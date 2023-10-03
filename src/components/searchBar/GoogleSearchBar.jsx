@@ -15,7 +15,7 @@ function SearchBar() {
   };
 
   return (
-    <LoadScript googleMapsApiKey="CLAVE_API" libraries={libraries}>
+    <LoadScript googleMapsApiKey="AIzaSyDBNaUXsCtRqRqt0f1X9c2MmMlzNTEKG0c" libraries={libraries}>
       <StandaloneSearchBox
         onLoad={ref => searchBoxRef.current = ref}
         onPlacesChanged={handlePlacesChanged}
@@ -23,6 +23,7 @@ function SearchBar() {
         <input
           type="search"
           placeholder="827 Cedar Ridge Dr Raymore, MO 64083"
+          className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           style={{ width: "200px", height: "20px" }}
         />
       </StandaloneSearchBox>

@@ -6,7 +6,7 @@ export default function WebScrappingResult({searchItem, companies, webInfo }) {
         {companies.map(
             (items, i) => {
             const itemInfo = webInfo.find(web => web.websiteName == items.title)
-            const value = itemInfo ? itemInfo?.estimatedValue : "0"
+            const value = itemInfo ? itemInfo?.estimatedValue ? itemInfo?.estimatedValue: "0" : "0"
             return <CardForValues title={items.title} img={items.img} value={ value } key={i}/>}
         )}
         </div>
