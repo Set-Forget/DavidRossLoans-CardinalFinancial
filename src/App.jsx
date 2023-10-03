@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { useMutation } from 'react-query';
-import logo from "./assets/logo.png"
 import Spinner from "./components/Spinner"
 import WebScrappingResult from "./components/TableResults"
 import SearchBar from "./components/searchBar/MapboxSearchBar"
@@ -35,12 +34,15 @@ export default function App() {
   return (
     <div className="flex flex-col place-items-center gap-4 h-screen bg-gray-100 dark:bg-slate-700 dark:text-white">
       
-      <main className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative">
-        <figure className="bg-black w-full flex justify-center">
-          <img src={logo} alt="Logo" />
-          <figcaption></figcaption>
-        </figure>
-        <h1 className="text-2xl md:text-4xl lg:text-6xl">Home Value Sites</h1>
+      <main 
+       className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative bg-contain bg-center bg-no-repeat"
+       style={{ backgroundImage: `url('https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg')` }}
+       >
+        {/* <figure className="bg-black w-full flex justify-center max-h-24 p-6">
+          <img src={"https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg"} alt="Logo" />
+          <figcaption>Home Value Sites</figcaption>
+        </figure> */}
+        <h1 className="p-6 text-2xl md:text-4xl lg:text-6xl">Home Value Sites</h1>
         <SearchBar mutation={mutation} setSearchItem={setSearchItem} />
         { mutation.isLoading ?
           <>
@@ -58,6 +60,9 @@ export default function App() {
           <p>Make a search to find the values</p>
         }
       </main>
+      <footer className="p-4">
+        <a href="https://www.cardinalfinancial.com/loan-originator/david-ross/" className="p-1 hover:underline hover:decoration-rose-500">Contact us</a>
+      </footer>
     </div>
   )
 }
