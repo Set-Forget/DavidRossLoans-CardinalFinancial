@@ -17,7 +17,7 @@ export default function WebScrappingResult({searchItem, companies, webInfo }) {
 function CardForValues({title, img, value}) {
     const formatted = parseFloat(value).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
     return(
-        <div className="border-solid border-2 border-sky-500 p-4 rounded min-w-min w-48 h-48 flex flex-col relative items-end justify-between">
+        <div className="bg-gray-100 dark:bg-slate-700 border-solid border-2 border-sky-500 p-4 rounded min-w-min w-48 h-48 flex flex-col relative items-end justify-between">
         <img src={img} alt={title} className="self-start justify-self-start h-12"/>
         <p className="font-semibold ">{formatted}</p>
         </div>
