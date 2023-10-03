@@ -35,7 +35,7 @@ export default function App() {
     <div className="flex flex-col place-items-center gap-4 h-screen bg-gray-100 dark:bg-slate-700 dark:text-white">
       
       <main 
-       className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative bg-contain bg-center bg-no-repeat"
+       className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative bg-contain bg-center bg-no-repeat p-4"
        style={{ backgroundImage: `url('https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg')` }}
        >
         {/* <figure className="bg-black w-full flex justify-center max-h-24 p-6">
