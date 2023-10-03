@@ -33,15 +33,13 @@ export default function App() {
 
   return (
     <div className="flex flex-col place-items-center gap-4 h-screen bg-gray-100 dark:bg-slate-700 dark:text-white">
-      
+      <header className="w-full p-4 flex justify-around items-center bg-sky-300 dark:bg-sky-900">
+        <img src={"https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg"} alt="Logo" className="w-10" />
+        <a href="https://www.cardinalfinancial.com/loan-originator/david-ross/" className="text-black dark:text-white p-1 hover:underline hover:decoration-rose-500">Contact us</a>
+      </header>
       <main 
-       className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative bg-contain bg-center bg-no-repeat p-4"
-       style={{ backgroundImage: `url('https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg')` }}
+       className="flex-1 overflow-y-auto w-full flex flex-col place-items-center gap-4 relative p-4"
        >
-        {/* <figure className="bg-black w-full flex justify-center max-h-24 p-6">
-          <img src={"https://www.cardinalfinancial.com/wp-content/themes/cfstack/assets/images/logo_mark.svg"} alt="Logo" />
-          <figcaption>Home Value Sites</figcaption>
-        </figure> */}
         <h1 className="p-6 text-2xl md:text-4xl lg:text-6xl">Home Value Sites</h1>
         <SearchBar mutation={mutation} setSearchItem={setSearchItem} />
         { mutation.isLoading ?
@@ -60,9 +58,6 @@ export default function App() {
           <p>Make a search to find the values</p>
         }
       </main>
-      <footer className="p-4">
-        <a href="https://www.cardinalfinancial.com/loan-originator/david-ross/" className="p-1 hover:underline hover:decoration-rose-500">Contact us</a>
-      </footer>
     </div>
   )
 }
