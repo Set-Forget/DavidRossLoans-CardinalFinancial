@@ -6,6 +6,7 @@ import SearchBar from "./components/searchBar/MapboxSearchBar"
 
 export default function App() {
   const [hasSearched, setHasSearched] = useState(false);
+  const [average, setAverage] = useState(0);
   const [searchItem, setSearchItem] = useState("")
   const companies = [
     {title: "Homebot", img:"https://imgs.search.brave.com/6Laiiyi2pSBnp5knhBT0xjKcyVnuSgYnNc-A92zgY58/rs:fit:860:0:0/g:ce/aHR0cHM6Ly93d3cu/c2NsbW9ydGdhZ2Uu/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDIzLzAyL2hvbWVi/b3QtbG9nby0yOTN4/MzAwLnBuZw"},
@@ -24,6 +25,13 @@ export default function App() {
         console.error(e.message)
         throw new Error('Network response was not ok. ' + e.message)
       })
+    
+    const infoValues = info.results.map( i => {
+      let value = Number(i.estimatedValue);
+      return isNaN(value) ? 0 : value;
+    }).filter(value => value !== 0)
+    const avg = infoValues.reduce((acc, num) => acc + num, 0) / infoValues.length
+    setAverage(avg)
     setWebInfo(info.results)
     setHasSearched(true);
     return info;
@@ -54,7 +62,7 @@ export default function App() {
           <hr />
           </>):
           hasSearched ?
-          webInfo && <WebScrappingResult searchItem={searchItem} companies={companies} webInfo={webInfo}/>:
+          webInfo && <WebScrappingResult searchItem={searchItem} companies={companies} webInfo={webInfo} avg={average}/>:
           <p>Make a search to find the values</p>
         }
       </main>

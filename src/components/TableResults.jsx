@@ -1,4 +1,4 @@
-export default function WebScrappingResult({searchItem, companies, webInfo }) {
+export default function WebScrappingResult({searchItem, companies, webInfo, avg }) {
     return(
         <>
         <p>Subject Property Address: {searchItem}</p>
@@ -10,6 +10,7 @@ export default function WebScrappingResult({searchItem, companies, webInfo }) {
             return <CardForValues title={items.title} img={items.img} value={ value } key={i}/>}
         )}
         </div>
+        <p>Average: <span>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></p>
         </>
     )
 }
