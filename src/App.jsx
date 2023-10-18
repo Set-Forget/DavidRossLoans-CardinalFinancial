@@ -20,7 +20,7 @@ export default function App() {
       <Routes>
           <Route exact path="/search" element={< SearchPage />} />
           <Route path="*" element={<h2>Not Found</h2>} />
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={< SearchPage />} />
       </Routes>
     </main>
     </div>
