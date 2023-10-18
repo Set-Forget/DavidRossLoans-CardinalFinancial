@@ -78,15 +78,19 @@ export default function SearchPage() {
       )
 }
 
-function ButtonAddToPipedrive({searchItem, companies, webInfo, avg }) {
+import Select from 'react-select';
+
+function ButtonAddToPipedrive({ avg }) {
     const [deals, setDeals] = useState([])
+    const [options, setOptions] = useState([])
     const [selectedDeal, setSelectedDeal] = useState(null)
     const apiUrl = "https://api.pipedrive.com/v1"
     const apiKey = "6a7d6756d454c725103f483026d2773693b1d5fc"
 
     const updateDeal = function () {
-      if (selectedDeal) {
-        const apiEndpoint = `/deals/${selectedDeal}?api_token=${apiKey}`;
+      const deal = deals.find( d => d.id == selectedDeal.value)
+      if (deal) {
+        const apiEndpoint = `/deals/${deal.id}?api_token=${apiKey}`;
         fetch(apiUrl + apiEndpoint, {
           method: "PUT",
           body: JSON.stringify({
@@ -99,28 +103,34 @@ function ButtonAddToPipedrive({searchItem, companies, webInfo, avg }) {
       }
     }
 
-    const handleSelectChange = (event) => {
-      setSelectedDeal(event.target.value);
+    const handleSelectChange = (selectedOption) => {
+      setSelectedDeal(selectedOption);
     }
 
     useEffect(()=>{
       const apiEndpoint = "/deals?status=all_not_deleted&start=0&limit=500&api_token="
       fetch(apiUrl + apiEndpoint + apiKey)
       .then(response => response.json())
-      .then( res => setDeals(res.data))
+      .then( res => {
+        const newOptions = res.data.map(d => ({
+          label: d.title,
+          value: d.id
+        }));
+        setDeals(res.data)
+        setOptions(newOptions)
+      })
     }, [])
 
     return(
-      <section className="flex gap-6">
-        <div className="flex gap-4 items-center">
-          <select 
-           id="deals"
-           onChange={handleSelectChange}
-           value={selectedDeal || ''}
-           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option defaultValue={0} hidden>Select a deal</option>
-            { deals.map( d => <option value={d.id} key={d.id}>{d.title}</option>) }
-          </select>
+      <section className="flex gap-6 w-1/2">
+        <div className="flex gap-4 items-center flex-1">
+          <Select
+            id="deals"
+            value={selectedDeal}
+            onChange={handleSelectChange}
+            options={options}
+            className="bg-gray-50 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
           to
         </div>
         <button type="button" onClick={updateDeal} className="text-white bg-[#00B1A4] hover:bg-[#033652] focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 focus:outline-none dark:focus:ring-blue-800">add to pipedrive</button>
