@@ -65,7 +65,7 @@ export default function ButtonAddToPipedrive({ companies, webInfo, avg }) {
             value={selectedDeal}
             onChange={handleSelectChange}
             options={options}
-            className="bg-gray-50 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full dark:bg-gray-700 dark:placeholder-gray-400"
           />
           to
         </div>
