@@ -1,7 +1,9 @@
+import { useState } from "react"
+
 export default function WebScrappingResult({searchItem, companies, webInfo, avg }) {
     return(
         <>
-        <p>Subject Property Address: {searchItem}</p>
+        <p>Subject Property Address: {searchItem} <CopyToClip text={searchItem} /></p>
         <div className="flex flex-wrap place-content-center gap-8 w-full">
         {companies.map(
             (items, i) => {
@@ -23,4 +25,28 @@ function CardForValues({title, img, value}) {
         <p className="font-semibold ">{formatted}</p>
         </div>
     )
+}
+
+function CopyToClip({text}) {
+    const [isCopied, setIsCopied] = useState(false);
+    
+    const handleCopyClick = () => {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000)
+          })
+          .catch((error) => {
+            console.error('Error trying to copy the text: ', error);
+          });
+      };
+
+    return (
+        <button className="relative">
+        <div className={`${isCopied ? "" : "hidden"} absolute -top-8 -left-4 text-sm bg-slate-600 p-1 rounded-lg`}>Copied!</div>
+        <ion-button aria-label="Copy to clipboard"  onClick={handleCopyClick}>
+            <ion-icon name="clipboard-outline" size="small"></ion-icon>
+        </ion-button>
+        </button>
+    );
 }
