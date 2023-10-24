@@ -12,8 +12,9 @@ export default function SearchBar({mutation, setSearchItem}) {
         const city = form.elements["address-city"].value;
         const state = form.elements["address-state"].value;
         const postcode = form.elements["address-postcode"].value;
+        const unit= form.elements["address-unit"].value;
 
-        const fullAddress = `${address} ${city}, ${state} ${postcode}`;
+        const fullAddress = `${address}${ unit ? " UNIT "+unit: ""} ${city}, ${state} ${postcode}`;
         setSearchItem(fullAddress);
         mutation.mutate(fullAddress);
         
@@ -58,42 +59,53 @@ export default function SearchBar({mutation, setSearchItem}) {
             className="text-gray-900 absolute right-2.5 bottom-2.5 bg-[#00B1A4] hover:bg-[#033652] hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:focus:ring-blue-800"
             >Search</button>
        </div>
-       <div className={`grid grid-cols-3 gap-4 ${showFormExpanded ? '': 'hidden'}`}>
-        <div className="flex">
-            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-               City
-            </span>
-            <input
-                name="address-city"
+       <div className={`grid grid-cols-4 gap-4 ${showFormExpanded ? '': 'hidden'}`}>
+            <div className="flex">
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                City
+                </span>
+                <input
+                    name="address-city"
+                    className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-none rounded-r-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="City"
+                    autoComplete="address-level2"
+                    disabled
+                />
+            </div>
+            <div className="flex">
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                State
+                </span>
+                <input
+                    name="address-state"
+                    className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-none rounded-r-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="State / Region"
+                    autoComplete="address-level1"
+                    disabled
+                />
+            </div>
+            <div className="flex">
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                Code
+                </span>
+                <input
+                name="address-postcode"
                 className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-none rounded-r-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="City"
-                autoComplete="address-level2"
+                placeholder="ZIP / Postcode"
+                autoComplete="postal-code"
                 disabled
-            />
-        </div>
-        <div className="flex">
-            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-               State
-            </span>
-            <input
-                name="address-state"
+                />
+            </div>
+            <div className="flex">
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                Unit
+                </span>
+                <input
+                name="address-unit"
                 className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-none rounded-r-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="State / Region"
-                autoComplete="address-level1"
-                disabled
-            />
-        </div>
-        <div className="flex">
-            <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-               Code
-            </span>
-            <input
-            name="address-postcode"
-            className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-none rounded-r-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="ZIP / Postcode"
-            autoComplete="postal-code"
-            disabled
-            />
+                placeholder="Unit"
+                type="text"
+                />
             </div>
        </div>
      </form>
