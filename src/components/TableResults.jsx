@@ -3,7 +3,10 @@ import { useState } from "react"
 export default function WebScrappingResult({searchItem, companies, webInfo, avg }) {
     return(
         <>
-        <p>Subject Property Address: {searchItem} <CopyToClip text={searchItem} /></p>
+        <div className="flex gap-2">
+            <h4>Subject Property Address:</h4>
+            <CopyToClip text={searchItem} />
+        </div>
         <div className="flex flex-wrap place-content-center gap-8 w-full">
         {companies.map(
             (items, i) => {
@@ -44,11 +47,12 @@ function CopyToClip({text}) {
       };
 
     return (
-        <button className="relative">
-        <div className={`${isCopied ? "" : "hidden"} absolute -top-8 -left-4 text-sm bg-slate-600 p-1 rounded-lg`}>Copied!</div>
-        <ion-button aria-label="Copy to clipboard"  onClick={handleCopyClick}>
-            <ion-icon name="clipboard-outline" size="small"></ion-icon>
-        </ion-button>
-        </button>
+        <p onClick={handleCopyClick} className="cursor-pointer flex items-center">
+            {text}
+            <span className="relative flex">
+                <div className={`${isCopied ? "" : "hidden"} absolute -top-8 -left-4 text-sm bg-slate-600 p-1 rounded-lg`}>Copied!</div>
+                <ion-icon name="clipboard-outline" size="small"></ion-icon>
+            </span>
+        </p>
     );
 }
