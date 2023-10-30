@@ -2,42 +2,12 @@ import SearchPage from "./page/searchPage";
 import { useState, useEffect } from "react";
 import UserSession from "./components/UserSession";
 import Spinner from "./components/Spinner";
+import Login from "./components/user/Login";
 
 export default function App() {
 
-  const [loading, setLoading] = useState(true)
-  const [errorMsg, setErrorMsg] = useState("")
-  const [user, setUser] = useState({
-      email:null
-    })
-
-  useEffect(() => {
-    const handleSuccess = (returnedUser) => {
-      if (returnedUser != null) {
-        setUser(returnedUser);
-      }
-      setLoading(false)
-    };
-
-    const handleFailure = (response) => {
-      setLoading(false)
-      console.error(response)
-      setErrorMsg("Error trying to get user information")
-      setUser({ email:null })
-    };
-
-    if (typeof google !== 'undefined') {
-      google?.script.run
-      .withSuccessHandler(handleSuccess)
-      .withFailureHandler(handleFailure)
-      .oauthUser();
-    } else {
-      handleSuccess({
-        email:null
-      })
-    }
-
-  }, []);
+  const [loading, setLoading] = useState(false)
+  const [user, setUser] = useState({ email:null })
 
   const headerStyle = {
     background: "linear-gradient(180deg, #05293e, #033652)",
@@ -57,12 +27,14 @@ export default function App() {
     </header>
     <main className="flex-1 w-full flex flex-col place-items-center gap-4 relative p-6"  style={headerStyle}>
       <div className="w-full h-full bg-white rounded-lg p-4 m-4 flex flex-col place-items-center gap-4 dark:bg-transparent">
-        { errorMsg ? <p className="uppercase text-rose-500">{errorMsg}</p> : null }
         {
           loading ? <Spinner/> : 
           user.email ? 
             < SearchPage /> :
-            <h2 className="uppercase font-semibold">User not found. Request premision.</h2>
+            <>
+              <h2 className="uppercase font-semibold">User not found. Request premision.</h2>
+              <Login setUser={setUser} setLoading={setLoading}/>
+            </>
         }
       </div>
     </main>
