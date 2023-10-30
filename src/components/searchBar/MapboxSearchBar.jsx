@@ -9,14 +9,16 @@ export default function SearchBar({mutation, setSearchItem}) {
         e.preventDefault()
         const form = formRef.current;
         const address = form.elements["address-search"].value;
-        const city = form.elements["address-city"].value;
-        const state = form.elements["address-state"].value;
-        const postcode = form.elements["address-postcode"].value;
-        const unit= form.elements["address-unit"].value;
+        const city = form.elements["address-city"].value ?? "";
+        const state = form.elements["address-state"].value ?? "";
+        const postcode = form.elements["address-postcode"].value ?? "";
+        const unit = form.elements["address-unit"].value ?? "";
+        const formatedAddress = unit || city || state || postcode ? ` ${unit} ${city}, ${state} ${postcode}`: ""
 
-        const fullAddress = `${address}${ unit ? " UNIT "+unit: ""} ${city}, ${state} ${postcode}`;
+        const fullAddress = `${address}${ formatedAddress }`;
+
         setSearchItem(fullAddress);
-        mutation.mutate(fullAddress);
+        mutation.mutate(encodeURIComponent(fullAddress));
         
         setShowFormExpanded(false)
         form.reset();

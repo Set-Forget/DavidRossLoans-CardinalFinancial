@@ -50,7 +50,7 @@ function CopyToClip({text}) {
         <p onClick={handleCopyClick} className="cursor-pointer flex items-center">
             {text}
             <span className="relative flex">
-                <div className={`${isCopied ? "" : "hidden"} absolute -top-8 -left-4 text-sm bg-slate-600 p-1 rounded-lg`}>Copied!</div>
+                <span className={`${isCopied ? "" : "hidden"} absolute -top-8 -left-4 text-sm bg-slate-600 p-1 rounded-lg`}>Copied!</span>
                 <ion-icon name="clipboard-outline" size="small"></ion-icon>
             </span>
         </p>
