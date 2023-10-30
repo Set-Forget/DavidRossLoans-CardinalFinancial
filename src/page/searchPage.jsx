@@ -17,6 +17,9 @@ export default function SearchPage() {
         {title: "Corelogic",
          img:"https://imgs.search.brave.com/PNU0Uym5dsCc1rqpNhFF5itvNhvSWJlxiUUpNJmS0OY/rs:fit:500:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy80/LzRkL0NvcmVMb2dp/Y19sb2dvLnN2Zw.svg",
          link:"https://www.chase.com/personal/mortgage/calculators-resources/home-value-estimator"},
+        {title: "Red Fin",
+         img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Redfin_logo.png/270px-Redfin_logo.png",
+         link:"https://www.redfin.com/"},
         {title: "Realtor",
          img:"https://imgs.search.brave.com/0aJD-DQCf4FViZMXm0kgCk05J17qx48pVme8QX6kkEw/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hY3Jl/YWxlc3RhdGUub3Jn/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDEz/LzEwL1JlYWx0b3It/TG9nby0yNjN4MzAw/LmpwZw",
          link:"https://www.realtor.com/"}
