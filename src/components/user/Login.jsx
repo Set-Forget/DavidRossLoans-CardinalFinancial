@@ -10,7 +10,7 @@ function Login({setUser, setLoading}) {
     onSuccess: (response) => {
       localStorage.setItem("userInfo", JSON.stringify(response));
       setLoading(true)
-      setMakePost(true);
+      fetchGoogleUserData(response)
     },
     onError: (error) => console.log(`Login Failed: ${error}`),
   });
@@ -20,7 +20,7 @@ function Login({setUser, setLoading}) {
     localStorage.clear();
   };
 
-  const fetchUserData = (user) => {
+  const fetchUserData = async (user) => {
     const encodedEmail = encodeURIComponent(user.email);
     const url = `https://script.google.com/macros/s/AKfycbxBvJxMEbhyMRloRtmW7TqKuCgMKxKdrW09E6rs_Os3sSN7PorHW3qe_QYogdyNDr8s/exec?userEmail=${encodedEmail}`;
     
@@ -31,10 +31,8 @@ function Login({setUser, setLoading}) {
             }
     
             if (response.data.status === 200) {
-                console.log('Usuario encontrado:', response.data.message.email);
                 localStorage.setItem("activeUser", JSON.stringify(user))
                 setUser(user);
-                setMakePost(false);
                 setLoading(false)
                 return response.data.message.email;
             }
@@ -47,26 +45,30 @@ function Login({setUser, setLoading}) {
         });
     };
 
+  async function fetchGoogleUserData(userInfo) {
+    return axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userInfo.access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.access_token}`,
+            Accept: "application/json",
+          },
+        }
+      )
+      .then( (response) => {
+        return  fetchUserData(response.data)
+      })
+      .catch((error) => console.error(error));
+  }
+
   useEffect(() => {
-    if (makePost) {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userInfo.access_token}`,
-          {
-            headers: {
-              Authorization: `Bearer ${userInfo.access_token}`,
-              Accept: "application/json",
-            },
-          }
-        )
-        .then( (response) => {
-            console.log('Usuario encontrado:', response.data);
-            fetchUserData(response.data) 
-        })
-        .catch((error) => console.error(error));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo) {
+      setLoading(true)
+      fetchGoogleUserData(userInfo)
     }
-  }, [makePost]);
+  }, []);
 
   return (
     <div>
@@ -155,7 +157,7 @@ const ErrorLoginModal = ({ setShowErrorModal }) => {
     return (
       <div
         id="editMemberModal"
-        className="relative z-10 ml-[40px]"
+        className="relative z-10 ml-[40px] dark:bg-slate-700 dark:text-white"
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
@@ -163,10 +165,10 @@ const ErrorLoginModal = ({ setShowErrorModal }) => {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-40 transition-opacity"></div>
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all w-[600px] sm:my-8 sm:p-6">
+            <div className="dark:bg-slate-700 dark:text-white relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all w-[600px] sm:my-8 sm:p-6">
               <div className="mt-3 text-center sm:mt-5 text-sm montserrat">
                 <h3
-                  className=" font-semibold lg:text-base leading-6 text-gray-900"
+                  className=" font-semibold lg:text-base leading-6 text-gray-900 dark:text-white"
                   id="modal-title"
                 >
                   An error ocurred.
@@ -175,7 +177,7 @@ const ErrorLoginModal = ({ setShowErrorModal }) => {
               </div>
               <div className="mt-5 flex justify-center">
                 <button
-                  className="w-[120px] mr-2 rounded-lg bg-transparent px-3 py-2 border-2 border-[#243570] text-base font-semibold text-[#243570] shadow-sm hover:text-[#535787]"
+                  className="w-[120px] mr-2 rounded-lg bg-transparent px-3 py-2 border-2 border-[#243570] text-base font-semibold shadow-sm hover:text-[#535787] hover:bg-[#033652] dark:bg-[#033652] dark:hover:bg-[#00B1A4] hover:text-white focus:outline-none dark:focus:ring-blue-800"
                   onClick={ () => setShowErrorModal(false) }
                 >
                   Close

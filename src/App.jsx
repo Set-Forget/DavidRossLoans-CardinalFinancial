@@ -32,7 +32,7 @@ export default function App() {
           user.email ? 
             < SearchPage /> :
             <>
-              <h2 className="uppercase font-semibold">User not found. Request premision.</h2>
+              <h2 className="uppercase font-semibold">Loggin to get access or request premision</h2>
               <Login setUser={setUser} setLoading={setLoading}/>
             </>
         }
