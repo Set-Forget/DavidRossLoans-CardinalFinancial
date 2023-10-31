@@ -1,6 +1,6 @@
 import SearchPage from "./page/searchPage";
-import { useState, useEffect } from "react";
-import UserSession from "./components/UserSession";
+import { useState } from "react";
+import UserSession from "./components/user/UserSession";
 import Spinner from "./components/Spinner";
 import Login from "./components/user/Login";
 
