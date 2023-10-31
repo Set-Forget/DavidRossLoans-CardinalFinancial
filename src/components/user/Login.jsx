@@ -4,7 +4,6 @@ import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 
 function Login({setUser, setLoading}) {
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [makePost, setMakePost] = useState(false);
 
   const login = useGoogleLogin({
     onSuccess: (response) => {
