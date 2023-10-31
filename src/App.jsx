@@ -33,8 +33,8 @@ export default function App() {
           user.email ? 
             < SearchPage /> :
             <>
-              { !auth && <p className="uppercase font-bold text-rose-600">User not autorized</p> } 
-              <h2 className="uppercase font-semibold">Loggin to get access or request premision</h2>
+              { !auth && <h3 className="uppercase font-bold text-rose-600">Unauthorized user</h3> } 
+              <h2 className="uppercase font-semibold">Log in to gain access or request permission</h2>
               <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth}/>
             </>
         }
