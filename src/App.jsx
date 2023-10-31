@@ -8,6 +8,7 @@ export default function App() {
 
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({ email:null })
+  const [auth, setAuth] = useState(true)
 
   const headerStyle = {
     background: "linear-gradient(180deg, #05293e, #033652)",
@@ -32,8 +33,9 @@ export default function App() {
           user.email ? 
             < SearchPage /> :
             <>
+              { !auth && <p className="uppercase font-bold text-rose-600">User not autorized</p> } 
               <h2 className="uppercase font-semibold">Loggin to get access or request premision</h2>
-              <Login setUser={setUser} setLoading={setLoading}/>
+              <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth}/>
             </>
         }
       </div>

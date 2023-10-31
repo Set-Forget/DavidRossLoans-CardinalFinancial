@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 
-function Login({setUser, setLoading}) {
+function Login({setUser, setLoading, setAuth}) {
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const login = useGoogleLogin({
@@ -11,7 +11,11 @@ function Login({setUser, setLoading}) {
       setLoading(true)
       fetchGoogleUserData(response)
     },
-    onError: (error) => console.log(`Login Failed: ${error}`),
+    onError: (error) => {
+      console.log(`Login Failed: ${error}`)
+      setLoading(false)
+      setShowErrorModal(true);
+    }
   });
 
   const logOut = () => {
@@ -25,21 +29,36 @@ function Login({setUser, setLoading}) {
     
     return axios.get( url )
         .then((response) => {
-            if (response.data.status === 404) {
+          try {
+          
+          if (response.data.status === 404) {
             throw new Error('Usuario no encontrado');
-            }
-    
-            if (response.data.status === 200) {
+          }
+          
+          if (response.data.status === 403) {
+            throw new Error('Usuario no autorizado');
+          }
+          
+          if (response.data.status === 200) {
                 localStorage.setItem("activeUser", JSON.stringify(user))
                 setUser(user);
                 setLoading(false)
+                setAuth(true)
                 return response.data.message.email;
-            }
-    
+              }
+
             throw new Error('Respuesta inesperada del servidor');
+              
+          } catch (error) {
+            console.error(error.message);
+            setLoading(false)
+            setAuth(false)
+            logOut()
+          }
         })
         .catch((error) => {
             console.error('Error:', error.message || 'Hubo un error inesperado');
+            setLoading(false)
             setShowErrorModal(true);
         });
     };
@@ -55,15 +74,21 @@ function Login({setUser, setLoading}) {
           },
         }
       )
-      .then( (response) => {
-        return  fetchUserData(response.data)
-      })
-      .catch((error) => console.error(error));
+      .then( (response) => fetchUserData(response.data))
+      .catch((error) => {
+        console.error(error)
+        setLoading(false)
+        setShowErrorModal(true);
+      });
   }
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (userInfo) {
+    const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+
+    if (activeUser) setUser(activeUser)
+
+    if (userInfo && !activeUser) {
       setLoading(true)
       fetchGoogleUserData(userInfo)
     }
