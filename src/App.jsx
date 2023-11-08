@@ -11,6 +11,7 @@ export default function App() {
   const [user, setUser] = useState({ email:null })
   const [tempUser, setTempUser] = useState({ })
   const [auth, setAuth] = useState(true)
+  const [ reqSend, setReqSend ] = useState(false)
 
   const headerStyle = {
     background: "linear-gradient(180deg, #05293e, #033652)",
@@ -37,7 +38,7 @@ export default function App() {
             <section className="flex flex-col gap-4 items-center">
               <h2 className="uppercase font-semibold">Sign in to gain access or request permission</h2>
               <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth} setTempUser={setTempUser}/>
-              { !auth && <RequestAuth user={tempUser} /> } 
+              { !auth && <RequestAuth user={tempUser} setLoading={setLoading} reqSend={reqSend} setReqSend={setReqSend} /> } 
             </section>
         }
       </div>
