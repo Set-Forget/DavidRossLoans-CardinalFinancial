@@ -1,6 +1,10 @@
 export default function RequestAuth({user}) {
     function handleReqAuth(e) {
         e.preventDefault()
+        const userEmail = user.email
+        const userLastName = user.family_name
+        const userFirstName = user.given_name
+        const userName = user.name
         console.log(user)
     }
 
