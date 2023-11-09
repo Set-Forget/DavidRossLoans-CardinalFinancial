@@ -26,7 +26,7 @@ export default function RequestAuth({user, setLoading, reqSend, setReqSend}) {
             {
                 reqSend ? 
                 <>
-                <p className="text-green-500">Request send</p>
+                <p className="text-green-500">Request sent</p>
                 </>:
                 <>
                 <h3 className="uppercase font-bold text-rose-600">Unauthorized user</h3>
