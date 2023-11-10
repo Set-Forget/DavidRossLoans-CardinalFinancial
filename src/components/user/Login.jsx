@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 
-function Login({setUser, setLoading, setAuth}) {
+function Login({setUser, setLoading, setAuth, setTempUser}) {
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const login = useGoogleLogin({
@@ -36,6 +36,7 @@ function Login({setUser, setLoading, setAuth}) {
           }
           
           if (response.data.status === 403) {
+            setTempUser(user)
             throw new Error('Usuario no autorizado');
           }
           
@@ -160,13 +161,6 @@ function Login({setUser, setLoading, setAuth}) {
             <span id="buttonText" className="ml-4">
               Sign in with Google
             </span>
-          </button>
-          <button
-            id="requestAccess"
-            onClick={logOut}
-            className="relative flex mt-4 justify-center items-center montserrat w-60 h-[42px] bg-[#243746] text-white border border-gray-300 rounded-full shadow-md px-6 py-2 text-sm font-medium hover:bg-[#4F5664] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            Request access
           </button>
         </div>
         { showErrorModal && <ErrorLoginModal setShowErrorModal={setShowErrorModal} /> }

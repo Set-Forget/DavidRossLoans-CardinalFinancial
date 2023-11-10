@@ -3,12 +3,15 @@ import { useState } from "react";
 import UserSession from "./components/user/UserSession";
 import Spinner from "./components/Spinner";
 import Login from "./components/user/Login";
+import RequestAuth from "./components/user/requestAuth";
 
 export default function App() {
 
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({ email:null })
+  const [tempUser, setTempUser] = useState({ })
   const [auth, setAuth] = useState(true)
+  const [ reqSend, setReqSend ] = useState(false)
 
   const headerStyle = {
     background: "linear-gradient(180deg, #05293e, #033652)",
@@ -32,11 +35,11 @@ export default function App() {
           loading ? <Spinner/> : 
           user.email ? 
             < SearchPage /> :
-            <>
-              { !auth && <h3 className="uppercase font-bold text-rose-600">Unauthorized user</h3> } 
-              <h2 className="uppercase font-semibold">Log in to gain access or request permission</h2>
-              <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth}/>
-            </>
+            <section className="flex flex-col gap-4 items-center">
+              <h2 className="uppercase font-semibold">Sign in to gain access or request permission</h2>
+              <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth} setTempUser={setTempUser}/>
+              { !auth && <RequestAuth user={tempUser} setLoading={setLoading} reqSend={reqSend} setReqSend={setReqSend} /> } 
+            </section>
         }
       </div>
     </main>
