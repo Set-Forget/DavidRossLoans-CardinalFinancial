@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { useEffect, useState } from "react"
 import Spinner from '../Spinner';
 
-export default function ButtonAddToPipedrive({ companies, webInfo, avg }) {
+export default function ButtonAddToPipedrive({ companies, avg }) {
     const [deals, setDeals] = useState([])
     const [options, setOptions] = useState([])
     const [selectedDeal, setSelectedDeal] = useState(null)
@@ -14,7 +14,7 @@ export default function ButtonAddToPipedrive({ companies, webInfo, avg }) {
     const updateDeal = function () {
       const deal = deals.find( d => d.id == selectedDeal.value)
       if (deal) {
-        const noteContent = renderToString(<CreateNote companies={companies} webInfo={webInfo} avg={avg} />);
+        const noteContent = renderToString(<CreateNote companies={companies} avg={avg} />);
         const noteData = {
           deal_id: deal.id,
           content: noteContent
@@ -74,7 +74,7 @@ export default function ButtonAddToPipedrive({ companies, webInfo, avg }) {
     )
 }
 
-function CreateNote({ companies, webInfo, avg }) {
+function CreateNote({ companies, avg }) {
   const tableStyle = {
     border: "1px solid #000",
     borderCollapse: "collapse",
@@ -99,18 +99,16 @@ function CreateNote({ companies, webInfo, avg }) {
         <th style={cellStyle}>Value</th>
       </tr>
       {companies.map((items, i) => {
-        const itemInfo = webInfo.find(web => web.websiteName == items.title);
-        const value = itemInfo ? (itemInfo.estimatedValue ? itemInfo.estimatedValue : "0") : "0";
         return (
           <tr key={i}>
             <td style={cellStyle}>{items.title}</td>
-            <td style={cellStyle}>{value}</td>
+            <td style={cellStyle}>{items.estimatedValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
           </tr>
         );
       })}
       <tr>
         <td style={cellStyle}>Average</td>
-        <td style={cellStyle}>${avg}</td>
+        <td style={cellStyle}>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
       </tr>
     </table>
   );

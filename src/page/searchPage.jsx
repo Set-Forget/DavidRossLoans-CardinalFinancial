@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from 'react-query';
 import Spinner from "./../components/Spinner"
 import WebScrappingResult from "./../components/TableResults"
@@ -34,6 +34,19 @@ export default function SearchPage() {
     ])
 
     const [webInfo, setWebInfo] = useState([])
+
+    const setEstimateValue = (companyName, value) => {
+      const companyIndex = companies.findIndex(company => company.title === companyName);
+      if (companyIndex !== -1) {
+        const newCompanies = [...companies];
+
+        newCompanies[companyIndex] = {
+          ...newCompanies[companyIndex],
+          estimatedValue: value,
+        };
+        setCompanies(newCompanies);
+      }
+    }
     
     const searchRealStateValues = async (address) => {
         const url = "https://script.google.com/macros/s/AKfycbwzIyZEUg78F3IbJvYJHNVPgqkwLIBnb4Lz0Y_cErcYxBKipyj-QoM5WKaj5oO6gFgnog/exec" + "?address=" + address
@@ -44,27 +57,29 @@ export default function SearchPage() {
             throw new Error('Network response was not ok. ' + e.message)
         })
         
-        const infoValues = info.results.map( i => {
-        let value = Number(i.estimatedValue);
-        return isNaN(value) ? 0 : value;
-        }).filter(value => value !== 0)
-
         const nc = companies.map( item => {
           const itemInfo = info.results.find(web => web.websiteName == item.title)
-          console.log(itemInfo);
           const value = itemInfo ? itemInfo?.estimatedValue ? itemInfo?.estimatedValue: "0" : "0"
           item.estimatedValue = value
           return item
         })
 
-        console.log(nc);
         setCompanies(nc)
-        const avg = infoValues.length != 0 ? infoValues.reduce((acc, num) => acc + num, 0) / infoValues.length : 0
-        setAverage(avg)
         setWebInfo(info.results)
         setHasSearched(true);
         return info;
     }
+
+    useEffect(()=>{
+      const infoValues = companies.map( i => {
+        let value = Number(i.estimatedValue);
+        return isNaN(value) ? 0 : value;
+      }).filter(value => value !== 0)
+
+      const avg = infoValues.length != 0 ? infoValues.reduce((acc, num) => acc + num, 0) / infoValues.length : 0
+      setAverage(avg)
+
+    }, [companies])
     
     const mutation = useMutation(address => searchRealStateValues(address));
 
@@ -86,8 +101,8 @@ export default function SearchPage() {
               hasSearched ?
               webInfo && (
               <>
-                <WebScrappingResult searchItem={searchItem} companies={companies} webInfo={webInfo} avg={average}/>
-                <ButtonAddToPipedrive companies={companies} webInfo={webInfo} avg={average}/>
+                <WebScrappingResult searchItem={searchItem} companies={companies} avg={average} setEstimateValue={setEstimateValue} />
+                <ButtonAddToPipedrive companies={companies} avg={average}/>
               </>
               ):
               <p>Make a search to find the values</p>
