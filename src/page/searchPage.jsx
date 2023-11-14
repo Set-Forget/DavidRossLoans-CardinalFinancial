@@ -6,7 +6,7 @@ import SearchBar from "./../components/searchBar/MapboxSearchBar"
 import ButtonAddToPipedrive from "../components/addNotes/btnAddToPipedrive";
 
 export default function SearchPage() {
-    const [hasSearched, setHasSearched] = useState(true);
+    const [hasSearched, setHasSearched] = useState(false);
     const [average, setAverage] = useState(0);
     const [searchItem, setSearchItem] = useState("")
     const [companies, setCompanies] = useState([
