@@ -33,7 +33,8 @@ function CardForValues({title, img, value, link, setEstimateValue}) {
     }, [value]);
 
     const handleBlur = () => {
-        const numericValue = parseFloat(editValue) || 0;
+        const input = editValue.replace(/,/g, '')
+        const numericValue = parseFloat(input) || 0;
         setEstimateValue(title, numericValue);
         setEditValue(numericValue.toString());
     };
