@@ -5,7 +5,7 @@ import WebScrappingResult from "./../components/TableResults"
 import SearchBar from "./../components/searchBar/MapboxSearchBar"
 import ButtonAddToPipedrive from "../components/addNotes/btnAddToPipedrive";
 
-export default function SearchPage() {
+export default function SearchPage({ allowPipedrive }) {
     const [hasSearched, setHasSearched] = useState(false);
     const [average, setAverage] = useState(0);
     const [searchItem, setSearchItem] = useState("")
@@ -21,7 +21,7 @@ export default function SearchPage() {
         link:"https://www.chase.com/personal/mortgage/calculators-resources/home-value-estimator",
         estimatedValue:0
         },
-        {title: "Red Fin",
+        {title: "Redfin",
          img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Redfin_logo.png/270px-Redfin_logo.png",
          link:"https://www.redfin.com/",
          estimatedValue:0
@@ -32,8 +32,6 @@ export default function SearchPage() {
          estimatedValue:0
         }
     ])
-
-    const [webInfo, setWebInfo] = useState([])
 
     const setEstimateValue = (companyName, value) => {
       const companyIndex = companies.findIndex(company => company.title === companyName);
@@ -65,7 +63,6 @@ export default function SearchPage() {
         })
 
         setCompanies(nc)
-        setWebInfo(info.results)
         setHasSearched(true);
         return info;
     }
@@ -99,10 +96,10 @@ export default function SearchPage() {
               <hr />
               </>):
               hasSearched ?
-              webInfo && (
+              (
               <>
                 <WebScrappingResult searchItem={searchItem} companies={companies} avg={average} setEstimateValue={setEstimateValue} />
-                <ButtonAddToPipedrive companies={companies} avg={average}/>
+                { allowPipedrive && <ButtonAddToPipedrive companies={companies} avg={average}/> }
               </>
               ):
               <p>Make a search to find the values</p>
