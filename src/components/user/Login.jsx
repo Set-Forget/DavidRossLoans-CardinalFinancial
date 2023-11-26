@@ -28,41 +28,42 @@ function Login({setUser, setLoading, setAuth, setTempUser}) {
     const url = `https://script.google.com/macros/s/AKfycbxBvJxMEbhyMRloRtmW7TqKuCgMKxKdrW09E6rs_Os3sSN7PorHW3qe_QYogdyNDr8s/exec?userEmail=${encodedEmail}`;
     
     return axios.get( url )
-        .then((response) => {
-          try {
-          
-          if (response.data.status === 404) {
-            throw new Error('Usuario no encontrado');
-          }
-          
-          if (response.data.status === 403) {
-            setTempUser(user)
-            throw new Error('Usuario no autorizado');
-          }
-          
-          if (response.data.status === 200) {
-                localStorage.setItem("activeUser", JSON.stringify(user))
-                setUser(user);
-                setLoading(false)
-                setAuth(true)
-                return response.data.message.email;
-              }
+      .then((response) => {
+        try {
+        
+        if (response.data.status === 404) {
+          throw new Error('Usuario no encontrado');
+        }
+        
+        if (response.data.status === 403) {
+          setTempUser(user)
+          throw new Error('Usuario no autorizado');
+        }
+        
+        if (response.data.status === 200) {
+              user.allowPipedrive = response.data.message.allowPipedrive
+              localStorage.setItem("activeUser", JSON.stringify(user))
+              setUser(user);
+              setLoading(false)
+              setAuth(true)
+              return response.data.message.email;
+            }
 
-            throw new Error('Respuesta inesperada del servidor');
-              
-          } catch (error) {
-            console.error(error.message);
-            setLoading(false)
-            setAuth(false)
-            logOut()
-          }
-        })
-        .catch((error) => {
-            console.error('Error:', error.message || 'Hubo un error inesperado');
-            setLoading(false)
-            setShowErrorModal(true);
-        });
-    };
+          throw new Error('Respuesta inesperada del servidor');
+            
+        } catch (error) {
+          console.error(error.message);
+          setLoading(false)
+          setAuth(false)
+          logOut()
+        }
+      })
+      .catch((error) => {
+          console.error('Error:', error.message || 'Hubo un error inesperado');
+          setLoading(false)
+          setShowErrorModal(true);
+    });
+  };
 
   async function fetchGoogleUserData(userInfo) {
     return axios
