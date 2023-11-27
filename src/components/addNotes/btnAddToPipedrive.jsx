@@ -9,7 +9,7 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
     const [selectedDeal, setSelectedDeal] = useState(null)
     const [loading, setLoading] = useState(false)
     const apiUrl = "https://api.pipedrive.com/v1"
-    const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY
+    const apiKey = process.env.REACT_APP_PIPEDRIVE_API_KEY
 
     const updateDeal = function () {
       const deal = deals.find( d => d.id == selectedDeal.value)

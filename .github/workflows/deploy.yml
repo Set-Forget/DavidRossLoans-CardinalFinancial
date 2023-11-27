@@ -10,8 +10,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-      VITE_PIPEDRIVE_API_KEY: ${{ secrets.VITE_PIPEDRIVE_API_KEY }}
+      REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      REACT_APP_PIPEDRIVE_API_KEY: ${{ secrets.PIPEDRIVE_API_KEY }}
       
     steps:
       - name: Checkout repo
