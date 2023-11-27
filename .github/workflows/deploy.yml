@@ -9,7 +9,10 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
+    env:
+      VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+      VITE_PIPEDRIVE_API_KEY: ${{ secrets.VITE_PIPEDRIVE_API_KEY }}
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -24,8 +27,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-        env:
-          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v2
