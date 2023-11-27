@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      REACT_APP_PIPEDRIVE_API_KEY: 6a7d6756d454c725103f483026d2773693b1d5fc
+      REACT_APP_PIPEDRIVE_API_KEY: ${{ vars.PIPEDRIVE_API_KEY }}
       
     steps:
       - name: Checkout repo
