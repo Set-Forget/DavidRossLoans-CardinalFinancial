@@ -31,6 +31,10 @@ function Login({setUser, setLoading, setAuth, setTempUser}) {
       .then((response) => {
         try {
         
+        if (response.data.status === 401) {
+          throw new Error('Usuario no encontrado');
+        }
+        
         if (response.data.status === 404) {
           throw new Error('Usuario no encontrado');
         }
@@ -42,7 +46,6 @@ function Login({setUser, setLoading, setAuth, setTempUser}) {
         
         if (response.data.status === 200) {
               user.allowPipedrive = response.data.message.allowPipedrive
-              localStorage.setItem("activeUser", JSON.stringify(user))
               setUser(user);
               setLoading(false)
               setAuth(true)
@@ -66,31 +69,34 @@ function Login({setUser, setLoading, setAuth, setTempUser}) {
   };
 
   async function fetchGoogleUserData(userInfo) {
-    return axios
-      .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userInfo.access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userInfo.access_token}`,
-            Accept: "application/json",
-          },
+    const url = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userInfo.access_token}`
+    const opt = {
+      headers: {
+        Authorization: `Bearer ${userInfo.access_token}`,
+        Accept: "application/json",
+      },
+    }
+    return fetch(url, opt)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      )
-      .then( (response) => fetchUserData(response.data))
+        return response.json();
+      })
+      .then( response => {
+        fetchUserData(response)
+      })
       .catch((error) => {
         console.error(error)
+        localStorage.clear();
         setLoading(false)
         setShowErrorModal(true);
-      });
+      })
   }
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const activeUser = JSON.parse(localStorage.getItem("activeUser"));
-
-    if (activeUser) setUser(activeUser)
-
-    if (userInfo && !activeUser) {
+    if (userInfo) {
       setLoading(true)
       fetchGoogleUserData(userInfo)
     }
