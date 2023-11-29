@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import Spinner from '../Spinner';
 
 export default function ButtonAddToPipedrive({ companies, avg }) {
-    const [deals, setDeals] = useState([])
     const [options, setOptions] = useState([])
     const [selectedDeal, setSelectedDeal] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -12,11 +11,11 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
     const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY
 
     const updateDeal = function () {
-      const deal = deals.find( d => d.id == selectedDeal.value)
-      if (deal) {
+      let dealId = selectedDeal?.value
+      if (dealId) {
         const noteContent = renderToString(<CreateNote companies={companies} avg={avg} />);
         const noteData = {
-          deal_id: deal.id,
+          deal_id: dealId,
           content: noteContent
         }
         const fetchOptions = {
@@ -29,7 +28,10 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
         const apiEndpoint = `/notes?api_token=${apiKey}`;
         setLoading(true)
         fetch(apiUrl + apiEndpoint, fetchOptions)
-        .then( res => setLoading(false))
+        .then( res => {
+          setLoading(false)
+          setSelectedDeal(null)
+        })
         .catch( err => {
             console.error(err)
             setLoading(false)
@@ -38,7 +40,26 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
     }
 
     const handleSelectChange = (selectedOption) => {
-      setSelectedDeal(selectedOption);
+      setSelectedDeal(selectedOption)
+    }
+
+    const handleInputChange = (inputValue) => {
+      if (inputValue.length > 3) {
+        searchDeal(inputValue);
+      }
+    };
+
+    const searchDeal = (dealTitle) => {
+      const apiEndpoint = "/deals/search?term=" + dealTitle + "&fields=title&start=0&api_token="
+      fetch(apiUrl + apiEndpoint + apiKey)
+      .then(response => response.json())
+      .then( res => {
+        const newOptions = res.data.items.map(d => ({
+          label: d.item.title,
+          value: d.item.id
+        }));
+        setOptions(newOptions)
+      })
     }
 
     useEffect(()=>{
@@ -50,7 +71,6 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
           label: d.title,
           value: d.id
         }));
-        setDeals(res.data)
         setOptions(newOptions)
       })
     }, [])
@@ -64,12 +84,18 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
             id="deals"
             value={selectedDeal}
             onChange={handleSelectChange}
+            onInputChange={handleInputChange}
             options={options}
             className="bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full dark:bg-gray-700 dark:placeholder-gray-400"
           />
           to
         </div>
-        <button type="button" onClick={updateDeal} className="text-white bg-[#00B1A4] hover:bg-[#033652] focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 focus:outline-none dark:focus:ring-blue-800">add to pipedrive</button>
+        <button 
+         type="button"
+         onClick={updateDeal}
+         className="text-white bg-[#00B1A4] hover:bg-[#033652] focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed"
+         disabled={ !selectedDeal}
+        >add to pipedrive</button>
       </section>
     )
 }
