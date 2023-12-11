@@ -34,7 +34,7 @@ export default function App() {
         {
           loading ? <Spinner/> : 
           user.email ? 
-            < SearchPage allowPipedrive={ user.allowPipedrive == 'TRUE' } /> :
+            < SearchPage allowPipedrive={ user.allowPipedrive == 'TRUE' } user={user} /> :
             <section className="flex flex-col gap-4 items-center">
               <h2 className="uppercase font-semibold">Sign in to gain access or request permission</h2>
               <Login setUser={setUser} setLoading={setLoading} setAuth={setAuth} setTempUser={setTempUser}/>

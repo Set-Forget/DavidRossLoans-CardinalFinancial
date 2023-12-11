@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { useEffect, useState } from "react"
 import Spinner from '../Spinner';
 
-export default function ButtonAddToPipedrive({ companies, avg, address }) {
+export default function ButtonAddToPipedrive({ companies, avg, address, toLog }) {
     const [options, setOptions] = useState([])
     const [selectedDeal, setSelectedDeal] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -35,6 +35,13 @@ export default function ButtonAddToPipedrive({ companies, avg, address }) {
         .catch( err => {
             console.error(err)
             setLoading(false)
+        })
+        .finally( ()=>{
+          try {
+            toLog("Add to pipedrive")
+          } catch (error) {
+            console.error(error.message)
+          }
         })
       }
     }

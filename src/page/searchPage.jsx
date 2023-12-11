@@ -5,11 +5,26 @@ import WebScrappingResult from "./../components/TableResults"
 import SearchBar from "./../components/searchBar/MapboxSearchBar"
 import ButtonAddToPipedrive from "../components/addNotes/btnAddToPipedrive";
 
-export default function SearchPage({ allowPipedrive }) {
+export default function SearchPage({ allowPipedrive, user }) {
     const [hasSearched, setHasSearched] = useState(false);
     const [average, setAverage] = useState(0);
     const [searchItem, setSearchItem] = useState("")
     const [companies, setCompanies] = useState([])
+
+    const toLog = (actionToLog) => {
+      let dataToLog = {
+        user: user.email,
+        action: actionToLog, 
+        address: searchItem, 
+        avg: average, 
+        realstateData: companies.map( com => { return {title: com.title, value: com.value}})
+      }
+      dataToLog = JSON.stringify(dataToLog)
+      dataToLog = encodeURIComponent(dataToLog)
+      const url = `https://script.google.com/macros/s/AKfycbwOyHzbGCIfZ5PmHh8vs8PdNUxBUWqELB2lwuVNMvRv3Py6ipOXQe2d9Lq8e1-ONWqo/exec?action=log&&logData=${dataToLog}`
+      console.log(url);
+      fetch(url)
+    }
 
     const setEstimateValue = (companyName, value) => {
       const companyIndex = companies.findIndex(company => company.title === companyName);
@@ -44,6 +59,13 @@ export default function SearchPage({ allowPipedrive }) {
 
         setCompanies(nc)
         setHasSearched(true);
+        try {
+          setTimeout(() => {
+            toLog("Search")
+          }, 10000);
+        } catch (error) {
+          console.error(error.message)
+        }
         return info;
     }
 
@@ -79,7 +101,7 @@ export default function SearchPage({ allowPipedrive }) {
               (
               <>
                 <WebScrappingResult searchItem={searchItem} companies={companies} avg={average} setEstimateValue={setEstimateValue} />
-                { allowPipedrive && <ButtonAddToPipedrive companies={companies} avg={average} address={searchItem}/> }
+                { allowPipedrive && <ButtonAddToPipedrive companies={companies} avg={average} address={searchItem} toLog={toLog}/> }
               </>
               ):
               <p>Make a search to find the values</p>
