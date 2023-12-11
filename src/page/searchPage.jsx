@@ -17,11 +17,11 @@ export default function SearchPage({ allowPipedrive, user }) {
         action: actionToLog, 
         address: searchItem, 
         avg: average, 
-        realstateData: companies.map( com => { return {title: com.title, value: com.value}})
+        realstateData: companies.map( com => { return {title: com.title, value: com.estimatedValue}})
       }
       dataToLog = JSON.stringify(dataToLog)
       dataToLog = encodeURIComponent(dataToLog)
-      const url = `https://script.google.com/macros/s/AKfycbwOyHzbGCIfZ5PmHh8vs8PdNUxBUWqELB2lwuVNMvRv3Py6ipOXQe2d9Lq8e1-ONWqo/exec?action=log&&logData=${dataToLog}`
+      const url = `https://script.google.com/macros/s/AKfycbxSMUrSNvs3a9tSoyUcQolSl9v0pn3z0aS806DiYplK8dzDvSLjGlLk22JWYXdChmt8/exec?action=log&&logData=${dataToLog}`
       console.log(url);
       fetch(url)
     }
@@ -60,9 +60,7 @@ export default function SearchPage({ allowPipedrive, user }) {
         setCompanies(nc)
         setHasSearched(true);
         try {
-          setTimeout(() => {
-            toLog("Search")
-          }, 10000);
+          toLog("Search")
         } catch (error) {
           console.error(error.message)
         }
