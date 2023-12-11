@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { useEffect, useState } from "react"
 import Spinner from '../Spinner';
 
-export default function ButtonAddToPipedrive({ companies, avg }) {
+export default function ButtonAddToPipedrive({ companies, avg, address }) {
     const [options, setOptions] = useState([])
     const [selectedDeal, setSelectedDeal] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -13,7 +13,7 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
     const updateDeal = function () {
       let dealId = selectedDeal?.value
       if (dealId) {
-        const noteContent = renderToString(<CreateNote companies={companies} avg={avg} />);
+        const noteContent = renderToString(<CreateNote companies={companies} avg={avg} address={address} />);
         const noteData = {
           deal_id: dealId,
           content: noteContent
@@ -100,7 +100,7 @@ export default function ButtonAddToPipedrive({ companies, avg }) {
     )
 }
 
-function CreateNote({ companies, avg }) {
+function CreateNote({ companies, avg, address }) {
   const tableStyle = {
     border: "1px solid #000",
     borderCollapse: "collapse",
@@ -118,24 +118,31 @@ function CreateNote({ companies, avg }) {
     textAlign: "left",
   };
 
+  const addressStyle = {
+    fontWeight: "bold"
+  }
+
   return (
-    <table style={tableStyle}>
-      <tr style={headerRowStyle}>
-        <th style={cellStyle}>Web Name</th>
-        <th style={cellStyle}>Value</th>
-      </tr>
-      {companies.map((items, i) => {
-        return (
-          <tr key={i}>
-            <td style={cellStyle}>{items.title}</td>
-            <td style={cellStyle}>{items.estimatedValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
-          </tr>
-        );
-      })}
-      <tr>
-        <td style={cellStyle}>Average</td>
-        <td style={cellStyle}>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
-      </tr>
-    </table>
+    <>
+      <div style={addressStyle}>{address}</div>
+      <table style={tableStyle}>
+        <tr style={headerRowStyle}>
+          <th style={cellStyle}>Web Name</th>
+          <th style={cellStyle}>Value</th>
+        </tr>
+        {companies.map((items, i) => {
+          return (
+            <tr key={i}>
+              <td style={cellStyle}>{items.title}</td>
+              <td style={cellStyle}>{items.estimatedValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+            </tr>
+          );
+        })}
+        <tr>
+          <td style={cellStyle}>Average</td>
+          <td style={cellStyle}>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+        </tr>
+      </table>
+    </>
   );
 }

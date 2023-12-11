@@ -19,7 +19,7 @@ export default function WebScrappingResult({searchItem, companies, avg, setEstim
              key={i}/>}
         )}
         </div>
-        <p>Average: <span>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></p>
+        <p className="font-bold my-8 text-2xl">Average: <span>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></p>
         </>
     )
 }
