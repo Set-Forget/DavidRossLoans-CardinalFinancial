@@ -16,7 +16,7 @@ export default function SearchPage({ allowPipedrive, user }) {
         user: user.email,
         action: actionToLog, 
         address: searchItem, 
-        avg: average, 
+        avg: calAvg(), 
         realstateData: companies.map( com => { return {title: com.title, value: com.estimatedValue}})
       }
       dataToLog = JSON.stringify(dataToLog)
@@ -24,6 +24,11 @@ export default function SearchPage({ allowPipedrive, user }) {
       const url = `https://script.google.com/macros/s/AKfycbxSMUrSNvs3a9tSoyUcQolSl9v0pn3z0aS806DiYplK8dzDvSLjGlLk22JWYXdChmt8/exec?action=log&&logData=${dataToLog}`
       console.log(url);
       fetch(url)
+    }
+
+    const searchAddress = (address) => {
+      setHasSearched(false)
+      setSearchItem(address)
     }
 
     const setEstimateValue = (companyName, value) => {
@@ -59,15 +64,10 @@ export default function SearchPage({ allowPipedrive, user }) {
 
         setCompanies(nc)
         setHasSearched(true);
-        try {
-          toLog("Search")
-        } catch (error) {
-          console.error(error.message)
-        }
         return info;
     }
 
-    useEffect(()=>{
+    const calAvg = () => {
       const infoValues = companies.map( i => {
         let value = Number(i.estimatedValue);
         return isNaN(value) ? 0 : value;
@@ -75,15 +75,23 @@ export default function SearchPage({ allowPipedrive, user }) {
 
       const avg = infoValues.length != 0 ? infoValues.reduce((acc, num) => acc + num, 0) / infoValues.length : 0
       setAverage(avg)
+      return avg
+    }
 
+    useEffect(()=>{
+      calAvg()
     }, [companies])
+
+    useEffect(()=>{
+      if (hasSearched) toLog("Search")
+    }, [hasSearched])
     
     const mutation = useMutation(address => searchRealStateValues(address));
 
     return (
         <>
             <h1 className="p-6 text-2xl md:text-4xl lg:text-6xl">Home Value Sites</h1>
-            <SearchBar mutation={mutation} setSearchItem={setSearchItem} />
+            <SearchBar mutation={mutation} setSearchItem={searchAddress} />
             { mutation.isLoading ?
               <>
                 <p>Searching values for <span className="font-semibold">{searchItem}</span></p>
