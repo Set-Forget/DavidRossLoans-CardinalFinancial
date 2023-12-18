@@ -141,13 +141,13 @@ function CreateNote({ companies, avg, address }) {
           return (
             <tr key={i}>
               <td style={cellStyle}>{items.title}</td>
-              <td style={cellStyle}>{items.estimatedValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+              <td style={cellStyle}>{items.estimatedValue.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0  })}</td>
             </tr>
           );
         })}
         <tr>
           <td style={cellStyle}>Average</td>
-          <td style={cellStyle}>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+          <td style={cellStyle}>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
         </tr>
       </table>
     </>

@@ -19,7 +19,13 @@ export default function WebScrappingResult({searchItem, companies, avg, setEstim
              key={i}/>}
         )}
         </div>
-        <p className="font-bold my-8 text-2xl">Average: <span>{avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></p>
+        <p className="font-bold my-8 text-2xl">Average: <span>{avg.toLocaleString('en-US', { 
+            style: 'currency', 
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0 
+        })}</span>
+        </p>
         </>
     )
 }
@@ -59,15 +65,27 @@ function CardForValues({title, img, value, link, setEstimateValue}) {
                 </div>
             </a>
             <p className="font-semibold absolute bottom-2 right-2 flex flex-row gap-2 justify-end items-center"> 
-            $ 
-            <input
-                className={`bg-transparent py-0 m-0 w-2/3 text-right disabled:border-none`}
-                value={editValue}
-                disabled={!isEditable}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-            />
+            {
+                isEditable ?
+                (<>
+                    $
+                <input
+                    className={`bg-transparent py-0 m-0 w-2/3 text-right disabled:border-none`}
+                    value={editValue}
+                    disabled={!isEditable}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    />
+                </>) 
+                :
+                (<p className="text-gray-300"> { value.toLocaleString('en-US', { 
+                    style: 'currency', 
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0 
+                }) } </p>)
+            }
             <MaterialSymbolsEdit setIsEditable={setIsEditable} isEditable={isEditable} />
             </p>
         </div>
