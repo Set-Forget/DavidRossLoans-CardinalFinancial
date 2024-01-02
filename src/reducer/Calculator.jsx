@@ -51,6 +51,15 @@ export const calculatorReducer = (state, action) => {
         ),
       };
     }
+    case "REMOVE_RESULT": {
+      const resultIndex = action.payload;
+      return {
+        ...state,
+        results: state.results.filter(
+          (_, index) => index !== resultIndex
+        ),
+      };
+    }
     case "SHOW_RESULTS":
       return {
         ...state,

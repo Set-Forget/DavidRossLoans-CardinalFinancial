@@ -12,22 +12,23 @@ const Table = () => {
     <table className="border-collapse table-auto w-full text-sm">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+          <th className="border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
             return (
               <th
-              key={`scenario-${index}`}
-                className="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
+                key={`scenario-${index}`}
+                className="font-bold border-b dark:border-slate-600 p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
               >
                 Scenario {index + 1}
                 {index >= 2 && (
                   <button
-                    className="ml-52"
-                    onClick={() =>
-                      dispatch({ type: "REMOVE_SCENARIO", payload: index })
-                    }
+                    className="ml-52 font-bold text-white"
+                    onClick={() => {
+                      dispatch({ type: "REMOVE_SCENARIO", payload: index });
+                      dispatch({ type: "REMOVE_RESULT", payload: index });
+                    }}
                   >
                     X
                   </button>
@@ -36,7 +37,7 @@ const Table = () => {
             );
           })}
           {showAddButton && (
-            <th className="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+            <th className="font-bold border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-white dark:text-slate-200 text-left">
               <button className="text-lg" onClick={handleAddScenario}>
                 +
               </button>
@@ -46,7 +47,7 @@ const Table = () => {
       </thead>
       <tbody className="bg-white dark:bg-slate-800">
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Purchase Price
           </td>
           {scenarios.map((scenario, index) => (
@@ -62,7 +63,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Down Payment Percentage
           </td>
           {scenarios.map((scenario, index) => (
@@ -78,7 +79,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Base Loan Amount
           </td>
           {scenarios.map((scenario, index) => (
@@ -94,7 +95,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Monthly Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => (
@@ -115,7 +116,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Property Taxes
           </td>
           {scenarios.map((scenario, index) => (
@@ -131,7 +132,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Home-Owners Insurance
           </td>
           {scenarios.map((scenario, index) => (
@@ -147,7 +148,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             HOA Payment
           </td>
           {scenarios.map((scenario, index) => (
@@ -163,7 +164,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Closing Costs
           </td>
           {scenarios.map((scenario, index) => (
@@ -179,7 +180,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Conventional Mortgage Insurance Paid Up Front
           </td>
           {scenarios.map((scenario, index) => (
@@ -195,7 +196,7 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Interest Rate
           </td>
           {scenarios.map((scenario, index) => (

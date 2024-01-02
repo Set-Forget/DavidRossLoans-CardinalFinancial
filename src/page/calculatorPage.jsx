@@ -6,7 +6,7 @@ export default function CalculatorPage() {
   return (
     <CalculatorProvider>
       <div>
-        <h2>Conventional Calculator </h2>
+        <h2 className="font-bold text-lg">Conventional Calculator </h2>
         <p>Workout your property taxes with the calculator below.</p>
         <Calculator />
       </div>

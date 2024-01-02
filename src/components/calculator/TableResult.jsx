@@ -66,18 +66,42 @@ const TableResult = () => {
     dispatch({ type: "UPDATE_RESULTS", payload: newResults });
   }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showResults]);
 
+  const IconUp = () => (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M8 0L15.7942 11.25H0.205771L8 0Z" fill="#2BCE9D" />
+    </svg>
+  );
+
+  const IconDown = () => (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M8 12L0.205773 0.749999L15.7942 0.75L8 12Z" fill="#FC3945" />
+    </svg>
+  );
+
   return (
     <table className="border-collapse table-auto w-full text-sm">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+          <th className="border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
             return (
               <th
                 key={`result-${index}`}
-                className="border-b dark:border-slate-600 font-medium p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
+                className="font-bold border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
               >
                 Scenario {index + 1}
               </th>
@@ -87,7 +111,7 @@ const TableResult = () => {
       </thead>
       <tbody className="bg-white dark:bg-slate-800">
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Principle and Interest
           </td>
           {results.map((result, index) => {
@@ -103,14 +127,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Home-Owners Insurance
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`homeOwnersInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(homeOwnersInsurance)}
@@ -119,14 +143,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Monthly Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
             const { monthlyMortgageInsurance } = scenario;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(monthlyMortgageInsurance)}
@@ -135,14 +159,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Property Taxes
           </td>
           {scenarios.map((scenario, index) => {
             const { propertyTaxes } = scenario;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`propertyTaxes-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(propertyTaxes)}
@@ -151,14 +175,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Housing Expense
           </td>
           {results.map((result, index) => {
             const { totalHousingExpense } = result;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`totalHousingExpense-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(totalHousingExpense)}
@@ -167,14 +191,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Housing Expense With the HOA
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA } = result;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`totalHousingExpenseWithHOA-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(totalHousingExpenseWithHOA)}
@@ -183,14 +207,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Down Payment
           </td>
           {results.map((result, index) => {
             const { totalDownPayment } = result;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`totalDownPayment-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(totalDownPayment)}
@@ -199,14 +223,14 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Cash From Borrower
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower } = result;
             return (
               <td
-                key={`principleAndInterest-${index}`}
+                key={`totalCashFromBorrower-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 ${checkValue(totalCashFromBorrower)}
@@ -215,87 +239,148 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Down Payment Delta
           </td>
           {results.map((result, index) => {
             const { totalDownPayment: total } = result;
-            return results.map((r, i) => {
+            const comparisons = [];
+            results.forEach((r, i) => {
               if (index === i) return;
               const { totalDownPayment: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
-              return (
-                <td
-                  key={`principleAndInterest-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              comparisons.push(
+                <span
+                  className="flex items-center"
+                  key={`downPaymentDelta-${index}-${i}`}
                 >
-                  Vs Scenario {i}: ${value} {value >= 0 ? "↑" : "↓"}
-                </td>
+                  Vs Scenario {i + 1}:
+                  <span
+                    className={`flex items-center ml-2 ${
+                      value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
+                    }`}
+                  >
+                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                  </span>
+                </span>
               );
             });
+            return (
+              <td
+                key={`closingCostDelta-${index}`}
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              >
+                <div className="flex flex-col">{comparisons}</div>
+              </td>
+            );
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Closing Cost Delta
           </td>
           {scenarios.map((scenario, index) => {
             const { mortgageInsurancePaidUpFront: total } = scenario;
-            return scenarios.map((s, i) => {
+            const comparisons = [];
+            results.forEach((r, i) => {
               if (index === i) return;
-              const { mortgageInsurancePaidUpFront: tmpTotal } = s;
+              const { mortgageInsurancePaidUpFront: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
-              return (
-                <td
-                  key={`principleAndInterest-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              comparisons.push(
+                <span
+                  className="flex items-center"
+                  key={`closingCostDelta-${index}-${i}`}
                 >
-                  Vs Scenario {i}: ${value} {value >= 0 ? "↑" : "↓"}
-                </td>
+                  Vs Scenario {i + 1}:
+                  <span
+                    className={`flex items-center ml-2 ${
+                      value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
+                    }`}
+                  >
+                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                  </span>
+                </span>
               );
             });
+            return (
+              <td
+                key={`closingCostDelta-${index}`}
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              >
+                <div className="flex flex-col">{comparisons}</div>
+              </td>
+            );
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Cash From Borrower Delta
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower: total } = result;
-            return results.map((r, i) => {
+            const comparisons = [];
+            results.forEach((r, i) => {
               if (index === i) return;
               const { totalCashFromBorrower: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
-              return (
-                <td
-                  key={`principleAndInterest-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              comparisons.push(
+                <span
+                  className="flex items-center"
+                  key={`cashFromBorrowerDelta-${index}-${i}`}
                 >
-                  Vs Scenario {i}: ${value} {value >= 0 ? "↑" : "↓"}
-                </td>
+                  Vs Scenario {i + 1}:
+                  <span
+                    className={`flex items-center ml-2 ${
+                      value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
+                    }`}
+                  >
+                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                  </span>
+                </span>
               );
             });
+            return (
+              <td
+                key={`cashFromBorrowerDelta-${index}`}
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              >
+                <div className="flex flex-col">{comparisons}</div>
+              </td>
+            );
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">
+          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Payment Difference
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA: total } = result;
-            return results.map((r, i) => {
+            const comparisons = [];
+            results.forEach((r, i) => {
               if (index === i) return;
               const { totalHousingExpenseWithHOA: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
-              return (
-                <td
-                  key={`principleAndInterest-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
-                >
-                  Vs Scenario {i}: ${value} {value >= 0 ? "↑" : "↓"}<br/>
-                </td>
+              comparisons.push(
+                <span className="flex items-center" key={`paymentDifference-${index}-${i}`}>
+                  Vs Scenario {i + 1}:
+                  <span
+                    className={`flex items-center ml-2 ${
+                      value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
+                    }`}
+                  >
+                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                  </span>
+                </span>
               );
             });
+            return (
+              <td
+                key={`paymentDifferences-${index}`}
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              >
+                <div className="flex flex-col">{comparisons}</div>
+              </td>
+            );
           })}
         </tr>
       </tbody>
