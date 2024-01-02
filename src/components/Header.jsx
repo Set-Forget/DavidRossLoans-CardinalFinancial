@@ -16,7 +16,22 @@ const Header = () => {
           alt="Logo"
           className="w-10"
         />
-        {user.email && <Link className="ml-2 flex justify-center items-center" to={`${BASE_URL}home`}>Home</Link>}
+        {user.email && (
+          <>
+            <Link
+              className="ml-2 flex justify-center items-center"
+              to={`${BASE_URL}home`}
+            >
+              Home
+            </Link>
+            <Link
+              className="ml-2 flex justify-center items-center"
+              to={`${BASE_URL}calculator`}
+            >
+              Calculator
+            </Link>
+          </>
+        )}
       </div>
       <div className="flex gap-4 flex-col lg:flex-row items-center">
         <a
@@ -36,6 +51,6 @@ const Header = () => {
       </div>
     </header>
   );
-}
+};
 
 export default Header;
