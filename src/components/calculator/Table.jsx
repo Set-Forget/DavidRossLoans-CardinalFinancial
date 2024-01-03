@@ -2,14 +2,14 @@ import { useContext } from "react";
 import RateListBox from "./RateListbox";
 import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
+import { RemoveIcon } from "./Icons";
 
 const Table = () => {
   const { state, dispatch } = useContext(CalculatorContext);
-  const { scenarios, showResults } = state;
-  const showAddButton = !showResults && scenarios.length < 5;
+  const { scenarios } = state;
 
   return (
-    <table className="border-collapse table-auto w-full text-sm">
+    <table className="border-collapse table-fixed text-md">
       <thead>
         <tr>
           <th className="border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
@@ -19,30 +19,24 @@ const Table = () => {
             return (
               <th
                 key={`scenario-${index}`}
-                className="font-bold border-b dark:border-slate-600 p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left"
+                className="font-bold border-b dark:border-slate-600 p-4 pt-2 pb-3 text-slate-400 dark:text-slate-200 text-left"
               >
                 Scenario {index + 1}
                 {index >= 2 && (
                   <button
-                    className="ml-52 font-bold text-white"
+                    className="font-bold text-white relative float-right"
                     onClick={() => {
                       dispatch({ type: "REMOVE_SCENARIO", payload: index });
                       dispatch({ type: "REMOVE_RESULT", payload: index });
                     }}
                   >
-                    X
+                    <RemoveIcon />
                   </button>
                 )}
               </th>
             );
           })}
-          {showAddButton && (
-            <th className="font-bold border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-white dark:text-slate-200 text-left">
-              <button className="text-lg" onClick={handleAddScenario}>
-                +
-              </button>
-            </th>
-          )}
+
         </tr>
       </thead>
       <tbody className="bg-white dark:bg-slate-800">
@@ -50,15 +44,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Purchase Price
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`purchasePrice-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`purchasePrice-${index}`}
-                value={scenario.purchasePrice}
-              />
+              <CalculatorInput name={`purchasePrice-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -66,15 +57,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Down Payment Percentage
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`downPaymentPercentage-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`downPaymentPercentage-${index}`}
-                value={scenario.downPaymentPercentage}
-              />
+              <CalculatorInput name={`downPaymentPercentage-${index}`} suffix />
             </td>
           ))}
         </tr>
@@ -82,15 +70,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Base Loan Amount
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`baseLoanAmount-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`baseLoanAmount-${index}`}
-                value={scenario.baseLoanAmount}
-              />
+              <CalculatorInput name={`baseLoanAmount-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -98,36 +83,29 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Monthly Mortgage Insurance
           </td>
-          {scenarios.map((scenario, index) => (
-            <td
-              key={`monthlyMortgageInsurance-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
-            >
-              <CalculatorInput
-                name={`monthlyMortgageInsurance-${index}`}
-                value={
-                  isNaN((scenario.baseLoanAmount * 0.85) / 12)
-                    ? "0"
-                    : String((scenario.baseLoanAmount * 0.85) / 12)
-                }
-                disabled
-              />
-            </td>
-          ))}
+          {scenarios.map((scenario, index) => {
+            return (
+              <td
+                key={`monthlyMortgageInsurance-${index}`}
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              >
+                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none py-2 p-3 text-sm leading-5 text-gray-900 focus:ring-0">
+                  {scenario.monthlyMortgageInsurance}{" "}%
+                </span>
+              </td>
+            );
+          })}
         </tr>
         <tr>
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Property Taxes
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`propertyTaxes-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`propertyTaxes-${index}`}
-                value={scenario.propertyTaxes}
-              />
+              <CalculatorInput name={`propertyTaxes-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -135,15 +113,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Home-Owners Insurance
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`homeOwnersInsurance-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`homeOwnersInsurance-${index}`}
-                value={scenario.homeOwnersInsurance}
-              />
+              <CalculatorInput name={`homeOwnersInsurance-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -151,15 +126,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             HOA Payment
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`HOAPayment-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`HOAPayment-${index}`}
-                value={scenario.HOAPayment}
-              />
+              <CalculatorInput name={`HOAPayment-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -167,15 +139,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Closing Costs
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`totalClosingCosts-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`totalClosingCosts-${index}`}
-                value={scenario.totalClosingCosts}
-              />
+              <CalculatorInput name={`totalClosingCosts-${index}`} prefix />
             </td>
           ))}
         </tr>
@@ -183,14 +152,14 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Conventional Mortgage Insurance Paid Up Front
           </td>
-          {scenarios.map((scenario, index) => (
+          {scenarios.map((_, index) => (
             <td
               key={`mortgageInsurancePaidUpFront-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
               <CalculatorInput
                 name={`mortgageInsurancePaidUpFront-${index}`}
-                value={scenario.mortgageInsurancePaidUpFront}
+                prefix
               />
             </td>
           ))}
@@ -214,10 +183,6 @@ const Table = () => {
       </tbody>
     </table>
   );
-
-  function handleAddScenario() {
-    dispatch({ type: "ADD_SCENARIO" });
-  }
 };
 
 export default Table;

@@ -1,3 +1,5 @@
+import { MAX_SCENARIOS, calculateMortgageInsurance } from "../components/calculator/utils";
+
 export const initialScenario = {
   purchasePrice: "",
   downPaymentPercentage: "",
@@ -25,20 +27,27 @@ export const calculatorReducer = (state, action) => {
       const { fieldName, scenarioIndex, value } = action.payload;
       return {
         ...state,
+        isReset: false,
         scenarios: state.scenarios.map((scenario, index) => {
           if (String(index) === scenarioIndex) {
-            return { ...scenario, [fieldName]: value };
+            let updatedScenario = { ...scenario, [fieldName]: value };
+            if (fieldName === "baseLoanAmount") {
+              updatedScenario.monthlyMortgageInsurance =
+                calculateMortgageInsurance(value);
+            }
+            return updatedScenario;
           }
           return scenario;
         }),
       };
     }
     case "ADD_SCENARIO":
-      if (state.scenarios.length >= 5) {
+      if (state.scenarios.length >= MAX_SCENARIOS) {
         return state;
       }
       return {
         ...state,
+        isReset: false,
         scenarios: [...state.scenarios, { ...initialScenario }],
         results: [...state.results, { ...initialResult }],
       };
@@ -46,6 +55,7 @@ export const calculatorReducer = (state, action) => {
       const scenarioIndex = action.payload;
       return {
         ...state,
+        isReset: false,
         scenarios: state.scenarios.filter(
           (_, index) => index !== scenarioIndex
         ),
@@ -55,28 +65,37 @@ export const calculatorReducer = (state, action) => {
       const resultIndex = action.payload;
       return {
         ...state,
-        results: state.results.filter(
-          (_, index) => index !== resultIndex
-        ),
+        results: state.results.filter((_, index) => index !== resultIndex),
       };
     }
     case "SHOW_RESULTS":
       return {
         ...state,
         showResults: action.payload,
+        isReset: false,
       };
     case "UPDATE_RESULTS":
       return {
         ...state,
+        isReset: false,
         results: action.payload,
       };
-    case "RESET":
+    case "RESET": {
+      const numberOfScenarios = state.scenarios.length;
+      const newScenarios = new Array(numberOfScenarios)
+        .fill()
+        .map(() => ({ ...initialScenario }));
+      const newResults = new Array(numberOfScenarios)
+        .fill()
+        .map(() => ({ ...initialResult }));
       return {
         ...state,
+        isReset: true,
         showResults: false,
-        scenarios: [{ ...initialScenario }, { ...initialScenario }],
-        results: [{ ...initialResult }, { ...initialResult }],
+        scenarios: newScenarios,
+        results: newResults,
       };
+    }
     default:
       return state;
   }
