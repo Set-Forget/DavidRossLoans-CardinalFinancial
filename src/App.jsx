@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./routes";
 import Header from "./components/Header";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 export default function App({ children }) {
   const headerStyle = {
@@ -17,9 +17,7 @@ export default function App({ children }) {
           style={headerStyle}
         >
           <AppRoutes />
-          <div className="w-full h-full bg-white rounded-lg p-4 m-4 flex flex-col place-items-center gap-4 dark:bg-transparent">
-            {children}
-          </div>
+          {children}
         </main>
       </div>
     </Router>
@@ -27,5 +25,5 @@ export default function App({ children }) {
 }
 
 App.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };

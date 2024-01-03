@@ -10,6 +10,7 @@ export const CalculatorContext = createContext();
 
 const initialState = {
   showResults: false,
+  isReset: false,
   scenarios: [initialScenario, initialScenario],
   results: [initialResult, initialResult],
 };

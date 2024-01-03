@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect } from "react";
+import { DownIcon, UpIcon } from "./Icons";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { initialResult } from "../../reducer/Calculator";
 
@@ -8,7 +9,7 @@ const TableResult = () => {
 
   const getPMT = useCallback((interestRate, baseLoanAmount) => {
     const monthlyPayments = 30 * 12;
-    const rate = Number(interestRate?.split("%")[0]);
+    const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
     const dividend = Number(baseLoanAmount) * monthlyPaymentsRate;
     const divider = 1 - Math.pow(1 + monthlyPaymentsRate, -monthlyPayments);
@@ -66,32 +67,9 @@ const TableResult = () => {
     dispatch({ type: "UPDATE_RESULTS", payload: newResults });
   }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showResults]);
 
-  const IconUp = () => (
-    <svg
-      width="16"
-      height="12"
-      viewBox="0 0 16 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M8 0L15.7942 11.25H0.205771L8 0Z" fill="#2BCE9D" />
-    </svg>
-  );
-
-  const IconDown = () => (
-    <svg
-      width="16"
-      height="12"
-      viewBox="0 0 16 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M8 12L0.205773 0.749999L15.7942 0.75L8 12Z" fill="#FC3945" />
-    </svg>
-  );
 
   return (
-    <table className="border-collapse table-auto w-full text-sm">
+    <table className="border-collapse table-auto w-full text-md">
       <thead>
         <tr>
           <th className="border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-left">
@@ -121,7 +99,7 @@ const TableResult = () => {
                 key={`principleAndInterest-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(principleAndInterest)}
+                $ {checkValue(principleAndInterest)}
               </td>
             );
           })}
@@ -137,7 +115,7 @@ const TableResult = () => {
                 key={`homeOwnersInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(homeOwnersInsurance)}
+                $ {checkValue(homeOwnersInsurance)}
               </td>
             );
           })}
@@ -147,13 +125,13 @@ const TableResult = () => {
             Monthly Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
-            const { monthlyMortgageInsurance } = scenario;
+            const { baseLoanAmount } = scenario;
             return (
               <td
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(monthlyMortgageInsurance)}
+                $ {checkValue((baseLoanAmount * 0.85) / 12)}
               </td>
             );
           })}
@@ -169,7 +147,7 @@ const TableResult = () => {
                 key={`propertyTaxes-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(propertyTaxes)}
+                $ {checkValue(propertyTaxes)}
               </td>
             );
           })}
@@ -185,7 +163,7 @@ const TableResult = () => {
                 key={`totalHousingExpense-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(totalHousingExpense)}
+                $ {checkValue(totalHousingExpense)}
               </td>
             );
           })}
@@ -201,7 +179,7 @@ const TableResult = () => {
                 key={`totalHousingExpenseWithHOA-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(totalHousingExpenseWithHOA)}
+                $ {checkValue(totalHousingExpenseWithHOA)}
               </td>
             );
           })}
@@ -217,7 +195,7 @@ const TableResult = () => {
                 key={`totalDownPayment-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(totalDownPayment)}
+                $ {checkValue(totalDownPayment)}
               </td>
             );
           })}
@@ -233,7 +211,7 @@ const TableResult = () => {
                 key={`totalCashFromBorrower-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                ${checkValue(totalCashFromBorrower)}
+                $ {checkValue(totalCashFromBorrower)}
               </td>
             );
           })}
@@ -251,7 +229,7 @@ const TableResult = () => {
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
-                  className="flex items-center"
+                  className="flex items-center whitespace-nowrap"
                   key={`downPaymentDelta-${index}-${i}`}
                 >
                   Vs Scenario {i + 1}:
@@ -260,7 +238,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -288,7 +266,7 @@ const TableResult = () => {
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
-                  className="flex items-center"
+                  className="flex items-center whitespace-nowrap"
                   key={`closingCostDelta-${index}-${i}`}
                 >
                   Vs Scenario {i + 1}:
@@ -297,7 +275,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -325,7 +303,7 @@ const TableResult = () => {
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
-                  className="flex items-center"
+                  className="flex items-center whitespace-nowrap"
                   key={`cashFromBorrowerDelta-${index}-${i}`}
                 >
                   Vs Scenario {i + 1}:
@@ -334,7 +312,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -361,14 +339,14 @@ const TableResult = () => {
               const { totalHousingExpenseWithHOA: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
-                <span className="flex items-center" key={`paymentDifference-${index}-${i}`}>
+                <span className="flex items-center whitespace-nowrap" key={`paymentDifference-${index}-${i}`}>
                   Vs Scenario {i + 1}:
                   <span
                     className={`flex items-center ml-2 ${
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <IconUp /> : <IconDown />}
+                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -389,7 +367,7 @@ const TableResult = () => {
 
   function checkValue(value) {
     const number = Number(value);
-    return isNaN(number) ? 0 : number;
+    return isNaN(number) ? 0 : number.toFixed(2);
   }
 };
 
