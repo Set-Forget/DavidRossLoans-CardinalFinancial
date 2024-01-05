@@ -44,12 +44,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Purchase Price
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`purchasePrice-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`purchasePrice-${index}`} prefix />
+              <CalculatorInput name={`purchasePrice-${index}`} value={scenario.purchasePrice} prefix />
             </td>
           ))}
         </tr>
@@ -57,12 +57,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Down Payment Percentage
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`downPaymentPercentage-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`downPaymentPercentage-${index}`} suffix />
+              <CalculatorInput name={`downPaymentPercentage-${index}`} value={scenario.downPaymentPercentage} suffix />
             </td>
           ))}
         </tr>
@@ -70,12 +70,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Base Loan Amount
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`baseLoanAmount-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`baseLoanAmount-${index}`} prefix />
+              <CalculatorInput name={`baseLoanAmount-${index}`} value={scenario.baseLoanAmount} prefix />
             </td>
           ))}
         </tr>
@@ -89,8 +89,8 @@ const Table = () => {
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none py-2 p-3 text-sm leading-5 text-gray-900 focus:ring-0">
-                  {scenario.monthlyMortgageInsurance}{" "}%
+                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900 focus:ring-0">
+                ${" "}{scenario.monthlyMortgageInsurance}
                 </span>
               </td>
             );
@@ -100,12 +100,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Property Taxes
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`propertyTaxes-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`propertyTaxes-${index}`} prefix />
+              <CalculatorInput name={`propertyTaxes-${index}`} value={scenario.propertyTaxes} prefix />
             </td>
           ))}
         </tr>
@@ -113,12 +113,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Home-Owners Insurance
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`homeOwnersInsurance-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`homeOwnersInsurance-${index}`} prefix />
+              <CalculatorInput name={`homeOwnersInsurance-${index}`} value={scenario.homeOwnersInsurance} prefix />
             </td>
           ))}
         </tr>
@@ -126,12 +126,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             HOA Payment
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`HOAPayment-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`HOAPayment-${index}`} prefix />
+              <CalculatorInput name={`HOAPayment-${index}`} value={scenario.HOAPayment} prefix />
             </td>
           ))}
         </tr>
@@ -139,12 +139,12 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Closing Costs
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`totalClosingCosts-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`totalClosingCosts-${index}`} prefix />
+              <CalculatorInput name={`totalClosingCosts-${index}`} value={scenario.totalClosingCosts} prefix />
             </td>
           ))}
         </tr>
@@ -152,13 +152,14 @@ const Table = () => {
           <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Conventional Mortgage Insurance Paid Up Front
           </td>
-          {scenarios.map((_, index) => (
+          {scenarios.map((scenario, index) => (
             <td
               key={`mortgageInsurancePaidUpFront-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
               <CalculatorInput
                 name={`mortgageInsurancePaidUpFront-${index}`}
+                value={scenario.mortgageInsurancePaidUpFront}
                 prefix
               />
             </td>
