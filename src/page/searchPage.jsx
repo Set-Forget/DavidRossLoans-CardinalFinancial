@@ -4,16 +4,11 @@ import Spinner from "./../components/Spinner";
 import WebScrappingResult from "./../components/TableResults";
 import SearchBar from "./../components/searchBar/MapboxSearchBar";
 import ButtonAddToPipedrive from "../components/addNotes/btnAddToPipedrive";
-import { LoadingContext } from "../context/LoadingContext";
 import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../routes";
 
 export default function SearchPage() {
   const { user } = useContext(UserContext);
-  const { loading } = useContext(LoadingContext);
   const { allowPipedrive } = user;
-  const navigate = useNavigate();
   const [hasSearched, setHasSearched] = useState(false);
   const [average, setAverage] = useState(0);
   const [searchItem, setSearchItem] = useState("");
@@ -107,13 +102,6 @@ export default function SearchPage() {
   }, [hasSearched]);
 
   const mutation = useMutation((address) => searchRealStateValues(address));
-
-  useEffect(() => {
-    if (user.email) return;
-    navigate(BASE_URL);
-  }, [navigate, user]);
-
-  if (loading) return <Spinner />;
 
   return (
     <>

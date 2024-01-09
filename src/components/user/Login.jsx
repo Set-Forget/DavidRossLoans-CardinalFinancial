@@ -1,16 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { LoadingContext } from "../../context/LoadingContext";
 import PropTypes from "prop-types";
-import { BASE_URL } from "../../routes";
 
 function Login({ setAuth, setTempUser }) {
   const { setUser } = useContext(UserContext);
   const { setLoading } = useContext(LoadingContext);
-  const navigate = useNavigate();
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const login = useGoogleLogin({
@@ -18,7 +15,6 @@ function Login({ setAuth, setTempUser }) {
       localStorage.setItem("userInfo", JSON.stringify(response));
       setLoading(true);
       fetchGoogleUserData(response);
-      navigate(`${BASE_URL}home`);
     },
     onError: (error) => {
       console.log(`Login Failed: ${error}`);

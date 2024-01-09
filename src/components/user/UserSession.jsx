@@ -1,18 +1,14 @@
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { googleLogout } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../routes";
 
 export default function UserSession() {
   const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
   
   const logOut = () => {
     googleLogout();
     localStorage.clear();
     setUser({ email: null });
-    navigate(BASE_URL);
   };
 
   return (
