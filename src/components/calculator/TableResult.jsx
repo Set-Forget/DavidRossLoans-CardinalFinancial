@@ -29,7 +29,7 @@ const TableResult = () => {
         Number(homeOwnersInsurance) +
         Number(monthlyMortgageInsurance) +
         Number(propertyTaxes);
-      return pmt + sum;
+      return Number(pmt) + sum;
     },
     [getPMT]
   );
@@ -87,7 +87,7 @@ const TableResult = () => {
           })}
         </tr>
       </thead>
-      <tbody className="bg-white dark:bg-slate-800">
+      <tbody className="dark:bg-slate-800">
         <tr>
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Principle and Interest
@@ -97,7 +97,7 @@ const TableResult = () => {
             return (
               <td
                 key={`principleAndInterest-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(principleAndInterest)}
               </td>
@@ -113,7 +113,7 @@ const TableResult = () => {
             return (
               <td
                 key={`homeOwnersInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(homeOwnersInsurance)}
               </td>
@@ -129,7 +129,7 @@ const TableResult = () => {
             return (
               <td
                 key={`monthlyMortgageInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue((baseLoanAmount * 0.85) / 12)}
               </td>
@@ -145,7 +145,7 @@ const TableResult = () => {
             return (
               <td
                 key={`propertyTaxes-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(propertyTaxes)}
               </td>
@@ -161,7 +161,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalHousingExpense-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(totalHousingExpense)}
               </td>
@@ -177,7 +177,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalHousingExpenseWithHOA-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(totalHousingExpenseWithHOA)}
               </td>
@@ -193,7 +193,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalDownPayment-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(totalDownPayment)}
               </td>
@@ -209,7 +209,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalCashFromBorrower-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 $ {checkValue(totalCashFromBorrower)}
               </td>
@@ -246,7 +246,7 @@ const TableResult = () => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -275,7 +275,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                   $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -283,7 +283,7 @@ const TableResult = () => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -312,7 +312,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -320,7 +320,7 @@ const TableResult = () => {
             return (
               <td
                 key={`cashFromBorrowerDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -346,7 +346,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    ${value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -354,7 +354,7 @@ const TableResult = () => {
             return (
               <td
                 key={`paymentDifferences-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -367,7 +367,7 @@ const TableResult = () => {
 
   function checkValue(value) {
     const number = Number(value);
-    return isNaN(number) ? 0 : number.toFixed(2);
+    return isNaN(number) ? "0" : number.toFixed(2);
   }
 };
 
