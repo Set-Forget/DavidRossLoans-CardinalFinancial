@@ -3,7 +3,12 @@ import Table from "./Table";
 import TableResult from "./TableResult";
 import { AddIcon } from "./Icons";
 import { CalculatorContext } from "../../context/CalculatorContext";
-import { HASH_PURCHASE_PRICE, MAX_SCENARIOS } from "./utils";
+import {
+  KEY_PURCHASE_PRICE,
+  KEY_HOA_PAYMENT,
+  MAX_SCENARIOS,
+  KEY_PROPERTY_TAXES,
+} from "./utils";
 import Select from "react-select";
 
 const Calculator = () => {
@@ -15,6 +20,8 @@ const Calculator = () => {
     purchasePrice: null,
     baseLoanAmount: null,
     downPaymentPercentage: null,
+    HOAPayment: null,
+    propertyTaxes: null,
   });
   const scenariosRef = useRef(scenarios);
 
@@ -67,13 +74,29 @@ const Calculator = () => {
           value: String(baseLoanAmount),
         },
       });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "HOAPayment",
+          scenarioIndex: String(scenarioIndex),
+          value: String(dealData?.HOAPayment),
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "propertyTaxes",
+          scenarioIndex: String(scenarioIndex),
+          value: String(dealData?.propertyTaxes),
+        },
+      });
     });
   }, [dealData, dispatch, selectedDeal]);
 
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
 
   return (
-    <section className="bg-slate-50 rounded-xl dark:bg-slate-800/25">
+    <section className="rounded-xl">
       <div className="max-w-6xl shadow-sm my-2 rounded-xl">
         <div className="w-full flex justify-between my-6">
           <Select
@@ -85,7 +108,7 @@ const Calculator = () => {
             className="max-w-sm h-[38px] border-none w-full bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block dark:bg-gray-700 dark:placeholder-gray-400"
           />
           <button
-            className="flex items-center text-md font-medium whitespace-nowrap mb-1 border border-white rounded-full px-3 py-2"
+            className="flex items-center text-md font-medium whitespace-nowrap mb-1 border border-white rounded-full px-3 py-2 text-white"
             onClick={handleAddScenario}
             disabled={!showAddScenario}
           >
@@ -97,7 +120,7 @@ const Calculator = () => {
         {showResults ? (
           <div className="flex w-full justify-end mt-10 mb-10">
             <button
-              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px]"
+              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px] text-white"
               onClick={handleReset}
             >
               Reset
@@ -106,7 +129,7 @@ const Calculator = () => {
         ) : (
           <div className="flex w-full justify-end mt-10 mb-10">
             <button
-              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px]"
+              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px] text-white"
               onClick={handleCalculate}
             >
               Calculate
@@ -141,14 +164,15 @@ const Calculator = () => {
     fetch(apiUrl + apiEndpoint + apiKey)
       .then((response) => response.json())
       .then((res) => {
-        console.log(res.data);
         setDealData({
-          purchasePrice: res.data[HASH_PURCHASE_PRICE],
+          purchasePrice: res.data[KEY_PURCHASE_PRICE],
           baseLoanAmount: res.data["value"],
           downPaymentPercentage: (
-            (1 - res.data["value"] / res.data[HASH_PURCHASE_PRICE]) *
+            (1 - res.data["value"] / res.data[KEY_PURCHASE_PRICE]) *
             100
           ).toFixed(2),
+          HOAPayment: res.data[KEY_HOA_PAYMENT],
+          propertyTaxes: res.data[KEY_PROPERTY_TAXES],
         });
       });
   }

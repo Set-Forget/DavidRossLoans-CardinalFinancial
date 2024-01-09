@@ -19,7 +19,7 @@ const Table = () => {
             return (
               <th
                 key={`scenario-${index}`}
-                className="font-bold border-b dark:border-slate-600 p-4 pt-2 pb-3 text-slate-400 dark:text-slate-200 text-left"
+                className="font-bold border-b dark:border-slate-600 p-4 pt-2 pb-3 text-white text-left"
               >
                 Scenario {index + 1}
                 {index >= 2 && (
@@ -39,7 +39,7 @@ const Table = () => {
 
         </tr>
       </thead>
-      <tbody className="bg-white dark:bg-slate-800">
+      <tbody className="dark:bg-slate-800">
         <tr>
           <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Purchase Price
