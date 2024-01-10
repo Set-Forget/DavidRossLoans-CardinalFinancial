@@ -7,8 +7,9 @@ const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
   const { scenarios, results, showResults } = state;
 
-  const getPMT = useCallback((interestRate, loanAmount) => {
-    const monthlyPayments = 30 * 12;
+  const getPMT = useCallback((interestRate, loanAmount, loanTerm) => {
+    const years = loanTerm.split(" ")[0]
+    const monthlyPayments = Number(years) * 12;
     const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
     const dividend = Number(loanAmount) * monthlyPaymentsRate;
@@ -20,11 +21,12 @@ const TableResult = () => {
     (
       interestRate,
       loanAmount,
+      loanTerm,
       homeOwnersInsurance,
       monthlyMortgageInsurance,
       propertyTaxes
     ) => {
-      const pmt = getPMT(interestRate, loanAmount);
+      const pmt = getPMT(interestRate, loanAmount, loanTerm);
       const sum =
         Number(homeOwnersInsurance) +
         Number(monthlyMortgageInsurance) +
@@ -39,11 +41,13 @@ const TableResult = () => {
     const newResults = scenarios.map((scenario) => {
       const principleAndInterest = getPMT(
         scenario.interestRate,
-        scenario.loanAmount
+        scenario.loanAmount,
+        scenario.loanTerm
       );
       const totalHousingExpense = getTotalHousingExpense(
         scenario.interestRate,
         scenario.loanAmount,
+        scenario.loanTerm,
         scenario.homeOwnersInsurance,
         scenario.monthlyMortgageInsurance,
         scenario.propertyTaxes
