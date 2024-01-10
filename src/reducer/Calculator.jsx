@@ -2,15 +2,20 @@ import { MAX_SCENARIOS, calculateMortgageInsurance } from "../components/calcula
 
 export const initialScenario = {
   purchasePrice: "",
+  loanAmount: "",
+  loanTerm: "",
   downPaymentPercentage: "",
-  baseLoanAmount: "",
+  downPaymentDollars: "",
+  interestRate: "",
+  points: "",
+  homeOwnersInsurance: "",
   monthlyMortgageInsurance: "",
   propertyTaxes: "",
-  homeOwnersInsurance: "",
   HOAPayment: "",
+  singlePremiumMortgageInsurance: "",
+  prepaidEscrowClosingCosts: "",
+  closingCosts: "",
   totalClosingCosts: "",
-  mortgageInsurancePaidUpFront: "",
-  interestRate: "",
 };
 
 export const initialResult = {
@@ -31,7 +36,7 @@ export const calculatorReducer = (state, action) => {
         scenarios: state.scenarios.map((scenario, index) => {
           if (String(index) === scenarioIndex) {
             let updatedScenario = { ...scenario, [fieldName]: value };
-            if (fieldName === "baseLoanAmount") {
+            if (fieldName === "loanAmount") {
               updatedScenario.monthlyMortgageInsurance =
                 calculateMortgageInsurance(value);
             }
@@ -48,8 +53,8 @@ export const calculatorReducer = (state, action) => {
       return {
         ...state,
         isReset: false,
-        scenarios: [...state.scenarios, { ...initialScenario }],
-        results: [...state.results, { ...initialResult }],
+        scenarios: [...state.scenarios, { ...state.scenarios[0] }],
+        results: [...state.results, { ...state.results[0] }],
       };
     case "REMOVE_SCENARIO": {
       const scenarioIndex = action.payload;

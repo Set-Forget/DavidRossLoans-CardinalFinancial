@@ -7,11 +7,11 @@ const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
   const { scenarios, results, showResults } = state;
 
-  const getPMT = useCallback((interestRate, baseLoanAmount) => {
+  const getPMT = useCallback((interestRate, loanAmount) => {
     const monthlyPayments = 30 * 12;
     const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
-    const dividend = Number(baseLoanAmount) * monthlyPaymentsRate;
+    const dividend = Number(loanAmount) * monthlyPaymentsRate;
     const divider = 1 - Math.pow(1 + monthlyPaymentsRate, -monthlyPayments);
     return (dividend / divider).toFixed(2);
   }, []);
@@ -19,12 +19,12 @@ const TableResult = () => {
   const getTotalHousingExpense = useCallback(
     (
       interestRate,
-      baseLoanAmount,
+      loanAmount,
       homeOwnersInsurance,
       monthlyMortgageInsurance,
       propertyTaxes
     ) => {
-      const pmt = getPMT(interestRate, baseLoanAmount);
+      const pmt = getPMT(interestRate, loanAmount);
       const sum =
         Number(homeOwnersInsurance) +
         Number(monthlyMortgageInsurance) +
@@ -39,11 +39,11 @@ const TableResult = () => {
     const newResults = scenarios.map((scenario) => {
       const principleAndInterest = getPMT(
         scenario.interestRate,
-        scenario.baseLoanAmount
+        scenario.loanAmount
       );
       const totalHousingExpense = getTotalHousingExpense(
         scenario.interestRate,
-        scenario.baseLoanAmount,
+        scenario.loanAmount,
         scenario.homeOwnersInsurance,
         scenario.monthlyMortgageInsurance,
         scenario.propertyTaxes
@@ -51,9 +51,9 @@ const TableResult = () => {
       const totalHousingExpenseWithHOA =
         totalHousingExpense + Number(scenario.HOAPayment);
       const totalDownPayment =
-        Number(scenario.purchasePrice) - Number(scenario.baseLoanAmount);
+        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
       const totalCashFromBorrower =
-        Number(scenario.purchasePrice) - Number(scenario.baseLoanAmount);
+        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
       return {
         ...initialResult,
         principleAndInterest,
@@ -79,7 +79,7 @@ const TableResult = () => {
             return (
               <th
                 key={`result-${index}`}
-                className="font-bold border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
+                className="font-normal border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
               >
                 Scenario {index + 1}
               </th>
@@ -89,7 +89,7 @@ const TableResult = () => {
       </thead>
       <tbody className="dark:bg-slate-800">
         <tr>
-          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Principle and Interest
           </td>
           {results.map((result, index) => {
@@ -105,7 +105,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
             Home-Owners Insurance
           </td>
           {scenarios.map((scenario, index) => {
@@ -121,23 +121,23 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Monthly Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
-            const { baseLoanAmount } = scenario;
+            const { loanAmount } = scenario;
             return (
               <td
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue((baseLoanAmount * 0.85) / 12)}
+                $ {checkValue((loanAmount * 0.85) / 12)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Property Taxes
           </td>
           {scenarios.map((scenario, index) => {
@@ -153,7 +153,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Housing Expense
           </td>
           {results.map((result, index) => {
@@ -169,7 +169,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Housing Expense With the HOA
           </td>
           {results.map((result, index) => {
@@ -185,7 +185,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Down Payment
           </td>
           {results.map((result, index) => {
@@ -201,7 +201,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Total Cash From Borrower
           </td>
           {results.map((result, index) => {
@@ -217,7 +217,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Down Payment Delta
           </td>
           {results.map((result, index) => {
@@ -254,15 +254,15 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Closing Cost Delta
           </td>
           {scenarios.map((scenario, index) => {
-            const { mortgageInsurancePaidUpFront: total } = scenario;
+            const { singlePremiumMortgageInsurance: total } = scenario;
             const comparisons = [];
             results.forEach((r, i) => {
               if (index === i) return;
-              const { mortgageInsurancePaidUpFront: tmpTotal } = r;
+              const { singlePremiumMortgageInsurance: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
@@ -291,7 +291,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Cash From Borrower Delta
           </td>
           {results.map((result, index) => {
@@ -328,7 +328,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-bold border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
             Payment Difference
           </td>
           {results.map((result, index) => {

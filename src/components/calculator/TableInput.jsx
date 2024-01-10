@@ -10,6 +10,7 @@ const CalculatorInput = ({
   suffix = false,
 }) => {
   const [localValue, setLocalValue] = useState(value);
+  const [focus, setFocus] = useState(false);
   const { dispatch, state } = useContext(CalculatorContext);
   const { isReset } = state;
 
@@ -27,8 +28,9 @@ const CalculatorInput = ({
   }, [isReset]);
 
   return (
-    <div className="flex items-center relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+    <div className={`flex items-center relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md sm:text-sm ${focus ? "outline outline-2 outline-[#2684FF]" : ""}`}>
       {prefix && <span className="ml-2">$ </span>}
+      {!prefix && !suffix && <>&nbsp;&nbsp;</>}
       <input
         className={`${
           suffix ? "text-right pr-1" : ""
@@ -36,6 +38,8 @@ const CalculatorInput = ({
         onChange={handleOnChange}
         name={name}
         value={localValue}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         id={name}
         disabled={disabled}
         type="text"
@@ -63,6 +67,15 @@ const CalculatorInput = ({
       },
     });
   }
+
+  function handleFocus() {
+    setFocus(true)
+  }
+
+  function handleBlur() {
+    setFocus(false)
+  }
+
 };
 
 CalculatorInput.propTypes = {
