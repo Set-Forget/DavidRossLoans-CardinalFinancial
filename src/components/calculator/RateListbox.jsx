@@ -10,6 +10,7 @@ const RateListBox = ({ name, value }) => {
   const { dispatch, state } = useContext(CalculatorContext);
   const { scenarios } = state;
   const [width, setWidth] = useState(0);
+  const [focus, setFocus] = useState(false);
   const ref = useRef(null);
   const _value = value.split(" ")[0];
   
@@ -20,9 +21,9 @@ const RateListBox = ({ name, value }) => {
   }, [scenarios.length]);
 
   return (
-    <div className="-top-5">
-      <Listbox value={value} onChange={handleOnChange}>
-        <div className="mt-1" ref={ref}>
+    <div>
+      <Listbox value={value} onChange={handleOnChange} onFocus={handleFocus} onBlur={handleBlur} className={`${focus ? "outline outline-2 outline-[#2684FF] rounded-lg" : ""}`}>
+        <div ref={ref}>
           <Listbox.Button className="h-[2.25rem] w-full flex justify-between cursor-default rounded-lg bg-white py-2 pl-3 pr-1 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate text-black w-full text-right">{_value}{value && " %"}</span>
             <span className="pointer-events-none inset-y-0 flex items-center pr-2">
@@ -40,7 +41,7 @@ const RateListBox = ({ name, value }) => {
           >
             <Listbox.Options
               style={{ width: `${width}px` }}
-              className="absolute mt-1 max-h-60 w-auto overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+              className="z-50 absolute mt-1 max-h-60 w-auto overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
             >
               {rates.map((item) => (
                 <Listbox.Option
@@ -81,6 +82,15 @@ const RateListBox = ({ name, value }) => {
       },
     });
   }
+
+  function handleFocus() {
+    setFocus(true)
+  }
+
+  function handleBlur() {
+    setFocus(false)
+  }
+
 };
 
 RateListBox.propTypes = {

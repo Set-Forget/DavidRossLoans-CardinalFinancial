@@ -18,7 +18,7 @@ const Calculator = () => {
   const [options, setOptions] = useState([]);
   const [dealData, setDealData] = useState({
     purchasePrice: null,
-    baseLoanAmount: null,
+    loanAmount: null,
     downPaymentPercentage: null,
     HOAPayment: null,
     propertyTaxes: null,
@@ -47,8 +47,8 @@ const Calculator = () => {
   }, [apiKey]);
 
   useEffect(() => {
-    const { purchasePrice, downPaymentPercentage, baseLoanAmount } = dealData;
-    if (!purchasePrice || !downPaymentPercentage || !baseLoanAmount) return;
+    const { purchasePrice, downPaymentPercentage, loanAmount } = dealData;
+    if (!purchasePrice || !downPaymentPercentage || !loanAmount) return;
     scenariosRef.current.forEach((_, scenarioIndex) => {
       dispatch({
         type: "UPDATE_SCENARIO",
@@ -69,9 +69,9 @@ const Calculator = () => {
       dispatch({
         type: "UPDATE_SCENARIO",
         payload: {
-          fieldName: "baseLoanAmount",
+          fieldName: "loanAmount",
           scenarioIndex: String(scenarioIndex),
-          value: String(baseLoanAmount),
+          value: String(loanAmount),
         },
       });
       dispatch({
@@ -166,7 +166,7 @@ const Calculator = () => {
       .then((res) => {
         setDealData({
           purchasePrice: res.data[KEY_PURCHASE_PRICE],
-          baseLoanAmount: res.data["value"],
+          loanAmount: res.data["value"],
           downPaymentPercentage: (
             (1 - res.data["value"] / res.data[KEY_PURCHASE_PRICE]) *
             100
