@@ -1,13 +1,16 @@
 import { useContext, useState, useEffect, useRef } from "react";
-import Table from "./Table";
-import TableResult from "./TableResult";
-import { AddIcon } from "./Icons";
+import Table from "../../components/calculator/Table";
+import TableResult from "../../components/calculator/TableResult";
+import { AddIcon } from "../../components/calculator/Icons";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import {
   KEY_PURCHASE_PRICE,
   KEY_HOA_PAYMENT,
   MAX_SCENARIOS,
   KEY_PROPERTY_TAXES,
+  KEY_LOAN_TERM,
+  KEY_DOWN_PAYMENT_AMOUNT,
+  KEY_MORTGAGE_INSURANCE,
 } from "./utils";
 import Select from "react-select";
 
@@ -19,9 +22,12 @@ const Calculator = () => {
   const [dealData, setDealData] = useState({
     purchasePrice: null,
     loanAmount: null,
+    loanTerm: null,
     downPaymentPercentage: null,
     HOAPayment: null,
     propertyTaxes: null,
+    downPaymentAmount: null,
+    mortgageInsurance: null,
   });
   const scenariosRef = useRef(scenarios);
 
@@ -47,8 +53,8 @@ const Calculator = () => {
   }, [apiKey]);
 
   useEffect(() => {
-    const { purchasePrice, downPaymentPercentage, loanAmount } = dealData;
-    if (!purchasePrice || !downPaymentPercentage || !loanAmount) return;
+    const { purchasePrice, loanAmount } = dealData;
+    if (!purchasePrice || !loanAmount) return;
     scenariosRef.current.forEach((_, scenarioIndex) => {
       dispatch({
         type: "UPDATE_SCENARIO",
@@ -63,7 +69,7 @@ const Calculator = () => {
         payload: {
           fieldName: "downPaymentPercentage",
           scenarioIndex: String(scenarioIndex),
-          value: downPaymentPercentage,
+          value: dealData.downPaymentPercentage,
         },
       });
       dispatch({
@@ -77,9 +83,17 @@ const Calculator = () => {
       dispatch({
         type: "UPDATE_SCENARIO",
         payload: {
+          fieldName: "loanTerm",
+          scenarioIndex: String(scenarioIndex),
+          value: dealData?.loanTerm ?  dealData?.loanTerm + " years" : "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
           fieldName: "HOAPayment",
           scenarioIndex: String(scenarioIndex),
-          value: String(dealData?.HOAPayment),
+          value: dealData?.HOAPayment ?? "",
         },
       });
       dispatch({
@@ -87,7 +101,23 @@ const Calculator = () => {
         payload: {
           fieldName: "propertyTaxes",
           scenarioIndex: String(scenarioIndex),
-          value: String(dealData?.propertyTaxes),
+          value: dealData?.propertyTaxes ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "downPaymentAmount",
+          scenarioIndex: String(scenarioIndex),
+          value: dealData?.downPaymentAmount ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "singlePremiumMortgageInsurance",
+          scenarioIndex: String(scenarioIndex),
+          value: dealData?.mortgageInsurance ?? "",
         },
       });
     });
@@ -171,8 +201,11 @@ const Calculator = () => {
             (1 - res.data["value"] / res.data[KEY_PURCHASE_PRICE]) *
             100
           ).toFixed(2),
+          loanTerm: String(res.data[KEY_LOAN_TERM] / 12),
           HOAPayment: res.data[KEY_HOA_PAYMENT],
           propertyTaxes: res.data[KEY_PROPERTY_TAXES],
+          downPaymentAmount: res.data[KEY_DOWN_PAYMENT_AMOUNT],
+          mortgageInsurance: res.data[KEY_MORTGAGE_INSURANCE]
         });
       });
   }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import RateListBox from "./RateListbox";
+import ListBox from "./Listbox";
 import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { RemoveIcon } from "./Icons";
@@ -82,7 +82,7 @@ const Table = () => {
               key={`loanTerm-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`loanTerm-${index}`} value={scenario.loanTerm} />
+              <ListBox name={`loanTerm-${index}`} value={scenario.loanTerm} />
             </td>
           ))}
         </tr>
@@ -105,17 +105,17 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Down Payment Dollars
+            Down Payment Amount
           </td>
           {scenarios.map((scenario, index) => (
             <td
-              key={`downPaymentDollars-${index}`}
+              key={`downPaymentAmount-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
               <CalculatorInput
                 prefix
-                name={`downPaymentDollars-${index}`}
-                value={scenario.downPaymentDollars}
+                name={`downPaymentAmount-${index}`}
+                value={scenario.downPaymentAmount}
               />
             </td>
           ))}
@@ -129,7 +129,7 @@ const Table = () => {
               key={`interestRate-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <RateListBox
+              <ListBox
                 name={`interestRate-${index}`}
                 value={scenario.interestRate}
               />
@@ -176,7 +176,7 @@ const Table = () => {
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-3 text-sm leading-5 text-gray-900 focus:ring-0">
+                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-3 text-sm leading-5 text-gray-900">
                   $ {scenario.monthlyMortgageInsurance}
                 </span>
               </td>

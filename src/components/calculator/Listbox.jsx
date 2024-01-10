@@ -2,18 +2,21 @@ import { Fragment, useRef, useState, useContext, useEffect } from "react";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { rates } from "./rates";
+import { rates, years } from "../../sections/calculator/utils";
 import { CheckIcon } from "./Icons";
 import PropTypes from "prop-types";
 
-const RateListBox = ({ name, value }) => {
+const ListBox = ({ name, value }) => {
   const { dispatch, state } = useContext(CalculatorContext);
   const { scenarios } = state;
   const [width, setWidth] = useState(0);
   const [focus, setFocus] = useState(false);
   const ref = useRef(null);
   const _value = value.split(" ")[0];
-  
+  const [fieldName, scenarioIndex] = name.split("-");
+  const isLoanTerm = fieldName === "loanTerm"
+  const values = isLoanTerm ? years : rates
+
   useEffect(() => {
     if (!ref.current) return;
     const width = ref.current.clientWidth;
@@ -25,7 +28,7 @@ const RateListBox = ({ name, value }) => {
       <Listbox value={value} onChange={handleOnChange} onFocus={handleFocus} onBlur={handleBlur} className={`${focus ? "outline outline-2 outline-[#2684FF] rounded-lg" : ""}`}>
         <div ref={ref}>
           <Listbox.Button className="h-[2.25rem] w-full flex justify-between cursor-default rounded-lg bg-white py-2 pl-3 pr-1 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-            <span className="block truncate text-black w-full text-right">{_value}{value && " %"}</span>
+            <span className="block truncate text-black w-full text-right">{_value}{value && isLoanTerm ? " years" : " %"}</span>
             <span className="pointer-events-none inset-y-0 flex items-center pr-2">
               <ChevronUpDownIcon
                 className="h-5 w-5 text-gray-400"
@@ -43,7 +46,7 @@ const RateListBox = ({ name, value }) => {
               style={{ width: `${width}px` }}
               className="z-50 absolute mt-1 max-h-60 w-auto overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
             >
-              {rates.map((item) => (
+              {values.map((item) => (
                 <Listbox.Option
                   key={item}
                   name=""
@@ -72,7 +75,6 @@ const RateListBox = ({ name, value }) => {
   );
 
   function handleOnChange(e) {
-    const [fieldName, scenarioIndex] = name.split("-");
     dispatch({
       type: "UPDATE_SCENARIO",
       payload: {
@@ -93,9 +95,9 @@ const RateListBox = ({ name, value }) => {
 
 };
 
-RateListBox.propTypes = {
+ListBox.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
 };
 
-export default RateListBox;
+export default ListBox;

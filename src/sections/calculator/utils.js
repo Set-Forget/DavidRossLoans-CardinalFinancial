@@ -1,3 +1,18 @@
+
+export const MAX_SCENARIOS = 5;
+
+export const KEY_PURCHASE_PRICE = "e986ec80d8dce46cf43f261f60235d0a2faa24da";
+export const KEY_PROPERTY_TAXES = "0ac894d6605e196e6b2be867ff0c677dd31d8e92";
+export const KEY_LOAN_TERM = "878ddd2c5094c630638d255fd9ad54ab37aa5a4b";
+export const KEY_HOA_PAYMENT = "e223b6bbce177a8877fa3e3e7674bceb5b6bc735";
+export const KEY_DOWN_PAYMENT_AMOUNT = "98826f12c210fb692cf563eb80be01501973c23d"
+export const KEY_MORTGAGE_INSURANCE = "ada448810ec8e41b03f4104947e7d36d1c1a16a8"
+
+export function calculateMortgageInsurance(value) {
+  const calc = (value * 0.85) / 12;
+  return isNaN(calc) ? "0" : String(calc.toFixed(2));
+}
+
 export const rates = [
   "1.000 %",
   "1.125 %",
@@ -72,4 +87,28 @@ export const rates = [
   "9.750 %",
   "9.875 %",
   "10.000 %"
+];
+
+export const years = [
+  "10 years",
+  "11 years",
+  "12 years",
+  "13 years",
+  "14 years",
+  "15 years",
+  "16 years",
+  "17 years",
+  "18 years",
+  "19 years",
+  "20 years",
+  "21 years",
+  "22 years",
+  "23 years",
+  "24 years",
+  "25 years",
+  "26 years",
+  "27 years",
+  "28 years",
+  "29 years",
+  "30 years"
 ];

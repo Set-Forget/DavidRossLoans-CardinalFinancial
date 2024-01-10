@@ -1,11 +1,11 @@
-import { MAX_SCENARIOS, calculateMortgageInsurance } from "../components/calculator/utils";
+import { MAX_SCENARIOS, calculateMortgageInsurance } from "../sections/calculator/utils";
 
 export const initialScenario = {
   purchasePrice: "",
   loanAmount: "",
   loanTerm: "",
   downPaymentPercentage: "",
-  downPaymentDollars: "",
+  downPaymentAmount: "",
   interestRate: "",
   points: "",
   homeOwnersInsurance: "",

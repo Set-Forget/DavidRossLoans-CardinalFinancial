@@ -1,5 +1,5 @@
 import { CalculatorProvider } from "../context/CalculatorContext";
-import Calculator from "../components/calculator";
+import Calculator from "../sections/calculator";
 
 export default function CalculatorPage() {
 
