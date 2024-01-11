@@ -15,7 +15,6 @@ export const initialScenario = {
   singlePremiumMortgageInsurance: "",
   prepaidEscrowClosingCosts: "",
   closingCosts: "",
-  totalClosingCosts: "",
 };
 
 export const initialResult = {
