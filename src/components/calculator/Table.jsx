@@ -145,7 +145,11 @@ const Table = () => {
               key={`points-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput name={`points-${index}`} value={scenario.points} prefix />
+              <CalculatorInput
+                name={`points-${index}`}
+                value={scenario.points}
+                prefix
+              />
             </td>
           ))}
         </tr>
@@ -277,17 +281,36 @@ const Table = () => {
               key={`totalClosingCosts-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <CalculatorInput
-                name={`totalClosingCosts-${index}`}
-                value={scenario.totalClosingCosts}
-                prefix
-              />
+              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-3 text-sm leading-5 text-gray-900">
+                $ {getTotalClosingCost(scenario)}
+              </span>
             </td>
           ))}
         </tr>
       </tbody>
     </table>
   );
+
+  function getTotalClosingCost(scenario) {
+    const {
+      points,
+      singlePremiumMortgageInsurance,
+      prepaidEscrowClosingCosts,
+      closingCosts,
+    } = scenario;
+    const _points = Number(points);
+    const _singlePremiumMortgageInsurance = Number(
+      singlePremiumMortgageInsurance
+    );
+    const _prepaidEscrowClosingCosts = Number(prepaidEscrowClosingCosts);
+    const _closingCosts = Number(closingCosts);
+    return (
+      _points +
+      _singlePremiumMortgageInsurance +
+      _prepaidEscrowClosingCosts +
+      _closingCosts
+    );
+  }
 };
 
 export default Table;
