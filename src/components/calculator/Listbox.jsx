@@ -16,6 +16,7 @@ const ListBox = ({ name, value }) => {
   const [fieldName, scenarioIndex] = name.split("-");
   const isLoanTerm = fieldName === "loanTerm"
   const values = isLoanTerm ? years : rates
+  const valueToShow = (value ? _value : "") + (isLoanTerm ? " years" : " %")
 
   useEffect(() => {
     if (!ref.current) return;
@@ -28,7 +29,7 @@ const ListBox = ({ name, value }) => {
       <Listbox value={value} onChange={handleOnChange} onFocus={handleFocus} onBlur={handleBlur} className={`${focus ? "outline outline-2 outline-[#2684FF] rounded-lg" : ""}`}>
         <div ref={ref}>
           <Listbox.Button className="h-[2.25rem] w-full flex justify-between cursor-default rounded-lg bg-white py-2 pl-3 pr-1 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-            <span className="block truncate text-black w-full text-right">{_value}{value && isLoanTerm ? " years" : " %"}</span>
+            <span className="block truncate text-black w-full text-right">{valueToShow}</span>
             <span className="pointer-events-none inset-y-0 flex items-center pr-2">
               <ChevronUpDownIcon
                 className="h-5 w-5 text-gray-400"
