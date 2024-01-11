@@ -264,7 +264,7 @@ const TableResult = () => {
           {scenarios.map((scenario, index) => {
             const { singlePremiumMortgageInsurance: total } = scenario;
             const comparisons = [];
-            results.forEach((r, i) => {
+            scenarios.forEach((r, i) => {
               if (index === i) return;
               const { singlePremiumMortgageInsurance: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
