@@ -10,13 +10,14 @@ const CalculatorInput = ({
   suffix = false,
 }) => {
   const [localValue, setLocalValue] = useState(value);
+  const [isEdited, setIsEdited] = useState(false);
   const [focus, setFocus] = useState(false);
   const { dispatch, state } = useContext(CalculatorContext);
   const { isReset } = state;
 
   useEffect(() => {
     if (!value || value === localValue) return;
-    let val = value;
+    let val = String(value);
     val = val.replace(/[^0-9.]/g, "").replace(/(\.\d{2})\d+/, "$1");
     if (prefix) val = val.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     setLocalValue(val);
@@ -27,14 +28,18 @@ const CalculatorInput = ({
     setLocalValue("");
   }, [isReset]);
 
+  useEffect(() => {
+    if (isReset) setIsEdited(false)
+  }, [isReset]);
+
   return (
-    <div className={`flex items-center relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md sm:text-sm ${focus ? "outline outline-2 outline-[#2684FF]" : ""}`}>
+    <div className={`flex items-center relative w-full cursor-default overflow-hidden rounded-lg text-left shadow-md sm:text-sm ${focus ? "outline outline-2 outline-[#2684FF]" : ""} ${isEdited ? "bg-yellow-100" : "bg-white"}`}>
       {prefix && <span className="ml-2">$ </span>}
       {!prefix && !suffix && <>&nbsp;&nbsp;</>}
       <input
         className={`${
           suffix ? "text-right pr-1" : ""
-        } w-full border-none pl-1 text-sm leading-5 text-gray-900 focus:ring-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]`}
+        }  ${isEdited ? "bg-yellow-100" : "bg-white"} w-full border-none pl-1 text-sm leading-5 text-gray-900 focus:ring-0 ${isEdited ? "" : "autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]" }`}
         onChange={handleOnChange}
         name={name}
         value={localValue}
@@ -49,6 +54,7 @@ const CalculatorInput = ({
   );
 
   function handleOnChange(e) {
+    if (!isEdited) setIsEdited(true)
     const [fieldName, scenarioIndex] = name.split("-");
     let val = e.target.value;
     const storeValue = val
