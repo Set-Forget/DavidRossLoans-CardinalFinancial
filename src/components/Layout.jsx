@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     <div className="flex flex-col place-items-center h-screen text-stone-800 dark:bg-slate-700 dark:text-white">
       <Header />
       {loading ? (
-        <Spinner />
+        <Spinner isLayout />
       ) : (
         <main
           className="flex-1 w-full flex flex-col place-items-center gap-4 relative p-6"

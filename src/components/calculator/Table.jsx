@@ -180,7 +180,7 @@ const Table = () => {
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
-                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-3 text-sm leading-5 text-gray-900">
+                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
                   $ {scenario.monthlyMortgageInsurance}
                 </span>
               </td>
@@ -281,7 +281,7 @@ const Table = () => {
               key={`totalClosingCosts-${index}`}
               className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
             >
-              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-3 text-sm leading-5 text-gray-900">
+              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
                 $ {getTotalClosingCost(scenario)}
               </span>
             </td>

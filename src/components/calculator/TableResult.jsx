@@ -76,7 +76,7 @@ const TableResult = () => {
     <table className="border-collapse table-auto w-full text-md">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 p-4 pl-8 pt-0 pb-3 text-left">
+          <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
@@ -93,7 +93,7 @@ const TableResult = () => {
       </thead>
       <tbody className="dark:bg-slate-800">
         <tr>
-          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
             Principle and Interest
           </td>
           {results.map((result, index) => {
@@ -109,7 +109,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
             Home-Owners Insurance
           </td>
           {scenarios.map((scenario, index) => {
@@ -125,7 +125,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Monthly Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
@@ -141,7 +141,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Property Taxes
           </td>
           {scenarios.map((scenario, index) => {
@@ -157,7 +157,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Total Housing Expense
           </td>
           {results.map((result, index) => {
@@ -173,7 +173,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Total Housing Expense With the HOA
           </td>
           {results.map((result, index) => {
@@ -189,7 +189,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Total Down Payment
           </td>
           {results.map((result, index) => {
@@ -205,7 +205,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Total Cash From Borrower
           </td>
           {results.map((result, index) => {
@@ -221,7 +221,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Down Payment Delta
           </td>
           {results.map((result, index) => {
@@ -258,7 +258,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Closing Cost Delta
           </td>
           {scenarios.map((scenario, index) => {
@@ -295,7 +295,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Cash From Borrower Delta
           </td>
           {results.map((result, index) => {
@@ -332,7 +332,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-white">
+          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Payment Difference
           </td>
           {results.map((result, index) => {

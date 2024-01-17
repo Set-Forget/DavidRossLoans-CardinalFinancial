@@ -85,7 +85,7 @@ const Calculator = () => {
         payload: {
           fieldName: "loanTerm",
           scenarioIndex: String(scenarioIndex),
-          value: dealData?.loanTerm ?  dealData?.loanTerm + " years" : "",
+          value: dealData?.loanTerm ? dealData?.loanTerm + " years" : "",
         },
       });
       dispatch({
@@ -147,25 +147,22 @@ const Calculator = () => {
           </button>
         </div>
         <Table />
-        {showResults ? (
-          <div className="flex w-full justify-end mt-10 mb-10">
+        <div className="flex w-full justify-end mt-10 mb-10 gap-6">
+          <button
+            className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
+            onClick={handleReset}
+          >
+            Reset
+          </button>
+        {!showResults && (
             <button
-              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px] text-white"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-          </div>
-        ) : (
-          <div className="flex w-full justify-end mt-10 mb-10">
-            <button
-              className="mr-4 border border-white rounded-full px-4 py-2 w-[120px] text-white"
+              className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
               onClick={handleCalculate}
             >
               Calculate
             </button>
-          </div>
         )}
+        </div>
       </div>
       {showResults && (
         <div className="max-w-6xl shadow-sm overflow-auto my-2">
@@ -205,7 +202,7 @@ const Calculator = () => {
           HOAPayment: res.data[KEY_HOA_PAYMENT],
           propertyTaxes: res.data[KEY_PROPERTY_TAXES],
           downPaymentAmount: res.data[KEY_DOWN_PAYMENT_AMOUNT],
-          mortgageInsurance: res.data[KEY_MORTGAGE_INSURANCE]
+          mortgageInsurance: res.data[KEY_MORTGAGE_INSURANCE],
         });
       });
   }
@@ -213,6 +210,7 @@ const Calculator = () => {
   function handleSelectChange(selectedOption) {
     setSelectedDeal(selectedOption);
     searchDealById(selectedOption.value);
+    dispatch({ type: "RESET" });
   }
 
   function handleInputChange(inputValue) {
