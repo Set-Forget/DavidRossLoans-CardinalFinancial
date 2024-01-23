@@ -3,6 +3,7 @@ import {
   calculatorReducer,
   initialScenario,
   initialResult,
+  initialDeal,
 } from "../reducer/Calculator";
 import PropTypes from "prop-types";
 
@@ -13,6 +14,9 @@ const initialState = {
   isReset: false,
   scenarios: [initialScenario, initialScenario],
   results: [initialResult, initialResult],
+  options: [],
+  deal: [initialDeal],
+  selectedDeal: null
 };
 
 export const CalculatorProvider = ({ children }) => {

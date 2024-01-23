@@ -1,4 +1,7 @@
-import { MAX_SCENARIOS, calculateMortgageInsurance } from "../sections/calculator/utils";
+import {
+  MAX_SCENARIOS,
+  calculateMortgageInsurance,
+} from "../utils/utils";
 
 export const initialScenario = {
   purchasePrice: "",
@@ -23,6 +26,17 @@ export const initialResult = {
   housingExpenseWithHOA: "",
   totalDownPayment: "",
   totalCashFromBorrower: "",
+};
+
+export const initialDeal = {
+  purchasePrice: null,
+  loanAmount: null,
+  loanTerm: null,
+  downPaymentPercentage: null,
+  HOAPayment: null,
+  propertyTaxes: null,
+  downPaymentAmount: null,
+  mortgageInsurance: null,
 };
 
 export const calculatorReducer = (state, action) => {
@@ -54,6 +68,21 @@ export const calculatorReducer = (state, action) => {
         isReset: false,
         scenarios: [...state.scenarios, { ...state.scenarios[0] }],
         results: [...state.results, { ...state.results[0] }],
+      };
+    case "SET_DEAL":
+      return {
+        ...state,
+        deal: action.payload,
+      };
+    case "SET_OPTIONS":
+      return {
+        ...state,
+        options: action.payload,
+      };
+    case "SET_SELECTED_DEAL":
+      return {
+        ...state,
+        selectedDeal: action.payload,
       };
     case "REMOVE_SCENARIO": {
       const scenarioIndex = action.payload;
