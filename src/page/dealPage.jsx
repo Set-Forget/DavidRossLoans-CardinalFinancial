@@ -50,6 +50,7 @@ const Calculator = () => {
   }, [apiKey]);
 
   useEffect(() => {
+    if (!deal) return
     const { purchasePrice, loanAmount } = deal;
     if (!purchasePrice || !loanAmount) return;
     scenariosRef.current.forEach((_, scenarioIndex) => {
