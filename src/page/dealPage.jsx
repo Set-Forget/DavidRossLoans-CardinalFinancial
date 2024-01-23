@@ -12,12 +12,11 @@ import {
 } from "../utils/utils";
 import { BASE_URL } from "../router";
 import Select from "react-select";
-import Spinner from "../components/Spinner";
 
 const Calculator = () => {
   const navigate = useNavigate();
   const { state, dispatch } = useContext(CalculatorContext);
-  const { loading, setLoading } = useContext(LoadingContext);
+  const { setLoading } = useContext(LoadingContext);
   const { scenarios, deal, selectedDeal, options } = state;
   const scenariosRef = useRef(scenarios);
 
@@ -123,8 +122,6 @@ const Calculator = () => {
     navigate(`${BASE_URL}calculator/${selectedDeal.value}`);
   }, [deal, dispatch, selectedDeal]);
 
-  if (loading) return <Spinner isLayout/>
-
   return (
     <>
       <h2 className="font-bold text-lg text-white">Conventional Calculator </h2>
@@ -167,6 +164,7 @@ const Calculator = () => {
     fetch(apiUrl + apiEndpoint + apiKey)
       .then((response) => response.json())
       .then((res) => {
+        console.log("dealPage", res.data);
         dispatch({
           type: "SET_DEAL",
           payload: {

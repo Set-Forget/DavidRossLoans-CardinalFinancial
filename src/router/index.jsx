@@ -7,7 +7,7 @@ import SearchPage from "../page/searchPage";
 import DealPage from "../page/dealPage";
 import CalculatorPage from "../page/calculatorPage";
 
-export const BASE_URL = "/DavidRossLoans-CardinalFinancial/";
+export const BASE_URL = "/";
 
 const AppRoutes = () => {
   return (
