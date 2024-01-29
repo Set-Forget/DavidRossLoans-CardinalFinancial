@@ -19,16 +19,40 @@ const Header = () => {
         {user.email && (
           <>
             <Link
-              className="ml-2 flex justify-center items-center"
+              className="ml-6 flex justify-center items-center gap-1"
               to={`${BASE_URL}home`}
             >
-              Home
+              <img
+                src="/assets/2.png"
+                width={24}
+                height={24}
+                alt="Icon Home Value"
+              />
+              <span>Home Value</span>
             </Link>
             <Link
-              className="ml-2 flex justify-center items-center"
+              className="ml-4 flex justify-center items-center gap-1"
+              to="https://pdf-reader-dev.vercel.app/"
+            >
+              <img
+                src="/assets/2.png"
+                width={24}
+                height={24}
+                alt="Icon PDF ChatBot"
+              />
+              <span>PDF ChatBot</span>
+            </Link>
+            <Link
+              className="ml-4 flex justify-center items-center gap-1"
               to={`${BASE_URL}calculator`}
             >
-              Calculator
+              <img
+                src="/assets/2.png"
+                width={24}
+                height={24}
+                alt="Icon Pricing Calculator"
+              />
+              <span>Pricing Calculator</span>
             </Link>
           </>
         )}

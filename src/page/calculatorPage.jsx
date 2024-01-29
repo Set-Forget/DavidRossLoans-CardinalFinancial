@@ -6,8 +6,8 @@ import { AddIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
 import { LoadingContext } from "../context/LoadingContext";
-import { MAX_SCENARIOS } from "../utils/utils";
 import {
+  MAX_SCENARIOS,
   KEY_PURCHASE_PRICE,
   KEY_LOAN_TERM,
   KEY_DOWN_PAYMENT_AMOUNT,
@@ -146,10 +146,7 @@ export default function CalculatorPage() {
 
   return (
     <>
-      <h2 className="font-bold text-lg text-white">Conventional Calculator </h2>
-      <p className="text-white">
-        Workout your property taxes with the calculator below.
-      </p>
+      <h2 className="font-bold text-lg text-white">Conventional calculator</h2>
       <section className="rounded-xl">
         <div className="max-w-6xl shadow-sm my-2 rounded-xl">
           <div className="w-full flex justify-between my-6">
