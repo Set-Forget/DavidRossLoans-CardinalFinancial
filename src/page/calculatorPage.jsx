@@ -6,7 +6,16 @@ import { AddIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
 import { LoadingContext } from "../context/LoadingContext";
-import { MAX_SCENARIOS } from "../utils/utils";
+import {
+  MAX_SCENARIOS,
+  KEY_PURCHASE_PRICE,
+  KEY_LOAN_TERM,
+  KEY_DOWN_PAYMENT_AMOUNT,
+  KEY_HOA_PAYMENT,
+  KEY_PROPERTY_TAXES,
+  KEY_MORTGAGE_INSURANCE,
+  calculateDownPaymentPercentage
+} from "../utils/utils";
 import { BASE_URL } from "../router";
 import Spinner from "../components/Spinner";
 
@@ -19,34 +28,41 @@ export default function CalculatorPage() {
   const apiUrl = "https://api.pipedrive.com/v1";
   const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
-  const getDealById = useCallback(() => {
+  const getDealById = useCallback(async () => {
     setLoading(true);
     const apiEndpoint = `/deals/${id}?api_token=`;
     try {
-      fetch(apiUrl + apiEndpoint + apiKey)
-        .then((response) => response.json())
-        .then((res) => {
-          if (!res.success) {
-            navigate(`${BASE_URL}calculator`);
-            return;
-          }
-          dispatch({
-            type: "SET_DEAL",
-            payload: {
-              purchasePrice: res.data[KEY_PURCHASE_PRICE],
-              loanAmount: res.data["value"],
-              downPaymentPercentage: (
-                (1 - res.data["value"] / res.data[KEY_PURCHASE_PRICE]) *
-                100
-              ).toFixed(2),
-              loanTerm: String(res.data[KEY_LOAN_TERM] / 12),
-              HOAPayment: res.data[KEY_HOA_PAYMENT],
-              propertyTaxes: res.data[KEY_PROPERTY_TAXES],
-              downPaymentAmount: res.data[KEY_DOWN_PAYMENT_AMOUNT],
-              mortgageInsurance: res.data[KEY_MORTGAGE_INSURANCE],
-            },
-          });
-        });
+      const response = await fetch(apiUrl + apiEndpoint + apiKey);
+      const resJSON = await response.json();
+      if (!resJSON.success) {
+        navigate(`${BASE_URL}calculator`);
+        return;
+      }
+      const { data } = resJSON;
+      const purchasePrice = data[KEY_PURCHASE_PRICE];
+      const loanAmount = data["value"];
+      const downPaymentPercentage = calculateDownPaymentPercentage(loanAmount, purchasePrice);
+      const loanTerm = String(data[KEY_LOAN_TERM] / 12);
+      const HOAPayment = data[KEY_HOA_PAYMENT];
+      const propertyTaxes = data[KEY_PROPERTY_TAXES];
+      const defaultDownPaymentAmount =
+        Number(purchasePrice) - Number(loanAmount);
+      const downPaymentAmount = data[KEY_DOWN_PAYMENT_AMOUNT];
+      const downPaymentAmountValue = downPaymentAmount || defaultDownPaymentAmount;
+      const mortgageInsurance = data[KEY_MORTGAGE_INSURANCE];
+      dispatch({
+        type: "SET_DEAL",
+        payload: {
+          purchasePrice,
+          loanAmount,
+          downPaymentPercentage,
+          loanTerm,
+          HOAPayment,
+          propertyTaxes,
+          downPaymentAmount: downPaymentAmountValue,
+          mortgageInsurance,
+        },
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -57,7 +73,80 @@ export default function CalculatorPage() {
   useEffect(() => {
     if (selectedDeal?.value) return;
     getDealById();
-  }, [selectedDeal, getDealById]);
+    setLoading(false);
+  }, [setLoading, selectedDeal?.value, getDealById]);
+
+  useEffect(() => {
+    if (!deal) return;
+    const { purchasePrice, loanAmount } = deal;
+    if (!purchasePrice || !loanAmount) return;
+    scenariosRef.current.forEach((_, scenarioIndex) => {
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "purchasePrice",
+          scenarioIndex: String(scenarioIndex),
+          value: String(purchasePrice),
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "downPaymentPercentage",
+          scenarioIndex: String(scenarioIndex),
+          value: deal.downPaymentPercentage,
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "loanAmount",
+          scenarioIndex: String(scenarioIndex),
+          value: String(loanAmount),
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "loanTerm",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.loanTerm ? deal?.loanTerm + " years" : "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "HOAPayment",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.HOAPayment ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "propertyTaxes",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.propertyTaxes ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "downPaymentAmount",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.downPaymentAmount ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "singlePremiumMortgageInsurance",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.mortgageInsurance ?? "",
+        },
+      });
+    });
+  }, [deal, dispatch, selectedDeal]);
 
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
 

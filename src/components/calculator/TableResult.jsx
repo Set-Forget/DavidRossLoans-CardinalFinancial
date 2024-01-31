@@ -8,7 +8,7 @@ const TableResult = () => {
   const { scenarios, results, showResults } = state;
 
   const getPMT = useCallback((interestRate, loanAmount, loanTerm) => {
-    const years = loanTerm.split(" ")[0]
+    const years = loanTerm.split(" ")[0];
     const monthlyPayments = Number(years) * 12;
     const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
@@ -71,7 +71,6 @@ const TableResult = () => {
     dispatch({ type: "UPDATE_RESULTS", payload: newResults });
   }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showResults]);
 
-
   return (
     <table className="border-collapse table-auto w-full text-md">
       <thead>
@@ -98,12 +97,13 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { principleAndInterest } = result;
+            const value = checkValue(principleAndInterest);
             return (
               <td
                 key={`principleAndInterest-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(principleAndInterest)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -114,12 +114,13 @@ const TableResult = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;
+            const value = checkValue(homeOwnersInsurance);
             return (
               <td
                 key={`homeOwnersInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(homeOwnersInsurance)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -130,12 +131,13 @@ const TableResult = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { loanAmount } = scenario;
+            const value = checkValue((loanAmount * 0.85) / 12);
             return (
               <td
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue((loanAmount * 0.85) / 12)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -146,12 +148,13 @@ const TableResult = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { propertyTaxes } = scenario;
+            const value = checkValue(propertyTaxes);
             return (
               <td
                 key={`propertyTaxes-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(propertyTaxes)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -162,12 +165,13 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalHousingExpense } = result;
+            const value = checkValue(totalHousingExpense);
             return (
               <td
                 key={`totalHousingExpense-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(totalHousingExpense)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -178,12 +182,13 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA } = result;
+            const value = checkValue(totalHousingExpenseWithHOA);
             return (
               <td
                 key={`totalHousingExpenseWithHOA-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(totalHousingExpenseWithHOA)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -194,12 +199,13 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalDownPayment } = result;
+            const value = checkValue(totalDownPayment);
             return (
               <td
                 key={`totalDownPayment-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(totalDownPayment)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -210,12 +216,13 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower } = result;
+            const value = checkValue(totalCashFromBorrower);
             return (
               <td
                 key={`totalCashFromBorrower-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {checkValue(totalCashFromBorrower)}
+                $ {formatValue(value)}
               </td>
             );
           })}
@@ -242,7 +249,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -279,7 +286,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                   $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -316,7 +323,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -343,14 +350,17 @@ const TableResult = () => {
               const { totalHousingExpenseWithHOA: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
-                <span className="flex items-center whitespace-nowrap" key={`paymentDifference-${index}-${i}`}>
+                <span
+                  className="flex items-center whitespace-nowrap"
+                  key={`paymentDifference-${index}-${i}`}
+                >
                   Vs Scenario {i + 1}:
                   <span
                     className={`flex items-center ml-2 ${
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{value}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -372,6 +382,17 @@ const TableResult = () => {
   function checkValue(value) {
     const number = Number(value);
     return isNaN(number) ? "0" : number.toFixed(2);
+  }
+
+  function formatValue(value) {
+    let num = Number(value);
+    if (Number.isInteger(num)) return num.toLocaleString("en-US");
+    else {
+      return num.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
   }
 };
 
