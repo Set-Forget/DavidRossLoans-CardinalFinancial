@@ -9,6 +9,7 @@ import {
   KEY_LOAN_TERM,
   KEY_DOWN_PAYMENT_AMOUNT,
   KEY_MORTGAGE_INSURANCE,
+  calculateDownPaymentPercentage,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
 import Select from "react-select";
@@ -49,7 +50,7 @@ const Calculator = () => {
   }, [apiKey]);
 
   useEffect(() => {
-    if (!deal) return
+    if (!deal) return;
     const { purchasePrice, loanAmount } = deal;
     if (!purchasePrice || !loanAmount) return;
     scenariosRef.current.forEach((_, scenarioIndex) => {
@@ -164,24 +165,40 @@ const Calculator = () => {
     fetch(apiUrl + apiEndpoint + apiKey)
       .then((response) => response.json())
       .then((res) => {
-        console.log("dealPage", res.data);
+        const purchasePrice = res.data[KEY_PURCHASE_PRICE];
+        const loanAmount = res.data["value"];
+        const downPaymentPercentage = calculateDownPaymentPercentage(
+          loanAmount,
+          purchasePrice
+        );
+        const loanTerm = String(res.data[KEY_LOAN_TERM] / 12);
+        const HOAPayment = res.data[KEY_HOA_PAYMENT];
+        const propertyTaxes = res.data[KEY_PROPERTY_TAXES];
+        const downPaymentAmount = getDownPaymentAmount(
+          res.data[KEY_DOWN_PAYMENT_AMOUNT],
+          purchasePrice,
+          loanAmount
+        );
+        const mortgageInsurance = res.data[KEY_MORTGAGE_INSURANCE];
         dispatch({
           type: "SET_DEAL",
           payload: {
-            purchasePrice: res.data[KEY_PURCHASE_PRICE],
-            loanAmount: res.data["value"],
-            downPaymentPercentage: (
-              (1 - res.data["value"] / res.data[KEY_PURCHASE_PRICE]) *
-              100
-            ).toFixed(2),
-            loanTerm: String(res.data[KEY_LOAN_TERM] / 12),
-            HOAPayment: res.data[KEY_HOA_PAYMENT],
-            propertyTaxes: res.data[KEY_PROPERTY_TAXES],
-            downPaymentAmount: res.data[KEY_DOWN_PAYMENT_AMOUNT],
-            mortgageInsurance: res.data[KEY_MORTGAGE_INSURANCE],
+            purchasePrice,
+            loanAmount,
+            downPaymentPercentage,
+            loanTerm,
+            HOAPayment,
+            propertyTaxes,
+            downPaymentAmount,
+            mortgageInsurance,
           },
         });
       });
+  }
+
+  function getDownPaymentAmount(downPaymentAmount, purchasePrice, loanAmount) {
+    const defaultValue = Number(purchasePrice) - Number(loanAmount);
+    return downPaymentAmount || defaultValue;
   }
 
   function handleSelectChange(selectedOption) {

@@ -8,9 +8,13 @@ export const KEY_HOA_PAYMENT = "e223b6bbce177a8877fa3e3e7674bceb5b6bc735";
 export const KEY_DOWN_PAYMENT_AMOUNT = "98826f12c210fb692cf563eb80be01501973c23d"
 export const KEY_MORTGAGE_INSURANCE = "ada448810ec8e41b03f4104947e7d36d1c1a16a8"
 
-export function calculateMortgageInsurance(value) {
-  const calc = (value * 0.85) / 12;
-  return isNaN(calc) ? "0" : String(calc.toFixed(2));
+export function calculateDownPaymentPercentage(loanAmount, purchasePrice) {
+  return ((1 - Number(loanAmount) / Number(purchasePrice)) * 100).toFixed(2);
+}
+
+export function calculateLoanAmount(downPaymentPercentage, purchasePrice) {
+  const decimalDownPaymentPercentage = Number(downPaymentPercentage) / 100;
+  return (1 - decimalDownPaymentPercentage) * Number(purchasePrice);
 }
 
 export const rates = [
