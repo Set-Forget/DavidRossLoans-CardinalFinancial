@@ -24,6 +24,11 @@ export default function CalculatorPage() {
   const { state, dispatch } = useContext(CalculatorContext);
   const { setLoading } = useContext(LoadingContext);
   const { showResults, scenarios, deal, selectedDeal } = state;
+  const scenariosRef = useRef(scenarios);
+
+  useEffect(() => {
+    scenariosRef.current = scenarios;
+  }, [scenarios]);
 
   const getDealById = useCallback(async () => {
     setLoading(true);
