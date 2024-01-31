@@ -13,7 +13,8 @@ import {
   KEY_DOWN_PAYMENT_AMOUNT,
   KEY_HOA_PAYMENT,
   KEY_PROPERTY_TAXES,
-  KEY_MORTGAGE_INSURANCE
+  KEY_MORTGAGE_INSURANCE,
+  calculateDownPaymentPercentage
 } from "../utils/utils";
 import { BASE_URL } from "../router";
 
@@ -24,15 +25,8 @@ export default function CalculatorPage() {
   const { setLoading } = useContext(LoadingContext);
   const { showResults, scenarios, deal, selectedDeal } = state;
 
-  const scenariosRef = useRef(scenarios);
-
-  useEffect(() => {
-    scenariosRef.current = scenarios;
-  }, [scenarios]);
-
   const getDealById = useCallback(async () => {
-    const apiUrl = "https://api.pipedrive.com/v1";
-    const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY;
+    setLoading(true);
     const apiEndpoint = `/deals/${id}?api_token=`;
     try {
       const response = await fetch(apiUrl + apiEndpoint + apiKey);
@@ -42,20 +36,28 @@ export default function CalculatorPage() {
         return;
       }
       const { data } = resJSON;
+      const purchasePrice = data[KEY_PURCHASE_PRICE];
+      const loanAmount = data["value"];
+      const downPaymentPercentage = calculateDownPaymentPercentage(loanAmount, purchasePrice);
+      const loanTerm = String(data[KEY_LOAN_TERM] / 12);
+      const HOAPayment = data[KEY_HOA_PAYMENT];
+      const propertyTaxes = data[KEY_PROPERTY_TAXES];
+      const defaultDownPaymentAmount =
+        Number(purchasePrice) - Number(loanAmount);
+      const downPaymentAmount = data[KEY_DOWN_PAYMENT_AMOUNT];
+      const downPaymentAmountValue = downPaymentAmount || defaultDownPaymentAmount;
+      const mortgageInsurance = data[KEY_MORTGAGE_INSURANCE];
       dispatch({
         type: "SET_DEAL",
         payload: {
-          purchasePrice: data[KEY_PURCHASE_PRICE],
-          loanAmount: data["value"],
-          downPaymentPercentage: (
-            (1 - data["value"] / data[KEY_PURCHASE_PRICE]) *
-            100
-          ).toFixed(2),
-          loanTerm: String(data[KEY_LOAN_TERM] / 12),
-          HOAPayment: data[KEY_HOA_PAYMENT],
-          propertyTaxes: data[KEY_PROPERTY_TAXES],
-          downPaymentAmount: data[KEY_DOWN_PAYMENT_AMOUNT],
-          mortgageInsurance: data[KEY_MORTGAGE_INSURANCE],
+          purchasePrice,
+          loanAmount,
+          downPaymentPercentage,
+          loanTerm,
+          HOAPayment,
+          propertyTaxes,
+          downPaymentAmount: downPaymentAmountValue,
+          mortgageInsurance,
         },
       });
     } catch (error) {
@@ -71,7 +73,7 @@ export default function CalculatorPage() {
   }, [setLoading, selectedDeal?.value, getDealById]);
 
   useEffect(() => {
-    if (!deal) return
+    if (!deal) return;
     const { purchasePrice, loanAmount } = deal;
     if (!purchasePrice || !loanAmount) return;
     scenariosRef.current.forEach((_, scenarioIndex) => {

@@ -1,7 +1,4 @@
-import {
-  MAX_SCENARIOS,
-  calculateMortgageInsurance,
-} from "../utils/utils";
+import { MAX_SCENARIOS, calculateLoanAmount, calculateDownPaymentPercentage} from "../utils/utils";
 
 export const initialScenario = {
   purchasePrice: "",
@@ -49,9 +46,22 @@ export const calculatorReducer = (state, action) => {
         scenarios: state.scenarios.map((scenario, index) => {
           if (String(index) === scenarioIndex) {
             let updatedScenario = { ...scenario, [fieldName]: value };
+            const { purchasePrice } = updatedScenario;
             if (fieldName === "loanAmount") {
-              updatedScenario.monthlyMortgageInsurance =
-                calculateMortgageInsurance(value);
+              updatedScenario.downPaymentPercentage =
+                calculateDownPaymentPercentage(value, purchasePrice);
+              updatedScenario.downPaymentAmount =
+                Number(purchasePrice) - Number(value);
+            } else if (fieldName === "downPaymentPercentage") {
+              const loanAmountValue = calculateLoanAmount(value, purchasePrice);
+              updatedScenario.loanAmount = loanAmountValue;
+              updatedScenario.downPaymentAmount =
+                Number(purchasePrice) - Number(loanAmountValue);
+            } else if (fieldName === "downPaymentAmount") {
+              const loanAmountValue = Number(purchasePrice) - Number(value);
+              updatedScenario.loanAmount = loanAmountValue;
+              updatedScenario.downPaymentPercentage =
+                calculateDownPaymentPercentage(loanAmountValue, purchasePrice);
             }
             return updatedScenario;
           }
