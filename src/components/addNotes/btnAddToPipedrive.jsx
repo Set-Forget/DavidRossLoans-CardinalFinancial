@@ -115,7 +115,6 @@ function CreateNote({ companies, avg, address }) {
   };
 
   const headerRowStyle = {
-    backgroundColor: "#f0f0f0",
     textAlign: "left",
   };
 
