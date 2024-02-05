@@ -32,7 +32,7 @@ const Header = () => {
             </Link>
             <Link
               className="ml-4 flex justify-center items-center gap-1"
-              to="https://pdf-reader-dev.vercel.app/"
+              to="https://pdf-reader-chat.vercel.app/"
             >
               <img
                 src="/assets/2.png"
