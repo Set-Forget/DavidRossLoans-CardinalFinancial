@@ -6,6 +6,7 @@ import LoginPage from "../page/loginPage";
 import SearchPage from "../page/searchPage";
 import DealPage from "../page/dealPage";
 import CalculatorPage from "../page/calculatorPage";
+import { LogsPage } from "../page/logPage";
 
 export const BASE_URL = "/";
 
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="*" element={<NotFoundPage />} />
       {customRoute("", LoginPage, false)}
       {customRoute("home", SearchPage, true)}
+      {customRoute("logs", LogsPage, true)}
       {customRoute("calculator", DealPage, true)}
       {customRoute("calculator/:id", CalculatorPage, true)}
     </Routes>

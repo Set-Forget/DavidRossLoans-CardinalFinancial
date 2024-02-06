@@ -29,17 +29,25 @@ const CalculatorInput = ({
   }, [isReset]);
 
   useEffect(() => {
-    if (isReset) setIsEdited(false)
+    if (isReset) setIsEdited(false);
   }, [isReset]);
 
   return (
-    <div className={`flex items-center relative w-full cursor-default overflow-hidden rounded-lg text-left shadow-md sm:text-sm ${focus ? "outline outline-2 outline-[#2684FF]" : ""} ${isEdited ? "bg-yellow-100" : "bg-white"}`}>
+    <div
+      className={`flex items-center relative w-full cursor-default overflow-hidden rounded-lg text-left shadow-md sm:text-sm ${
+        focus ? "outline outline-2 outline-[#2684FF]" : ""
+      } ${isEdited ? "bg-yellow-100" : "bg-white"}`}
+    >
       {prefix && <span className="ml-2">$ </span>}
       {!prefix && !suffix && <>&nbsp;&nbsp;</>}
       <input
-        className={`${
-          suffix ? "text-right pr-1" : ""
-        }  ${isEdited ? "bg-yellow-100" : "bg-white"} w-full border-none pl-1 text-sm leading-5 text-gray-900 focus:ring-0 ${isEdited ? "" : "autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]" }`}
+        className={`${suffix ? "text-right pr-1" : ""}  ${
+          isEdited ? "bg-yellow-100" : "bg-white"
+        } w-full border-none pl-1 text-sm leading-5 text-gray-900 focus:ring-0 ${
+          isEdited
+            ? ""
+            : "autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
+        }`}
         onChange={handleOnChange}
         name={name}
         value={localValue}
@@ -54,7 +62,7 @@ const CalculatorInput = ({
   );
 
   function handleOnChange(e) {
-    if (!isEdited) setIsEdited(true)
+    if (!isEdited) setIsEdited(true);
     const [fieldName, scenarioIndex] = name.split("-");
     let val = e.target.value;
     const storeValue = val
@@ -72,16 +80,23 @@ const CalculatorInput = ({
         value: storeValue,
       },
     });
+    dispatch({
+      type: "SAVE_VALUES",
+      payload: {
+        fieldName,
+        scenarioIndex,
+        value: storeValue,
+      },
+    });
   }
 
   function handleFocus() {
-    setFocus(true)
+    setFocus(true);
   }
 
   function handleBlur() {
-    setFocus(false)
+    setFocus(false);
   }
-
 };
 
 CalculatorInput.propTypes = {

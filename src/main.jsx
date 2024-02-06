@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserProvider } from "./context/UserContext.jsx";
 import { LoadingProvider } from "./context/LoadingContext.jsx";
 import { CalculatorProvider } from "./context/CalculatorContext";
+import { LogsProvider } from "./context/LogContext.jsx";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <UserProvider>
           <LoadingProvider>
             <CalculatorProvider>
-              <App />
+              <LogsProvider>
+                <App />
+              </LogsProvider>
             </CalculatorProvider>
           </LoadingProvider>
         </UserProvider>

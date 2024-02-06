@@ -1,12 +1,54 @@
-
 export const MAX_SCENARIOS = 5;
+export const PIPE = "|";
+
+export const URL_LOGS =
+  "https://script.google.com/macros/s/AKfycbya0mvO7kTKxkh3ovfB0Fw0OBRs96j5qb0hfvue0O-Vo3MTzQSLp6c6ASO6jkqlSkZs/exec";
 
 export const KEY_PURCHASE_PRICE = "e986ec80d8dce46cf43f261f60235d0a2faa24da";
 export const KEY_PROPERTY_TAXES = "0ac894d6605e196e6b2be867ff0c677dd31d8e92";
 export const KEY_LOAN_TERM = "878ddd2c5094c630638d255fd9ad54ab37aa5a4b";
 export const KEY_HOA_PAYMENT = "e223b6bbce177a8877fa3e3e7674bceb5b6bc735";
-export const KEY_DOWN_PAYMENT_AMOUNT = "98826f12c210fb692cf563eb80be01501973c23d"
-export const KEY_MORTGAGE_INSURANCE = "ada448810ec8e41b03f4104947e7d36d1c1a16a8"
+export const KEY_DOWN_PAYMENT_AMOUNT =
+  "98826f12c210fb692cf563eb80be01501973c23d";
+export const KEY_MORTGAGE_INSURANCE =
+  "ada448810ec8e41b03f4104947e7d36d1c1a16a8";
+/**
+ *
+ * @param {dateString} date
+ * @returns us format date with time
+ * YYYY-MM-DDThs:mm:sg would be MM/DD/YY hs:mm PM/AM
+ */
+export function formatDate(date) {
+  const formattedDate = new Date(date).toLocaleString(
+    "en-US",
+    {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+    { timeZoneName: "short" }
+  );
+  return formattedDate.replace(",", "");
+}
+
+/**
+ *
+ * @param {string} value
+ * @returns us format currency
+ * XXXX would be X,XXX or XXXXX as XX,XXX
+ */
+export function formatCurrency(value) {
+  let num = Number(value);
+  if (Number.isInteger(num)) return num.toLocaleString("en-US");
+  else {
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+}
 
 export function calculateDownPaymentPercentage(loanAmount, purchasePrice) {
   return ((1 - Number(loanAmount) / Number(purchasePrice)) * 100).toFixed(2);
@@ -90,7 +132,7 @@ export const rates = [
   "9.625 %",
   "9.750 %",
   "9.875 %",
-  "10.000 %"
+  "10.000 %",
 ];
 
 export const years = [
@@ -114,5 +156,5 @@ export const years = [
   "27 years",
   "28 years",
   "29 years",
-  "30 years"
+  "30 years",
 ];

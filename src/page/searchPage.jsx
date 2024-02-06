@@ -27,7 +27,6 @@ export default function SearchPage() {
     dataToLog = JSON.stringify(dataToLog);
     dataToLog = encodeURIComponent(dataToLog);
     const url = `https://script.google.com/macros/s/AKfycbxSMUrSNvs3a9tSoyUcQolSl9v0pn3z0aS806DiYplK8dzDvSLjGlLk22JWYXdChmt8/exec?action=log&&logData=${dataToLog}`;
-    console.log(url);
     fetch(url);
   };
 

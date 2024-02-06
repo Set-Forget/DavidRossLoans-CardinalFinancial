@@ -15,6 +15,7 @@ const initialState = {
   scenarios: [initialScenario, initialScenario],
   results: [initialResult, initialResult],
   options: [],
+  logs: [],
   deal: [initialDeal],
   selectedDeal: null
 };
