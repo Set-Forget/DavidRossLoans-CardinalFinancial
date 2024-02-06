@@ -99,6 +99,14 @@ const ListBox = ({ name, value }) => {
         value: e,
       },
     });
+    dispatch({
+      type: "SAVE_VALUES",
+      payload: {
+        fieldName,
+        scenarioIndex,
+        value: e,
+      },
+    });
   }
 
   function handleFocus() {

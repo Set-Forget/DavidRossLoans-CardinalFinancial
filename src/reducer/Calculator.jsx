@@ -1,4 +1,8 @@
-import { MAX_SCENARIOS, calculateLoanAmount, calculateDownPaymentPercentage} from "../utils/utils";
+import {
+  MAX_SCENARIOS,
+  calculateLoanAmount,
+  calculateDownPaymentPercentage,
+} from "../utils/utils";
 
 export const initialScenario = {
   purchasePrice: "",
@@ -123,6 +127,26 @@ export const calculatorReducer = (state, action) => {
         isReset: false,
         results: action.payload,
       };
+    case "SAVE_VALUES": {
+      const { fieldName, scenarioIndex, value } = action.payload;
+      const updatedLogs = [...state.logs];
+      const existingLogIndex = updatedLogs.findIndex(
+        (log) =>
+          log.fieldName === fieldName && log.scenarioIndex === scenarioIndex
+      );
+      if (existingLogIndex !== -1) updatedLogs[existingLogIndex].value = value;
+      else {
+        updatedLogs.push({
+          fieldName,
+          scenarioIndex,
+          value,
+        });
+      }
+      return {
+        ...state,
+        logs: updatedLogs,
+      };
+    }
     case "RESET": {
       const numberOfScenarios = state.scenarios.length;
       const newScenarios = new Array(numberOfScenarios)

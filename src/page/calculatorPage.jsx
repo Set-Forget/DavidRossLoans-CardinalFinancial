@@ -6,6 +6,7 @@ import { AddIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
 import { LoadingContext } from "../context/LoadingContext";
+import { UserContext } from "../context/UserContext";
 import {
   MAX_SCENARIOS,
   KEY_PURCHASE_PRICE,
@@ -14,7 +15,8 @@ import {
   KEY_HOA_PAYMENT,
   KEY_PROPERTY_TAXES,
   KEY_MORTGAGE_INSURANCE,
-  calculateDownPaymentPercentage
+  calculateDownPaymentPercentage,
+  URL_LOGS,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
 
@@ -22,6 +24,7 @@ export default function CalculatorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state, dispatch } = useContext(CalculatorContext);
+  const { user } = useContext(UserContext);
   const { setLoading } = useContext(LoadingContext);
   const { showResults, scenarios, deal, selectedDeal } = state;
   const scenariosRef = useRef(scenarios);
@@ -31,7 +34,6 @@ export default function CalculatorPage() {
   }, [scenarios]);
 
   const getDealById = useCallback(async () => {
-    setLoading(true);
     const apiEndpoint = `/deals/${id}?api_token=`;
     try {
       const response = await fetch(apiUrl + apiEndpoint + apiKey);
@@ -43,14 +45,18 @@ export default function CalculatorPage() {
       const { data } = resJSON;
       const purchasePrice = data[KEY_PURCHASE_PRICE];
       const loanAmount = data["value"];
-      const downPaymentPercentage = calculateDownPaymentPercentage(loanAmount, purchasePrice);
+      const downPaymentPercentage = calculateDownPaymentPercentage(
+        loanAmount,
+        purchasePrice
+      );
       const loanTerm = String(data[KEY_LOAN_TERM] / 12);
       const HOAPayment = data[KEY_HOA_PAYMENT];
       const propertyTaxes = data[KEY_PROPERTY_TAXES];
       const defaultDownPaymentAmount =
         Number(purchasePrice) - Number(loanAmount);
       const downPaymentAmount = data[KEY_DOWN_PAYMENT_AMOUNT];
-      const downPaymentAmountValue = downPaymentAmount || defaultDownPaymentAmount;
+      const downPaymentAmountValue =
+        downPaymentAmount || defaultDownPaymentAmount;
       const mortgageInsurance = data[KEY_MORTGAGE_INSURANCE];
       dispatch({
         type: "SET_DEAL",
@@ -216,8 +222,22 @@ export default function CalculatorPage() {
     dispatch({ type: "RESET" });
   }
 
-  function handleCalculate() {
+  async function handleCalculate() {
     dispatch({ type: "SHOW_RESULTS", payload: true });
+    try {
+      const newDate = new Date().toISOString();
+      const { logs } = state;
+      const stringLog = encodeURIComponent(JSON.stringify(logs));
+      const url = `${URL_LOGS}?time=${newDate}&email=${user.email}&deal=${id}&values=${stringLog}`;
+      await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleAddScenario() {

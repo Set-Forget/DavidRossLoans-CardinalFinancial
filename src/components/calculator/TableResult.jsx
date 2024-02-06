@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect } from "react";
 import { DownIcon, UpIcon } from "./Icons";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { initialResult } from "../../reducer/Calculator";
+import { formatCurrency } from "../../utils/utils";
 
 const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
@@ -103,7 +104,7 @@ const TableResult = () => {
                 key={`principleAndInterest-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -120,7 +121,7 @@ const TableResult = () => {
                 key={`homeOwnersInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -137,7 +138,7 @@ const TableResult = () => {
                 key={`monthlyMortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -154,7 +155,7 @@ const TableResult = () => {
                 key={`propertyTaxes-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -171,7 +172,7 @@ const TableResult = () => {
                 key={`totalHousingExpense-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -188,7 +189,7 @@ const TableResult = () => {
                 key={`totalHousingExpenseWithHOA-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -205,7 +206,7 @@ const TableResult = () => {
                 key={`totalDownPayment-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -222,7 +223,7 @@ const TableResult = () => {
                 key={`totalCashFromBorrower-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
               >
-                $ {formatValue(value)}
+                $ {formatCurrency(value)}
               </td>
             );
           })}
@@ -249,7 +250,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatCurrency(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -286,7 +287,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatCurrency(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -323,7 +324,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatCurrency(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -360,7 +361,7 @@ const TableResult = () => {
                       value >= 0 ? "text-[#2BCE9D]" : "text-[#FC3945]"
                     }`}
                   >
-                    $&nbsp;{formatValue(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
+                    $&nbsp;{formatCurrency(value)}&nbsp;{value >= 0 ? <UpIcon /> : <DownIcon />}
                   </span>
                 </span>
               );
@@ -384,16 +385,6 @@ const TableResult = () => {
     return isNaN(number) ? "0" : number.toFixed(2);
   }
 
-  function formatValue(value) {
-    let num = Number(value);
-    if (Number.isInteger(num)) return num.toLocaleString("en-US");
-    else {
-      return num.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    }
-  }
 };
 
 export default TableResult;

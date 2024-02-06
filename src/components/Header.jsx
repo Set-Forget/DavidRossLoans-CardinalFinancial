@@ -23,7 +23,7 @@ const Header = () => {
               to={`${BASE_URL}home`}
             >
               <img
-                src="/assets/2.png"
+                src="./src/assets/3.png"
                 width={24}
                 height={24}
                 alt="Icon Home Value"
@@ -35,7 +35,7 @@ const Header = () => {
               to="https://pdf-reader-chat.vercel.app/"
             >
               <img
-                src="/assets/2.png"
+                src="./src/assets/2.png"
                 width={24}
                 height={24}
                 alt="Icon PDF ChatBot"
@@ -47,12 +47,24 @@ const Header = () => {
               to={`${BASE_URL}calculator`}
             >
               <img
-                src="/assets/2.png"
+                src="./src/assets/4.png"
                 width={24}
                 height={24}
                 alt="Icon Pricing Calculator"
               />
               <span>Pricing Calculator</span>
+            </Link>
+            <Link
+              className="ml-6 flex justify-center items-center gap-1"
+              to={`${BASE_URL}logs`}
+            >
+              <img
+                src="./src/assets/3.png"
+                width={24}
+                height={24}
+                alt="Icon Home Value"
+              />
+              <span>History Logs</span>
             </Link>
           </>
         )}

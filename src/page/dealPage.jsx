@@ -29,8 +29,8 @@ const Calculator = () => {
   }, [scenarios]);
 
   useEffect(() => {
-    setLoading(true);
     try {
+      setLoading(true);
       const apiEndpoint =
         "/deals?status=all_not_deleted&start=0&limit=500&api_token=";
       fetch(apiUrl + apiEndpoint + apiKey)
