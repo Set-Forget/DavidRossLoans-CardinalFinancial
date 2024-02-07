@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Table from "../components/calculator/Table";
 import TableResult from "../components/calculator/TableResult";
-import { AddIcon } from "../components/calculator/Icons";
+import { AddIcon, LogoIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
 import { LoadingContext } from "../context/LoadingContext";
@@ -159,7 +159,7 @@ export default function CalculatorPage() {
 
   const handleDownload = useReactToPrint({
     pageStyle:
-      "@page { size: auto; margin-bottom: 0mm ; margin-top: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+      "@page { size: auto; margin-bottom: 0mm ; margin-top: 0mm; } @media print { html, body { height: initial !important; overflow: initial !important; -webkit-print-color-adjust: exact; }}",
     content: () => componentRef.current,
   });
 
@@ -187,39 +187,59 @@ export default function CalculatorPage() {
               <AddIcon />
             </button>
           </div>
-          <Table />
-          <div className="flex w-full justify-end mt-10 mb-10 gap-6">
-            <button
-              className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-            {!showResults && (
+          <div ref={componentRef} className="flex flex-col">
+            <div className="w-full justify-between hidden my-4 print-component">
+              <LogoIcon />
+              <h1 className="text-black text-lg">
+                {selectedDeal?.label
+                  .replace(/\|/g, "")
+                  .replace(/,/g, "")
+                  .trim()}
+              </h1>
+            </div>
+            <Table />
+            <div className="flex w-full justify-end mt-10 mb-10 gap-6">
               <button
-                className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
-                onClick={handleCalculate}
+                className="border border-white rounded-full px-4 py-2 w-[120px] text-white print-reset"
+                onClick={handleReset}
               >
-                Calculate
+                Reset
               </button>
+              {!showResults && (
+                <button
+                  className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
+                  onClick={handleCalculate}
+                >
+                  Calculate
+                </button>
+              )}
+            </div>
+            {showResults && (
+              <>
+                <div className="max-w-6xl shadow-sm overflow-auto my-2">
+                  <div className="w-full justify-between hidden my-4 print-component">
+                    <LogoIcon />
+                    <h1 className="text-black text-lg">
+                      {selectedDeal?.label
+                        .replace(/\|/g, "")
+                        .replace(/,/g, "")
+                        .trim()}
+                    </h1>
+                  </div>
+                  <TableResult />
+                </div>
+                <div className="mt-8 flex w-full justify-center print-download">
+                  <button
+                    className="border border-white rounded-full px-4 py-2 w-[220px] text-white truncate"
+                    onClick={handleDownload}
+                  >
+                    Download Results
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
-        {showResults && (
-          <>
-            <div className="max-w-6xl shadow-sm overflow-auto my-2">
-              <TableResult componentRef={componentRef} />
-            </div>
-            <div className="mt-8 flex w-full justify-center">
-              <button
-                className="border border-white rounded-full px-4 py-2 w-[220px] text-white truncate"
-                onClick={handleDownload}
-              >
-                Download Results
-              </button>
-            </div>
-          </>
-        )}
       </section>
     </>
   );
