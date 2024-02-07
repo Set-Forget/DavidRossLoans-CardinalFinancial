@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "custom-bg": "linear-gradient(180deg, #05293e, #033652)",
+      }
+    },
   },
   plugins: [
     // eslint-disable-next-line no-undef
