@@ -3,7 +3,7 @@ export const logsReducer = (state, action) => {
     case "SET_LOGS":
       return {
         ...state,
-        logsData: action.payload,
+        logsData: action.payload
       };
     case "SET_SELECTED_ROW": {
       const groupDataByScenario = action.payload.reduce((acc, item) => {

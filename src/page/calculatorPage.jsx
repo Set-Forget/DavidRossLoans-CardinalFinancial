@@ -16,9 +16,10 @@ import {
   KEY_PROPERTY_TAXES,
   KEY_MORTGAGE_INSURANCE,
   calculateDownPaymentPercentage,
-  URL_LOGS,
+  API_URL,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
+import { useReactToPrint } from "react-to-print";
 
 export default function CalculatorPage() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function CalculatorPage() {
   const { setLoading } = useContext(LoadingContext);
   const { showResults, scenarios, deal, selectedDeal } = state;
   const scenariosRef = useRef(scenarios);
+  const componentRef = useRef();
 
   useEffect(() => {
     scenariosRef.current = scenarios;
@@ -155,6 +157,12 @@ export default function CalculatorPage() {
     });
   }, [deal, dispatch, selectedDeal]);
 
+  const handleDownload = useReactToPrint({
+    pageStyle:
+      "@page { size: auto; margin-bottom: 0mm ; margin-top: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+    content: () => componentRef.current,
+  });
+
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
 
   return (
@@ -198,9 +206,19 @@ export default function CalculatorPage() {
           </div>
         </div>
         {showResults && (
-          <div className="max-w-6xl shadow-sm overflow-auto my-2">
-            <TableResult />
-          </div>
+          <>
+            <div className="max-w-6xl shadow-sm overflow-auto my-2">
+              <TableResult componentRef={componentRef} />
+            </div>
+            <div className="mt-8 flex w-full justify-center">
+              <button
+                className="border border-white rounded-full px-4 py-2 w-[220px] text-white truncate"
+                onClick={handleDownload}
+              >
+                Download Results
+              </button>
+            </div>
+          </>
         )}
       </section>
     </>
@@ -227,14 +245,17 @@ export default function CalculatorPage() {
     try {
       const newDate = new Date().toISOString();
       const { logs } = state;
-      const stringLog = encodeURIComponent(JSON.stringify(logs));
-      const url = `${URL_LOGS}?time=${newDate}&email=${user.email}&deal=${id}&values=${stringLog}`;
-      await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8",
-        },
-      });
+      let dataToLog = {
+        time: newDate,
+        email: user.email,
+        action: "Calculator",
+        deal: id,
+        values: logs,
+      };
+      dataToLog = JSON.stringify(dataToLog);
+      dataToLog = encodeURIComponent(dataToLog);
+      const url = `${API_URL}?action=addLogCalculator&&logData=${dataToLog}`;
+      await fetch(url);
     } catch (error) {
       console.error(error);
     }

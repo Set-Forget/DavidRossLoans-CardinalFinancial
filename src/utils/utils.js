@@ -1,8 +1,8 @@
 export const MAX_SCENARIOS = 5;
 export const PIPE = "|";
 
-export const URL_LOGS =
-  "https://script.google.com/macros/s/AKfycbya0mvO7kTKxkh3ovfB0Fw0OBRs96j5qb0hfvue0O-Vo3MTzQSLp6c6ASO6jkqlSkZs/exec";
+export const API_URL =
+  "https://script.google.com/macros/s/AKfycbxTznkTRaceva-hCmt3OIqD-pXdLRJRS3nnsPfcycRtUp7U7uQ9C7FM5YBQIxHsfMSB/exec";
 
 export const KEY_PURCHASE_PRICE = "e986ec80d8dce46cf43f261f60235d0a2faa24da";
 export const KEY_PROPERTY_TAXES = "0ac894d6605e196e6b2be867ff0c677dd31d8e92";
