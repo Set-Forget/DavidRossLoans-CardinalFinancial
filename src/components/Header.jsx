@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import UserSession from "./user/UserSession";
+import Image1 from "../assets/2.png";
+import Image2 from "../assets/3.png";
+import Image3 from "../assets/4.png";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../router";
 
@@ -23,7 +26,7 @@ const Header = () => {
               to={`${BASE_URL}home`}
             >
               <img
-                src="./src/assets/3.png"
+                src={Image2}
                 width={24}
                 height={24}
                 alt="Icon Home Value"
@@ -35,7 +38,7 @@ const Header = () => {
               to="https://pdf-reader-chat.vercel.app/"
             >
               <img
-                src="./src/assets/2.png"
+                src={Image1}
                 width={24}
                 height={24}
                 alt="Icon PDF ChatBot"
@@ -47,7 +50,7 @@ const Header = () => {
               to={`${BASE_URL}calculator`}
             >
               <img
-                src="./src/assets/4.png"
+                src={Image3}
                 width={24}
                 height={24}
                 alt="Icon Pricing Calculator"
@@ -59,7 +62,7 @@ const Header = () => {
               to={`${BASE_URL}logs`}
             >
               <img
-                src="./src/assets/3.png"
+                src={Image2}
                 width={24}
                 height={24}
                 alt="Icon Home Value"
