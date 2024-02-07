@@ -9,7 +9,7 @@ const Table = () => {
   const { scenarios } = state;
 
   return (
-    <table className="border-collapse table-fixed text-md">
+    <table className="border-collapse table-fixed text-md table-inputs">
       <thead>
         <tr>
           <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
