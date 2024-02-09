@@ -73,10 +73,10 @@ export default function Modal() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 flex items-center justify-center">
                   <button
                     type="button"
-                    className="flex w-full justify-center px-4 py-2 text-sm font-medium text-slate-700"
+                    className="flex justify-center px-4 py-2 text-sm font-medium text-slate-700"
                     onClick={closeModal}
                   >
                     Go back

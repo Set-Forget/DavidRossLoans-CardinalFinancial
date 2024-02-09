@@ -270,11 +270,11 @@ export default function CalculatorPage() {
         email: user.email,
         action: "Calculator",
         deal: id,
-        values: logs,
+        values: JSON.stringify(logs),
       };
       dataToLog = JSON.stringify(dataToLog);
       dataToLog = encodeURIComponent(dataToLog);
-      const url = `${API_URL}?action=addLogCalculator&&logData=${dataToLog}`;
+     const url = `${API_URL}?action=addLogCalculator&&logData=${dataToLog}`;
       await fetch(url);
     } catch (error) {
       console.error(error);
