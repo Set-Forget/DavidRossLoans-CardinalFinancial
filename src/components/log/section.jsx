@@ -4,11 +4,16 @@ import { API_URL, formatDate } from "../../utils/utils";
 import PopoverComponent from "./actions";
 import Modal from "./modal";
 import Spinner from "../Spinner";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 export default function SectionLogs() {
+  const { user } = useContext(UserContext);
   const { state, dispatch } = useContext(LogsContext);
   const [isFetching, setIsFetching] = useState(false);
   const { logsData, showModal } = state;
+  const { isAdmin } = user;
+  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     try {
@@ -26,6 +31,11 @@ export default function SectionLogs() {
       setIsFetching(false);
     }
   }, [dispatch, setIsFetching]);
+
+  useEffect(() => {
+    if (isAdmin) return;
+    navigate(-1);
+  }, [isAdmin]);
 
   useEffect(() => {
     if (logsData.length) return;

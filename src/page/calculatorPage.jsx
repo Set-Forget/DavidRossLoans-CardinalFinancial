@@ -36,6 +36,7 @@ export default function CalculatorPage() {
   }, [scenarios]);
 
   const getDealById = useCallback(async () => {
+    const apiUrl = "https://api.pipedrive.com/v1";
     const apiEndpoint = `/deals/${id}?api_token=`;
     try {
       const response = await fetch(apiUrl + apiEndpoint + apiKey);

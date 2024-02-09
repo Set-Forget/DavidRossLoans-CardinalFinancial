@@ -9,6 +9,7 @@ import { BASE_URL } from "../router";
 
 const Header = () => {
   const { user } = useContext(UserContext);
+  const { isAdmin } = user;
   return (
     <header className="w-full p-4 grid grid-cols-2 gap-2 place-items-center bg-white dark:bg-slate-700">
       <div className="flex items-center justify-center">
@@ -25,24 +26,14 @@ const Header = () => {
               className="ml-6 flex justify-center items-center gap-1"
               to={`${BASE_URL}home`}
             >
-              <img
-                src={Image2}
-                width={24}
-                height={24}
-                alt="Icon Home Value"
-              />
+              <img src={Image2} width={24} height={24} alt="Icon Home Value" />
               <span>Home Value</span>
             </Link>
             <Link
               className="ml-4 flex justify-center items-center gap-1"
               to="https://pdf-reader-chat.vercel.app/"
             >
-              <img
-                src={Image1}
-                width={24}
-                height={24}
-                alt="Icon PDF ChatBot"
-              />
+              <img src={Image1} width={24} height={24} alt="Icon PDF ChatBot" />
               <span>PDF ChatBot</span>
             </Link>
             <Link
@@ -57,18 +48,20 @@ const Header = () => {
               />
               <span>Pricing Calculator</span>
             </Link>
-            <Link
-              className="ml-6 flex justify-center items-center gap-1"
-              to={`${BASE_URL}logs`}
-            >
-              <img
-                src={Image2}
-                width={24}
-                height={24}
-                alt="Icon Home Value"
-              />
-              <span>History Logs</span>
-            </Link>
+            {isAdmin && (
+              <Link
+                className="ml-6 flex justify-center items-center gap-1"
+                to={`${BASE_URL}logs`}
+              >
+                <img
+                  src={Image2}
+                  width={24}
+                  height={24}
+                  alt="Icon Home Value"
+                />
+                <span>History Logs</span>
+              </Link>
+            )}
           </>
         )}
       </div>
