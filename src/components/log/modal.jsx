@@ -40,17 +40,16 @@ export default function Modal() {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                
                 <div className="flex justify-between">
                   <Dialog.Title
-                  as="h1"
-                  className="text-lg font-semibold leading-6 text-gray-900"
-                >
-                  Modified fields and values
-                </Dialog.Title>
-                <button onClick={closeModal}>
-                  <XCircleIcon className="h-6 w-6 fill-black"/>
-                </button>
+                    as="h1"
+                    className="text-lg font-semibold leading-6 text-gray-900"
+                  >
+                    Modified fields and values
+                  </Dialog.Title>
+                  <button onClick={closeModal}>
+                    <XCircleIcon className="h-6 w-6 fill-black" />
+                  </button>
                 </div>
                 <div className="my-4">
                   {dataToShow.map((group, index) => (
@@ -82,6 +81,13 @@ export default function Modal() {
                   >
                     Go back
                   </button>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="text-white bg-slate-700 font-medium rounded-full text-sm px-4 py-2"
+                  >
+                    Copy info
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -98,10 +104,29 @@ export default function Modal() {
     });
   }
 
+  async function handleCopy() {
+    let info = "";
+    dataToShow.forEach((group) => {
+      info += `Scenario ${Number(group.scenarioIndex) + 1}\n`;
+      group.data.forEach((item) => {
+        info += `${formatFieldName(item.fieldName)}: ${formatFieldValue(
+          item.fieldName,
+          item.value
+        )}\n`;
+      });
+      info += "\n";
+    });
+    try {
+      await navigator.clipboard.writeText(info);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   function formatFieldValue(name, value) {
     if (name === "loanTerm" || name === "interestRate") return value;
     const format = formatCurrency(value);
-    return `$ ${format}`
+    return `$ ${format}`;
   }
 
   function formatFieldName(value) {
@@ -119,9 +144,9 @@ export default function Modal() {
       case "interestRate":
         return "Interest Rate";
       case "points":
-        return "Points";
+        return "Charge for interest rate";
       case "homeOwnersInsurance":
-        return "Home-Owners Insurance";
+        return "Homeowners";
       case "monthlyMortgageInsurance":
         return "Monthly Mortgage Insurance";
       case "propertyTaxes":

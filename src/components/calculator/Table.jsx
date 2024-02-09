@@ -138,7 +138,7 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Points
+            Charge for interest rate
           </td>
           {scenarios.map((scenario, index) => (
             <td
@@ -155,7 +155,7 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Home-Owners Insurance
+            Homeowners
           </td>
           {scenarios.map((scenario, index) => (
             <td
