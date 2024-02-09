@@ -111,7 +111,7 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Home-Owners Insurance
+            Homeowners
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;

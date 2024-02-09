@@ -18,7 +18,7 @@ const AppRoutes = () => {
       {customRoute("home", SearchPage, true)}
       {customRoute("logs", LogsPage, true)}
       {customRoute("calculator", DealPage, true)}
-      {customRoute("calculator/:id", CalculatorPage, true)}
+      {customRoute("calculator/:id", CalculatorPage, false)}
     </Routes>
   );
 };
