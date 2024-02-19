@@ -188,16 +188,7 @@ export default function CalculatorPage() {
               <AddIcon />
             </button>
           </div>
-          <div ref={componentRef} className="flex flex-col">
-            <div className="w-full justify-between hidden my-4 print-component">
-              <LogoIcon />
-              <h1 className="text-black text-lg">
-                {selectedDeal?.label
-                  .replace(/\|/g, "")
-                  .replace(/,/g, "")
-                  .trim()}
-              </h1>
-            </div>
+          <div className="flex flex-col">
             <Table />
             <div className="flex w-full justify-end mt-10 mb-10 gap-6">
               <button
@@ -217,7 +208,7 @@ export default function CalculatorPage() {
             </div>
             {showResults && (
               <>
-                <div className="max-w-6xl shadow-sm overflow-auto my-2">
+                <div ref={componentRef} className="max-w-6xl shadow-sm overflow-auto my-2">
                   <div className="w-full justify-between hidden my-4 print-component">
                     <LogoIcon />
                     <h1 className="text-black text-lg">
