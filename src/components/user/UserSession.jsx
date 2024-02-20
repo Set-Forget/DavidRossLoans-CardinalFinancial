@@ -1,27 +1,27 @@
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { googleLogout } from "@react-oauth/google";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/20/solid";
+import Button from "../Button";
 
 export default function UserSession() {
-  const { user, setUser } = useContext(UserContext);
-  
-  const logOut = () => {
-    googleLogout();
-    localStorage.clear();
-    setUser({ email: null });
-  };
+    const { user, setUser } = useContext(UserContext);
 
-  return (
-    <article className="text-center text-sm flex place-content-center gap-2">
-      <p>
-        Logged In as <span className="font-bold"> {user.name} </span>
-      </p>
-      <button
-        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-        onClick={logOut}
-      >
-        log out
-      </button>
-    </article>
-  );
+    const logOut = () => {
+        googleLogout();
+        localStorage.clear();
+        setUser({ email: null });
+    };
+
+    return (
+        <article className="flex-col text-sm flex items-start">
+            <p>
+                Logged In as <span className="font-bold"> {user.name} </span>
+            </p>
+            <Button className="text-red-600 gap-0.5" size="sm" variant="link" onClick={logOut}>
+                <ArrowLeftOnRectangleIcon className="w-4 h-4" />
+                Logout
+            </Button>
+        </article>
+    );
 }
