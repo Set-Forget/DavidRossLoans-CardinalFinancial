@@ -12,7 +12,7 @@ export default function SectionLogs() {
   const { state, dispatch } = useContext(LogsContext);
   const [isFetching, setIsFetching] = useState(false);
   const { logsData, showModal } = state;
-  const { isAdmin } = user;
+  const { admin: isAdmin } = user;
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {

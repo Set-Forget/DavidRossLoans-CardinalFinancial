@@ -9,7 +9,7 @@ import { BASE_URL } from "../router";
 
 const Header = () => {
     const { user } = useContext(UserContext);
-    const { admin } = user;
+    const { admin: isAdmin } = user;
 
     return (
         <header className="w-full p-4 grid grid-cols-2 gap-2 place-items-center bg-white dark:bg-slate-700">
@@ -41,7 +41,7 @@ const Header = () => {
                             <img src={Image3} width={24} height={24} alt="Icon Pricing Calculator" />
                             <span>Pricing Calculator</span>
                         </Link>
-                        {admin && (
+                        {isAdmin && (
                             <>
                                 <Link
                                     className="ml-6 flex justify-center items-center gap-1"
