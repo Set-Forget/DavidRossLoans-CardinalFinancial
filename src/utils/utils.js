@@ -1,4 +1,4 @@
-export const MAX_SCENARIOS = 5;
+export const MAX_SCENARIOS = 4;
 export const PIPE = "|";
 
 export const API_URL =

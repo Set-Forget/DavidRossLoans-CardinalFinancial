@@ -19,6 +19,9 @@ export const initialScenario = {
   singlePremiumMortgageInsurance: "",
   prepaidEscrowClosingCosts: "",
   closingCosts: "",
+  type: "conventional",
+  foundingFee: "",
+  waived: "no",
 };
 
 export const initialResult = {
@@ -97,6 +100,11 @@ export const calculatorReducer = (state, action) => {
       return {
         ...state,
         selectedDeal: action.payload,
+      };
+    case "SET_CALCULATOR_TYPE":
+      return {
+        ...state,
+        calculatorType: action.payload,
       };
     case "REMOVE_SCENARIO": {
       const scenarioIndex = action.payload;
