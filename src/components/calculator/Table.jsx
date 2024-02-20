@@ -3,13 +3,17 @@ import ListBox from "./Listbox";
 import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { RemoveIcon } from "./Icons";
+import SelectType, { SelectWaived } from "./SelectType";
+import { formatCurrency } from "../../utils/utils";
 
 const Table = () => {
   const { state, dispatch } = useContext(CalculatorContext);
   const { scenarios } = state;
 
+  const hasVaType = scenarios.some((item) => item.type === "va");
+
   return (
-    <table className="border-collapse table-fixed text-md table-inputs">
+    <table className="border-collapse table-auto w-full text-md table-inputs">
       <thead>
         <tr>
           <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
@@ -21,18 +25,20 @@ const Table = () => {
                 key={`scenario-${index}`}
                 className="font-normal border-b dark:border-slate-600 p-3 pt-2 pb-3 text-white text-left"
               >
-                Scenario {index + 1}
-                {index >= 2 && (
-                  <button
-                    className="text-white relative float-right"
-                    onClick={() => {
-                      dispatch({ type: "REMOVE_SCENARIO", payload: index });
-                      dispatch({ type: "REMOVE_RESULT", payload: index });
-                    }}
-                  >
-                    <RemoveIcon />
-                  </button>
-                )}
+                <div className="flex">
+                  <SelectType scenarioIndex={index} name="type" />
+                  {index >= 2 && (
+                    <button
+                      className="text-white relative float-right"
+                      onClick={() => {
+                        dispatch({ type: "REMOVE_SCENARIO", payload: index });
+                        dispatch({ type: "REMOVE_RESULT", payload: index });
+                      }}
+                    >
+                      <RemoveIcon />
+                    </button>
+                  )}
+                </div>
               </th>
             );
           })}
@@ -67,7 +73,7 @@ const Table = () => {
             >
               <CalculatorInput
                 name={`loanAmount-${index}`}
-                value={scenario.loanAmount}
+                value={String(scenario.loanAmount)}
                 prefix
               />
             </td>
@@ -115,7 +121,7 @@ const Table = () => {
               <CalculatorInput
                 prefix
                 name={`downPaymentAmount-${index}`}
-                value={scenario.downPaymentAmount}
+                value={String(scenario.downPaymentAmount)}
               />
             </td>
           ))}
@@ -289,9 +295,69 @@ const Table = () => {
             </td>
           ))}
         </tr>
+        {hasVaType && (
+          <>
+            <tr>
+              <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+                Funding Fee
+              </td>
+              {scenarios.map((scenario, index) => (
+                <td
+                  key={`fundingFee-${index}`}
+                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                >
+                  {scenario.type === "va" ? (
+                    <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
+                      {getFundingFee(scenario)}
+                    </span>
+                  ) : (
+                    <span className="flex w-full justify-center">-</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+                Waived
+              </td>
+              {scenarios.map((scenario, index) => (
+                <td
+                  key={`waived-${index}`}
+                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                >
+                  {scenario.type === "va" ? (
+                    <SelectWaived
+                      name={`waived-${index}`}
+                      value={scenario.waived}
+                    />
+                  ) : (
+                    <span className="flex w-full justify-center">-</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          </>
+        )}
       </tbody>
     </table>
   );
+
+  function getFundingFee(scenario) {
+    const { downPaymentPercentage, loanAmount, waived } = scenario;
+    if (waived === "yes") return "$ 0";
+    if (Number(downPaymentPercentage) < 5) {
+      const value = (Number(loanAmount) * 2.15) / 100;
+      return `$ ${formatCurrency(value)}`;
+    }
+    if (Number(downPaymentPercentage) >= 5) {
+      const value = (Number(loanAmount) * 1.5) / 100;
+      return `$ ${formatCurrency(value)}`;
+    }
+    if (Number(downPaymentPercentage) >= 10) {
+      const value = (Number(loanAmount) * 1.25) / 100;
+      return `${formatCurrency(value)}`;
+    }
+  }
 
   function getTotalClosingCost(scenario) {
     const {

@@ -17,7 +17,7 @@ const initialState = {
   options: [],
   logs: [],
   deal: [initialDeal],
-  selectedDeal: null
+  selectedDeal: null,
 };
 
 export const CalculatorProvider = ({ children }) => {

@@ -36,6 +36,7 @@ export default function CalculatorPage() {
   }, [scenarios]);
 
   const getDealById = useCallback(async () => {
+    const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY;
     const apiUrl = "https://api.pipedrive.com/v1";
     const apiEndpoint = `/deals/${id}?api_token=`;
     try {
@@ -172,7 +173,7 @@ export default function CalculatorPage() {
       <section className="rounded-xl">
         <div className="max-w-6xl shadow-sm my-2 rounded-xl">
           <div className="w-full flex justify-between my-6">
-            <button onClick={handleGoBack} className="flex items-center">
+            <button onClick={handleGoBack} className="flex items-center text-white">
               <ChevronLeftIcon
                 className="h-5 w-5 text-white"
                 aria-hidden="true"
