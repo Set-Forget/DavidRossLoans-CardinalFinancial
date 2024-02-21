@@ -1,22 +1,22 @@
 import {
     ChevronRightIcon,
     EllipsisHorizontalIcon,
+    PencilIcon,
     PlusIcon,
     TrashIcon,
-    PencilIcon,
 } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import Menu from "../components/Menu";
 import Table from "../components/Table";
-import FormDetailsView from "../components/form/FormDetailsView";
-import Modal from "../components/form/Modal";
-import NewFormView from "../components/form/NewFormView";
+import NewFormView from "../components/form/newFormView";
+import Dialog from "../components/form/dialog";
+import EditFormView from "../components/form/editFormView";
+import FormDetailsView from "../components/form/formDetailsView";
+import Modal from "../components/form/modal";
+import { DialogContext } from "../context/DialogContext";
 import { ModalContext } from "../context/ModalContext";
 import { FORM_API_URL } from "../utils/utils";
-import { DialogContext } from "../context/DialogContext";
-import Dialog from "../components/form/Dialog";
-import EditFormView from "../components/form/editFormView";
 
 const columns = [
     { name: "Form Name", accessor: "formName" },
