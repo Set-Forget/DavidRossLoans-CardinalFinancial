@@ -1,12 +1,22 @@
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import {
+    ChevronRightIcon,
+    EllipsisHorizontalIcon,
+    PlusIcon,
+    TrashIcon,
+    PencilIcon,
+} from "@heroicons/react/24/solid";
+import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
+import Menu from "../components/Menu";
 import Table from "../components/Table";
-import Modal from "../components/form/modal";
-import { useContext } from "react";
+import FormDetailsView from "../components/form/FormDetailsView";
+import Modal from "../components/form/Modal";
+import NewFormView from "../components/form/NewFormView";
 import { ModalContext } from "../context/ModalContext";
-import NewFormView from "../components/form/newFormView";
-import FormDetailsView from "../components/form/formDetailsView";
+import { FORM_API_URL } from "../utils/utils";
+import { DialogContext } from "../context/DialogContext";
+import Dialog from "../components/form/Dialog";
+import EditFormView from "../components/form/editFormView";
 
 const columns = [
     { name: "Form Name", accessor: "formName" },
@@ -18,15 +28,17 @@ const columns = [
 const itemsPerPage = 10;
 
 export default function FormPage() {
+    const modalDispatch = useContext(ModalContext).dispatch;
+    const dialogDispatch = useContext(DialogContext).dispatch;
+
     const [forms, setForms] = useState([]);
-    const { dispatch } = useContext(ModalContext);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
 
     const getAllForms = async () => {
         setLoading(true);
         try {
-            const url = `https://script.google.com/macros/s/AKfycbwTcsaRy7JXT_w1yW3npDdwqOAeuH9z3wPoeWRmnhKSDMtxNlJ8NVzmpI3QWRBSpVyr/exec?action=getForms`;
+            const url = `${FORM_API_URL}?action=getForms`;
             const response = await fetch(url);
             const resJson = await response.json();
             const formattedData = resJson.data
@@ -40,20 +52,28 @@ export default function FormPage() {
                         formName: item[1],
                         keyContactPersonName: item[2],
                         actions: (
-                            <Button
-                                onClick={() =>
-                                    dispatch({
-                                        type: "OPEN_MODAL",
-                                        title: `${item[1]}`,
-                                        view: FormDetailsView,
-                                        subtitle: "View form details",
-                                        payload: item,
-                                    })
-                                }
-                                variant="link"
-                            >
-                                View form
-                            </Button>
+                            <Menu
+                                icon={<EllipsisHorizontalIcon className="h-5 w-5" />}
+                                className="!p-1.5 !rounded-full"
+                                variant="ghost"
+                                options={[
+                                    {
+                                        name: "View form",
+                                        onClick: () => handleViewFormDetails(item),
+                                        icon: ({ className }) => <ChevronRightIcon className={className} />,
+                                    },
+                                    {
+                                        name: "Edit form",
+                                        onClick: () => handleEditForm(item),
+                                        icon: ({ className }) => <PencilIcon className={className} />,
+                                    },
+                                    {
+                                        name: "Delete form",
+                                        onClick: () => handleDeleteForm(item),
+                                        icon: ({ className }) => <TrashIcon className={className} />,
+                                    },
+                                ]}
+                            />
                         ),
                     };
                 });
@@ -64,6 +84,46 @@ export default function FormPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleViewFormDetails = (form) => {
+        modalDispatch({
+            type: "OPEN_MODAL",
+            title: `${form[1]}`,
+            view: FormDetailsView,
+            subtitle: "View form details",
+            payload: form,
+        });
+    };
+
+    const handleEditForm = (form) => {
+        modalDispatch({
+            type: "OPEN_MODAL",
+            title: `${form[1]}`,
+            view: EditFormView,
+            subtitle: "Edit form details",
+            payload: { form, getAllForms },
+        });
+    };
+
+    const handleDeleteForm = (form) => {
+        dialogDispatch({
+            type: "OPEN_DIALOG",
+            title: `Delete ${form[1]} form`,
+            description: "Are you sure you want to delete this form? This action cannot be undone.",
+            onConfirm: async () => {
+                try {
+                    const targetTime = form[0];
+                    const encodedTargetTime = encodeURIComponent(targetTime);
+                    const url = `${FORM_API_URL}?action=deleteForm&&targetTime=${encodedTargetTime}`;
+                    await fetch(url);
+                } catch (error) {
+                    throw new Error(error);
+                } finally {
+                    getAllForms();
+                }
+            },
+        });
     };
 
     const handleNext = () => {
@@ -98,7 +158,7 @@ export default function FormPage() {
                     <div className="flex justify-end mt-4">
                         <Button
                             onClick={() =>
-                                dispatch({
+                                modalDispatch({
                                     type: "OPEN_MODAL",
                                     view: NewFormView,
                                     title: "1003 Notes | File Review Link | Master",
@@ -131,6 +191,7 @@ export default function FormPage() {
                 }
             />
             <Modal />
+            <Dialog />
         </>
     );
 }
