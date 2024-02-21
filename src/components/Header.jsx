@@ -70,7 +70,6 @@ const Header = () => {
                         Contact us
                     </a>
                 )}
-
                 {user.email ? (
                     <span className="hidden lg:flex gap-4 items-center">
                         <UserSession />

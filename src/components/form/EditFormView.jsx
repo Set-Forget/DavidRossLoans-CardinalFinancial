@@ -6,36 +6,56 @@ import { useContext } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import { FORM_API_URL } from "../../utils/utils";
 
-export default function NewFormView() {
+export default function EditFormView() {
     const { state, dispatch } = useContext(ModalContext);
 
     const [loading, setLoading] = useState(false);
+
+    const formData = state.payload.form;
 
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            formTitle: formData[1],
+            keyContactPersonName: formData[2],
+            scenario: formData[3],
+            dealGoal: formData[4],
+            incomeEmploymentB1: formData[5],
+            incomeEmploymentB2: formData[6],
+            bestCaseCash: formData[7],
+            worstCaseCash: formData[8],
+            accountAssets: formData[9],
+            borrowerBalance: formData[10],
+            loanOfficerNotes: formData[11],
+            questionsBorrower: formData[12],
+            questionsOperations: formData[13],
+            incomeEmploymentNotes: formData[14],
+            incomeDocumentsB1: formData[15],
+            incomeDocumentsB2: formData[16],
+            opsAssetsNotes: formData[17],
+            assetDocuments: formData[18],
+        },
+    });
 
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const newDate = new Date().toISOString();
-            const formData = JSON.stringify({
-                time: newDate,
-                ...data,
-            });
-            const encodedFormData = encodeURIComponent(formData);
-            const url = `${FORM_API_URL}?action=addToForm&&formData=${encodedFormData}`;
+            const newData = JSON.stringify(data);
+            const encodedNewData = encodeURIComponent(newData);
+            const encodedTargetTime = encodeURIComponent(formData[0]);
+            const url = `${FORM_API_URL}?action=editForm&&targetTime=${encodedTargetTime}&&newData=${encodedNewData}`;
             await fetch(url);
-            state.payload();
             reset();
             dispatch({ type: "CLOSE_MODAL" });
         } catch (error) {
             throw new Error(error);
         } finally {
             setLoading(false);
+            state.payload.getAllForms();
         }
     };
 
