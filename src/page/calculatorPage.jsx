@@ -1,12 +1,10 @@
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Table from "../components/calculator/Table";
-import TableResult from "../components/calculator/TableResult";
-import { AddIcon, LogoIcon } from "../components/calculator/Icons";
+import { AddIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
 import { LoadingContext } from "../context/LoadingContext";
-import { UserContext } from "../context/UserContext";
 import {
   MAX_SCENARIOS,
   KEY_PURCHASE_PRICE,
@@ -16,20 +14,17 @@ import {
   KEY_PROPERTY_TAXES,
   KEY_MORTGAGE_INSURANCE,
   calculateDownPaymentPercentage,
-  API_URL,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
-import { useReactToPrint } from "react-to-print";
+import Modal from "../components/calculator/Modal";
 
 export default function CalculatorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state, dispatch } = useContext(CalculatorContext);
-  const { user } = useContext(UserContext);
   const { setLoading } = useContext(LoadingContext);
-  const { showResults, scenarios, deal, selectedDeal } = state;
+  const { showModalResults, scenarios, deal, selectedDeal } = state;
   const scenariosRef = useRef(scenarios);
-  const componentRef = useRef();
 
   useEffect(() => {
     scenariosRef.current = scenarios;
@@ -78,7 +73,7 @@ export default function CalculatorPage() {
     } catch (error) {
       console.error(error);
     }
-  }, [id, navigate, BASE_URL, dispatch]);
+  }, [id, navigate, dispatch]);
 
   useEffect(() => {
     if (selectedDeal?.value) return;
@@ -159,12 +154,6 @@ export default function CalculatorPage() {
     });
   }, [deal, dispatch, selectedDeal]);
 
-  const handleDownload = useReactToPrint({
-    pageStyle:
-      "@page { size: auto; margin-bottom: 0mm ; margin-top: 0mm; } @media print { html, body { height: initial !important; overflow: initial !important; -webkit-print-color-adjust: exact; }}",
-    content: () => componentRef.current,
-  });
-
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
 
   return (
@@ -173,7 +162,10 @@ export default function CalculatorPage() {
       <section className="rounded-xl">
         <div className="max-w-6xl shadow-sm my-2 rounded-xl">
           <div className="w-full flex justify-between my-6">
-            <button onClick={handleGoBack} className="flex items-center text-white">
+            <button
+              onClick={handleGoBack}
+              className="flex items-center text-white"
+            >
               <ChevronLeftIcon
                 className="h-5 w-5 text-white"
                 aria-hidden="true"
@@ -198,38 +190,14 @@ export default function CalculatorPage() {
               >
                 Reset
               </button>
-              {!showResults && (
-                <button
-                  className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
-                  onClick={handleCalculate}
-                >
-                  Calculate
-                </button>
-              )}
+              <button
+                className="border border-white rounded-full px-4 py-2 w-[120px] text-white"
+                onClick={handleCalculate}
+              >
+                Calculate
+              </button>
             </div>
-            {showResults && (
-              <>
-                <div ref={componentRef} className="max-w-6xl shadow-sm overflow-auto my-2">
-                  <div className="w-full justify-between hidden my-4 print-component">
-                    <LogoIcon />
-                    <h1 className="text-black text-lg">
-                      {selectedDeal?.label
-                        .replace(/\|/g, "")
-                        .replace(/,/g, "")
-                        .trim()}
-                    </h1>
-                  </div>
-                  <TableResult />
-                </div>
-                <div className="mt-8 flex w-full justify-center print-download">
-                  <button
-                    className="border border-white rounded-full px-4 py-2 w-[220px] text-white truncate"
-                    onClick={handleDownload}
-                  >
-                    Download Results
-                  </button>
-                </div>
-              </>
+            {showModalResults && ( <Modal />
             )}
           </div>
         </div>
@@ -254,8 +222,8 @@ export default function CalculatorPage() {
   }
 
   async function handleCalculate() {
-    dispatch({ type: "SHOW_RESULTS", payload: true });
-    try {
+    dispatch({ type: "SHOW_MODAL_RESULTS", payload: true });
+    /*try {
       const newDate = new Date().toISOString();
       const { logs } = state;
       let dataToLog = {
@@ -271,7 +239,7 @@ export default function CalculatorPage() {
       await fetch(url);
     } catch (error) {
       console.error(error);
-    }
+    }*/
   }
 
   function handleAddScenario() {

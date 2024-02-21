@@ -47,7 +47,7 @@ const Calculator = () => {
     } finally {
       setLoading(false);
     }
-  }, [apiKey]);
+  }, [apiKey, dispatch]);
 
   useEffect(() => {
     if (!deal) return;
@@ -119,9 +119,9 @@ const Calculator = () => {
         },
       });
     });
-    if (!selectedDeal.value) return;
+    if (!selectedDeal?.value) return;
     navigate(`${BASE_URL}calculator/${selectedDeal.value}`);
-  }, [deal, dispatch, selectedDeal]);
+  }, [deal, dispatch, selectedDeal, navigate]);
 
   return (
     <>

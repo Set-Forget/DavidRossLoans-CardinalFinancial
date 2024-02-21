@@ -123,10 +123,10 @@ export const calculatorReducer = (state, action) => {
         results: state.results.filter((_, index) => index !== resultIndex),
       };
     }
-    case "SHOW_RESULTS":
+    case "SHOW_MODAL_RESULTS":
       return {
         ...state,
-        showResults: action.payload,
+        showModalResults: action.payload,
         isReset: false,
       };
     case "UPDATE_RESULTS":
@@ -166,7 +166,7 @@ export const calculatorReducer = (state, action) => {
       return {
         ...state,
         isReset: true,
-        showResults: false,
+        showModalResults: false,
         scenarios: newScenarios,
         results: newResults,
       };
