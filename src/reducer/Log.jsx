@@ -19,7 +19,7 @@ export const logsReducer = (state, action) => {
         ...state,
         selectedRow: groupDataByScenario,
       };
-    };
+    }
     case "SHOW_MODAL":
       return {
         ...state,

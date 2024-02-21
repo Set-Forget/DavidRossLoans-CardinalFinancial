@@ -24,6 +24,7 @@ const SelectType = ({ scenarioIndex, name }) => {
     const newDefValue = scenarioType === "conventional" ? values[0] : values[1];
     setValue(newDefValue);
   }, [state.scenarios[scenarioIndex].type, scenarioIndex, value.value, values]);
+  
   return (
     <Listbox as="div" value={value.value} onChange={handleOnChange}>
       <div>
@@ -94,14 +95,13 @@ SelectType.propTypes = {
 
 export default SelectType;
 
-
-export const SelectWaived = ({name, value}) => {
+export const SelectWaived = ({ name, value }) => {
   const { dispatch, state } = useContext(CalculatorContext);
   const { scenarios } = state;
   const [width, setWidth] = useState(0);
   const [focus, setFocus] = useState(false);
   const ref = useRef(null);
-  const values = ["yes", "no"]
+  const values = ["yes", "no"];
   const [fieldName, scenarioIndex] = name.split("-");
 
   useEffect(() => {
@@ -121,9 +121,10 @@ export const SelectWaived = ({name, value}) => {
         focus ? "outline outline-2 outline-[#2684FF] rounded-lg" : ""
       }`}
     >
-
       <div ref={ref}>
-        <Listbox.Button className={`h-[2.25rem] w-full flex justify-between cursor-default rounded-lg py-2 pl-3 pr-1 text-left bg-white shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm`}>
+        <Listbox.Button
+          className={`h-[2.25rem] w-full flex justify-between cursor-default rounded-lg py-2 pl-3 pr-1 text-left bg-white shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm`}
+        >
           <span className="block truncate text-black w-full text-right capitalize">
             {value}
           </span>
@@ -189,4 +190,4 @@ export const SelectWaived = ({name, value}) => {
   function handleBlur() {
     setFocus(false);
   }
-}
+};

@@ -4,9 +4,9 @@ import { CalculatorContext } from "../../context/CalculatorContext";
 import { initialResult } from "../../reducer/Calculator";
 import { formatCurrency } from "../../utils/utils";
 
-const TableResult = ({ componentRef }) => {
+const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
-  const { scenarios, results, showResults } = state;
+  const { scenarios, results, showModalResults } = state;
 
   const getPMT = useCallback((interestRate, loanAmount, loanTerm) => {
     const years = loanTerm.split(" ")[0];
@@ -38,7 +38,7 @@ const TableResult = ({ componentRef }) => {
   );
 
   useEffect(() => {
-    if (!showResults) return;
+    if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
       const principleAndInterest = getPMT(
         scenario.interestRate,
@@ -70,7 +70,7 @@ const TableResult = ({ componentRef }) => {
     });
 
     dispatch({ type: "UPDATE_RESULTS", payload: newResults });
-  }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showResults]);
+  }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showModalResults]);
 
   return (
     <table className="border-collapse table-auto w-full text-md">
@@ -94,7 +94,9 @@ const TableResult = ({ componentRef }) => {
       <tbody className="dark:bg-slate-800">
         <tr>
           <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Principle and Interest
+            <span>Principle</span>
+            <span className="ml-2">and</span>
+            <span className="ml-2">Interest</span>
           </td>
           {results.map((result, index) => {
             const { principleAndInterest } = result;
@@ -111,7 +113,7 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Homeowners
+            <span>Homeowners</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;
@@ -128,7 +130,9 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Monthly Mortgage Insurance
+            <span>Monthly</span>
+            <span className="ml-2">Mortgage</span>
+            <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { loanAmount } = scenario;
@@ -145,7 +149,8 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Property Taxes
+            <span>Property</span>
+            <span className="ml-2">Taxes</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { propertyTaxes } = scenario;
@@ -162,7 +167,9 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Housing Expense
+            <span>Total</span>
+            <span className="ml-2">Housing</span>
+            <span className="ml-2">Expense</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpense } = result;
@@ -179,7 +186,11 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Housing Expense With the HOA
+            <span>Total</span>
+            <span className="ml-2">Housing</span>
+            <span className="ml-2">Expense</span>
+            <span className="ml-2">With</span>
+            <span className="ml-2">HOA</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA } = result;
@@ -196,7 +207,9 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Down Payment
+            <span>Total</span>
+            <span className="ml-2">Down</span>
+            <span className="ml-2">Payment</span>
           </td>
           {results.map((result, index) => {
             const { totalDownPayment } = result;
@@ -213,7 +226,10 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Cash From Borrower
+            <span>Total</span>
+            <span className="ml-2">Cash</span>
+            <span className="ml-2">From</span>
+            <span className="ml-2">Borrower</span>
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower } = result;
@@ -230,7 +246,9 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Down Payment Delta
+            <span>Down</span>
+            <span className="ml-2">Payment</span>
+            <span className="ml-2">Delta</span>
           </td>
           {results.map((result, index) => {
             const { totalDownPayment: total } = result;
@@ -251,7 +269,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative top-2">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative top-12">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -268,7 +294,9 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Closing Cost Delta
+            <span>Closing</span>
+            <span className="ml-2">Cost</span>
+            <span className="ml-2">Delta</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { singlePremiumMortgageInsurance: total } = scenario;
@@ -289,7 +317,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative top-2">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative top-12">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -306,7 +342,10 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Cash From Borrower Delta
+            <span>Cash</span>
+            <span className="ml-2">From</span>
+            <span className="ml-2">Borrower</span>
+            <span className="ml-2">Delta</span>
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower: total } = result;
@@ -327,7 +366,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative top-2">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative top-12">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -344,7 +391,8 @@ const TableResult = ({ componentRef }) => {
         </tr>
         <tr>
           <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Payment Difference
+            <span>Payment</span>
+            <span className="ml-2">Difference</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA: total } = result;
@@ -365,7 +413,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative top-2">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative top-12">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
