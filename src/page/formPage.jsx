@@ -4,6 +4,7 @@ import {
     PencilIcon,
     PlusIcon,
     TrashIcon,
+    LinkIcon,
 } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
@@ -21,7 +22,7 @@ import { FORM_API_URL } from "../utils/utils";
 const columns = [
     { name: "Form Name", accessor: "formName" },
     { name: "Key Contact Person Name", accessor: "keyContactPersonName" },
-    { name: "Creation date", accessor: "date" },
+    { name: "Deal ID", accessor: "dealId" },
     { name: "", accessor: "actions" },
 ];
 
@@ -41,43 +42,43 @@ export default function FormPage() {
             const url = `${FORM_API_URL}?action=getForms`;
             const response = await fetch(url);
             const resJson = await response.json();
-            const formattedData = resJson.data
-                .filter((_item, index) => index !== 0)
-                .map((item) => {
-                    return {
-                        date:
-                            new Date(item[0]).toLocaleDateString() +
-                            " " +
-                            new Date(item[0]).toLocaleTimeString(),
-                        formName: item[1],
-                        keyContactPersonName: item[2],
-                        actions: (
-                            <Menu
-                                icon={<EllipsisHorizontalIcon className="h-5 w-5" />}
-                                className="!p-1.5 !rounded-full"
-                                variant="ghost"
-                                options={[
-                                    {
-                                        name: "View form",
-                                        onClick: () => handleViewFormDetails(item),
-                                        icon: ({ className }) => <ChevronRightIcon className={className} />,
-                                    },
-                                    {
-                                        name: "Edit form",
-                                        onClick: () => handleEditForm(item),
-                                        icon: ({ className }) => <PencilIcon className={className} />,
-                                    },
-                                    {
-                                        name: "Delete form",
-                                        onClick: () => handleDeleteForm(item),
-                                        icon: ({ className }) => <TrashIcon className={className} />,
-                                    },
-                                ]}
-                            />
-                        ),
-                    };
-                });
-
+            const formattedData = resJson.data.map((item) => {
+                return {
+                    formName: item[1],
+                    keyContactPersonName: item[2],
+                    dealId: item[19],
+                    actions: (
+                        <Menu
+                            icon={<EllipsisHorizontalIcon className="h-5 w-5" />}
+                            className="!p-1.5 !rounded-full"
+                            variant="ghost"
+                            options={[
+                                {
+                                    name: "View form",
+                                    onClick: () => handleViewFormDetails(item),
+                                    icon: ({ className }) => <ChevronRightIcon className={className} />,
+                                },
+                                {
+                                    name: "Edit form",
+                                    onClick: () => handleEditForm(item),
+                                    icon: ({ className }) => <PencilIcon className={className} />,
+                                },
+                                {
+                                    name: "Delete form",
+                                    onClick: () => handleDeleteForm(item),
+                                    icon: ({ className }) => <TrashIcon className={className} />,
+                                    divider: true,
+                                },
+                                {
+                                    name: "View document",
+                                    onClick: () => handleGoToForm(item),
+                                    icon: ({ className }) => <LinkIcon className={className} />,
+                                },
+                            ]}
+                        />
+                    ),
+                };
+            });
             setForms(formattedData);
         } catch (error) {
             console.error(error);
@@ -94,6 +95,11 @@ export default function FormPage() {
             subtitle: "View form details",
             payload: form,
         });
+    };
+
+    const handleGoToForm = (form) => {
+        const fileDetailsLink = `https://docs.google.com/spreadsheets/d/1QYdsX4NOqOrWOq7eYT8B8q0LnBTt4_dbXXACk3A3GyM/edit#gid=${form[0]}`;
+        window.open(fileDetailsLink, "_blank").focus();
     };
 
     const handleEditForm = (form) => {
@@ -113,9 +119,9 @@ export default function FormPage() {
             description: "Are you sure you want to delete this form? This action cannot be undone.",
             onConfirm: async () => {
                 try {
-                    const targetTime = form[0];
-                    const encodedTargetTime = encodeURIComponent(targetTime);
-                    const url = `${FORM_API_URL}?action=deleteForm&&targetTime=${encodedTargetTime}`;
+                    const dealId = form[19];
+                    const encodedDealId = encodeURIComponent(dealId);
+                    const url = `${FORM_API_URL}?action=deleteForm&&dealId=${encodedDealId}`;
                     await fetch(url);
                 } catch (error) {
                     throw new Error(error);

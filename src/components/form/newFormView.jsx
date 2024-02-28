@@ -1,34 +1,83 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ModalContext } from "../../context/ModalContext";
+import { FORM_API_URL, KEY_1003_LINK } from "../../utils/utils";
 import Button from "../Button";
 import Input from "../Input";
-import { useContext } from "react";
-import { ModalContext } from "../../context/ModalContext";
-import { FORM_API_URL } from "../../utils/utils";
+import SearchSelect from "../SearchSelect";
+
+const API_URL = "https://api.pipedrive.com/v1";
+const API_KEY = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
 export default function NewFormView() {
     const { state, dispatch } = useContext(ModalContext);
 
     const [loading, setLoading] = useState(false);
+    const [query, setQuery] = useState("");
+    const [deals, setDeals] = useState([]);
 
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
+        control,
         formState: { errors },
     } = useForm();
+
+    const searchDeals = async (query) => {
+        if (query === "" || query.length < 3) return [];
+
+        try {
+            const url = `${API_URL}/deals/search?term=${query}&fields=title&start=0&api_token=${API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.data.items.map(({ item }) => ({
+                name: item.title,
+                id: item.id,
+                person: item.person,
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const onSelectedDeal = async (deal) => {
+        setValue("deal", deal);
+        setValue("formTitle", deal.name);
+        if (!deal.person) setValue("keyContactPersonName", "");
+        setValue("keyContactPersonName", deal.person.name);
+    };
 
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const newDate = new Date().toISOString();
             const formData = JSON.stringify({
-                time: newDate,
+                dealId: data.deal.id.toString(),
                 ...data,
             });
+
             const encodedFormData = encodeURIComponent(formData);
-            const url = `${FORM_API_URL}?action=addToForm&&formData=${encodedFormData}`;
-            await fetch(url);
+            const docsUrl = `${FORM_API_URL}?action=addToForm&&formData=${encodedFormData}`;
+            const pipedriveUrl = `${API_URL}/deals/${data.deal.id}?api_token=${API_KEY}`;
+
+            const res = await fetch(docsUrl);
+            const resJson = await res.json();
+
+            const fileReviewLink = `https://docs.google.com/spreadsheets/d/1QYdsX4NOqOrWOq7eYT8B8q0LnBTt4_dbXXACk3A3GyM/edit#gid=${resJson.data}`;
+
+            const fieldData = {
+                [KEY_1003_LINK]: fileReviewLink,
+            };
+
+            await fetch(pipedriveUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(fieldData),
+            });
+
             state.payload();
             reset();
             dispatch({ type: "CLOSE_MODAL" });
@@ -39,11 +88,34 @@ export default function NewFormView() {
         }
     };
 
+    const filteredData =
+        query === "" ? deals : deals.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="col-span-full mt-5">
+            <div className="flex mt-5 gap-6">
+                <SearchSelect
+                    className="flex-1"
+                    label="Deal"
+                    control={control}
+                    name="deal"
+                    register={register("deal", {
+                        required: true,
+                    })}
+                    data={filteredData}
+                    placeholder="Type to search..."
+                    errors={errors.deal && "This field is required"}
+                    query={query}
+                    onChange={(e) => onSelectedDeal(e)}
+                    onChangeQuery={async (e) => {
+                        setQuery(e.target.value);
+                        const data = await searchDeals(e.target.value);
+                        setDeals(data);
+                    }}
+                />
                 <Input
                     label="Form Title"
+                    className="flex-1"
                     placeholder="Your answer"
                     register={register("formTitle", {
                         required: true,

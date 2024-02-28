@@ -5,21 +5,33 @@ import Input from "../Input";
 import { useContext } from "react";
 import { ModalContext } from "../../context/ModalContext";
 import { FORM_API_URL } from "../../utils/utils";
+import SearchSelect from "../SearchSelect";
+
+const API_URL = "https://api.pipedrive.com/v1";
+const API_KEY = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
 export default function EditFormView() {
     const { state, dispatch } = useContext(ModalContext);
 
     const [loading, setLoading] = useState(false);
+    const [query, setQuery] = useState("");
+    const [deals, setDeals] = useState([]);
 
     const formData = state.payload.form;
-
+    console.log(formData);
     const {
         register,
         handleSubmit,
         reset,
+        control,
+        setValue,
         formState: { errors },
     } = useForm({
         defaultValues: {
+            deal: {
+                name: formData[1],
+                id: formData[19],
+            },
             formTitle: formData[1],
             keyContactPersonName: formData[2],
             scenario: formData[3],
@@ -41,13 +53,37 @@ export default function EditFormView() {
         },
     });
 
+    const searchDeals = async (query) => {
+        if (query === "" || query.length < 3) return [];
+
+        try {
+            const url = `${API_URL}/deals/search?term=${query}&fields=title&start=0&api_token=${API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.data.items.map(({ item }) => ({
+                name: item.title,
+                id: item.id,
+                person: item.person,
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const onSelectedDeal = async (deal) => {
+        setValue("deal", deal);
+        setValue("formTitle", deal.name);
+        if (!deal.person) setValue("keyContactPersonName", "");
+        setValue("keyContactPersonName", deal.person.name);
+    };
+
     const onSubmit = async (data) => {
         setLoading(true);
         try {
             const newData = JSON.stringify(data);
             const encodedNewData = encodeURIComponent(newData);
-            const encodedTargetTime = encodeURIComponent(formData[0]);
-            const url = `${FORM_API_URL}?action=editForm&&targetTime=${encodedTargetTime}&&newData=${encodedNewData}`;
+            const encodedDealId = encodeURIComponent(formData[19]);
+            const url = `${FORM_API_URL}?action=editForm&&dealId=${encodedDealId}&&newData=${encodedNewData}`;
             await fetch(url);
             reset();
             dispatch({ type: "CLOSE_MODAL" });
@@ -59,11 +95,34 @@ export default function EditFormView() {
         }
     };
 
+    const filteredData =
+        query === "" ? deals : deals.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="col-span-full mt-5">
+            <div className="flex mt-5 gap-6">
+                <SearchSelect
+                    className="flex-1"
+                    label="Deal"
+                    control={control}
+                    name="deal"
+                    register={register("deal", {
+                        required: true,
+                    })}
+                    data={filteredData}
+                    placeholder="Type to search..."
+                    errors={errors.deal && "This field is required"}
+                    query={query}
+                    onChange={(e) => onSelectedDeal(e)}
+                    onChangeQuery={async (e) => {
+                        setQuery(e.target.value);
+                        const data = await searchDeals(e.target.value);
+                        setDeals(data);
+                    }}
+                />
                 <Input
                     label="Form Title"
+                    className="flex-1"
                     placeholder="Your answer"
                     register={register("formTitle", {
                         required: true,
