@@ -124,26 +124,21 @@ const Calculator = () => {
   }, [deal, dispatch, selectedDeal, navigate]);
 
   return (
-    <>
-      <h2 className="font-bold text-lg text-white">Conventional Calculator </h2>
-      <p className="text-white">
-        Workout your property taxes with the calculator below.
-      </p>
-      <section className="rounded-xl w-full">
-        <div className="shadow-sm my-2 rounded-xl">
-          <div className="w-full flex my-6">
-            <Select
-              id="deals"
-              value={selectedDeal}
-              onChange={handleSelectChange}
-              onInputChange={handleInputChange}
-              options={options}
-              className="max-w-sm mx-auto h-[38px] border-none w-full bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block dark:bg-gray-700 dark:placeholder-gray-400"
-            />
-          </div>
+    <section className="rounded-xl w-full">
+      <div className="shadow-sm my-2 rounded-xl">
+        <div className="w-full flex my-6">
+          <Select
+            id="deals"
+            value={selectedDeal}
+            onChange={handleSelectChange}
+            onInputChange={handleInputChange}
+            options={options}
+            placeholder="Select deal"
+            className="max-w-sm mx-auto h-[38px] border-none w-full bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block dark:bg-gray-700 dark:placeholder-gray-400"
+          />
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 
   function searchDeal(dealTitle) {

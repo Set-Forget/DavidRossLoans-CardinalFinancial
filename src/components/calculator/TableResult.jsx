@@ -270,11 +270,11 @@ const TableResult = () => {
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
                     {value >= 0 ? (
-                      <div className="relative top-2">
+                      <div className="relative -bottom-2.5 left-1">
                         <UpIcon />
                       </div>
                     ) : (
-                      <div className="relative top-12">
+                      <div className="relative -bottom-2 left-1">
                         <DownIcon />
                       </div>
                     )}
@@ -318,11 +318,11 @@ const TableResult = () => {
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
                     {value >= 0 ? (
-                      <div className="relative top-2">
+                      <div className="relative -bottom-2.5 left-1">
                         <UpIcon />
                       </div>
                     ) : (
-                      <div className="relative top-12">
+                      <div className="relative -bottom-2 left-1">
                         <DownIcon />
                       </div>
                     )}
@@ -367,11 +367,11 @@ const TableResult = () => {
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
                     {value >= 0 ? (
-                      <div className="relative top-2">
+                      <div className="relative -bottom-2.5 left-1">
                         <UpIcon />
                       </div>
                     ) : (
-                      <div className="relative top-12">
+                      <div className="relative -bottom-2 left-1">
                         <DownIcon />
                       </div>
                     )}
@@ -414,11 +414,11 @@ const TableResult = () => {
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
                     {value >= 0 ? (
-                      <div className="relative top-2">
+                      <div className="relative -bottom-2.5 left-1">
                         <UpIcon />
                       </div>
                     ) : (
-                      <div className="relative top-12">
+                      <div className="relative -bottom-2 left-1">
                         <DownIcon />
                       </div>
                     )}

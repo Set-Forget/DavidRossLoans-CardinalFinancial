@@ -3,7 +3,8 @@ import ListBox from "./Listbox";
 import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { RemoveIcon } from "./Icons";
-import SelectType, { SelectWaived } from "./SelectType";
+import SelectType from "./SelectType";
+import { SelectVaFoundingFee, SelectWaived } from "./SelectsVa";
 import { formatCurrency } from "../../utils/utils";
 
 const Table = () => {
@@ -307,9 +308,10 @@ const Table = () => {
                   className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
                 >
                   {scenario.type === "va" ? (
-                    <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
-                      {getFundingFee(scenario)}
-                    </span>
+                    <SelectVaFoundingFee
+                      name={`fundingFee-${index}`}
+                      value={scenario.fundingFee}
+                    />
                   ) : (
                     <span className="flex w-full justify-center">-</span>
                   )}
@@ -318,7 +320,7 @@ const Table = () => {
             </tr>
             <tr>
               <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-                Waived
+                Waiver of VA Funding Fee”
               </td>
               {scenarios.map((scenario, index) => (
                 <td
@@ -341,23 +343,6 @@ const Table = () => {
       </tbody>
     </table>
   );
-
-  function getFundingFee(scenario) {
-    const { downPaymentPercentage, loanAmount, waived } = scenario;
-    if (waived === "yes") return "$ 0";
-    if (Number(downPaymentPercentage) < 5) {
-      const value = (Number(loanAmount) * 2.15) / 100;
-      return `$ ${formatCurrency(value)}`;
-    }
-    if (Number(downPaymentPercentage) >= 5) {
-      const value = (Number(loanAmount) * 1.5) / 100;
-      return `$ ${formatCurrency(value)}`;
-    }
-    if (Number(downPaymentPercentage) >= 10) {
-      const value = (Number(loanAmount) * 1.25) / 100;
-      return `${formatCurrency(value)}`;
-    }
-  }
 
   function getTotalClosingCost(scenario) {
     const {

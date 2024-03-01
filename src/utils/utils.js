@@ -161,3 +161,45 @@ export const years = [
   "29 years",
   "30 years",
 ];
+
+
+export function formatFieldValue(name, value) {
+  if (name === "loanTerm" || name === "interestRate") return value;
+  const format = formatCurrency(value);
+  return `$ ${format}`;
+}
+
+export function formatFieldName(value) {
+  switch (value) {
+    case "purchasePrice":
+      return "Purchase Price";
+    case "loanAmount":
+      return "Loan Amount";
+    case "loanTerm":
+      return "Loan Term";
+    case "downPaymentPercentage":
+      return "Down Payment Percentage";
+    case "downPaymentAmount":
+      return "Down Payment Amount";
+    case "interestRate":
+      return "Interest Rate";
+    case "points":
+      return "Charge for interest rate";
+    case "homeOwnersInsurance":
+      return "Homeowners";
+    case "monthlyMortgageInsurance":
+      return "Monthly Mortgage Insurance";
+    case "propertyTaxes":
+      return "Property Taxes";
+    case "HOAPayment":
+      return "HOA Payment";
+    case "singlePremiumMortgageInsurance":
+      return "Single Premium Mortgage Insurance";
+      case "closingCosts":
+        return "Closing Costs";
+    case "prepaidEscrowClosingCosts":
+      return "Prepaid & Escrow closing costs";
+    default:
+      return value;
+  }
+}
