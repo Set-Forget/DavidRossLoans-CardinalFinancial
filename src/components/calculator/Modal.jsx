@@ -11,12 +11,13 @@ import TableResult from "./TableResult";
 import { Dialog, Transition } from "@headlessui/react";
 import { LogoIcon } from "./Icons";
 import { XCircleIcon } from "@heroicons/react/20/solid";
+import { formatFieldName, formatFieldValue } from "../../utils/utils";
 import html2canvas from "html2canvas";
 
 export default function Modal() {
   const { state, dispatch } = useContext(CalculatorContext);
+  const { showModalResults } = state;
   const componentRef = useRef();
-  const { showModalResults, selectedDeal } = state;
 
   const [imageDataUrl, setImageDataUrl] = useState(null);
 
@@ -84,6 +85,15 @@ export default function Modal() {
                     </div>
                   )}
                 </div>
+                <div className="w-full flex justify-center">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="w-[320px] text-white bg-slate-700 font-medium rounded-full text-md px-4 py-2 m-auto"
+                  >
+                    Copy Text
+                  </button>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -97,5 +107,33 @@ export default function Modal() {
       type: "SHOW_MODAL_RESULTS",
       payload: false,
     });
+  }
+
+  async function handleCopy() {
+    const groupedData = state.logs.reduce((acc, item) => {
+      const index = parseInt(item.scenarioIndex);
+      if (!acc[index]) {
+        acc[index] = [];
+      }
+      acc[index].push(item);
+      return acc;
+    }, []);
+    if (!groupedData.length) return;
+    let info = "";
+    groupedData.forEach((group, index) => {
+      info += `Scenario ${index + 1}\n`;
+      group.forEach((item) => {
+        info += `${formatFieldName(item.fieldName)}: ${formatFieldValue(
+          item.fieldName,
+          item.value
+        )}\n`;
+      });
+      info += "\n";
+    });
+    try {
+      await navigator.clipboard.writeText(info);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

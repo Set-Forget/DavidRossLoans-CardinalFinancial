@@ -1,8 +1,8 @@
-import React, { Fragment, useContext } from "react";
+import { Fragment, useContext } from "react";
 import { LogsContext } from "../../context/LogContext";
 import { Dialog, Transition } from "@headlessui/react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { formatCurrency } from "../../utils/utils";
+import { formatFieldValue, formatFieldName } from "../../utils/utils"
 
 export default function Modal() {
   const { state, dispatch } = useContext(LogsContext);
@@ -54,14 +54,14 @@ export default function Modal() {
                 <div className="my-4">
                   {dataToShow.map((group, index) => (
                     <div key={group.scenarioIndex} className="my-2">
-                      <h2 className="font-medium text-md">
+                      <h2 className="font-medium text-lg">
                         Scenario {Number(group.scenarioIndex) + 1}
                       </h2>
                       <ul>
                         {group.data.map((item) => (
                           <li
                             key={item.fieldName + index}
-                            className="flex w-full justify-between my-1 text-sm"
+                            className="flex w-full justify-between my-1 text-md"
                           >
                             <span>{formatFieldName(item.fieldName)}</span>
                             <span>
@@ -79,14 +79,14 @@ export default function Modal() {
                     className="flex justify-center px-4 py-2 text-sm font-medium text-slate-700"
                     onClick={closeModal}
                   >
-                    Go back
+                    Go Back
                   </button>
                   <button
                     type="button"
                     onClick={handleCopy}
                     className="text-white bg-slate-700 font-medium rounded-full text-sm px-4 py-2"
                   >
-                    Copy info
+                    Copy Text
                   </button>
                 </div>
               </Dialog.Panel>
@@ -123,42 +123,4 @@ export default function Modal() {
     }
   }
 
-  function formatFieldValue(name, value) {
-    if (name === "loanTerm" || name === "interestRate") return value;
-    const format = formatCurrency(value);
-    return `$ ${format}`;
-  }
-
-  function formatFieldName(value) {
-    switch (value) {
-      case "purchasePrice":
-        return "Purchase Price";
-      case "loanAmount":
-        return "Loan Amount";
-      case "loanTerm":
-        return "Loan Term";
-      case "downPaymentPercentage":
-        return "Down Payment Percentage";
-      case "downPaymentAmount":
-        return "Down Payment Amount";
-      case "interestRate":
-        return "Interest Rate";
-      case "points":
-        return "Charge for interest rate";
-      case "homeOwnersInsurance":
-        return "Homeowners";
-      case "monthlyMortgageInsurance":
-        return "Monthly Mortgage Insurance";
-      case "propertyTaxes":
-        return "Property Taxes";
-      case "HOAPayment":
-        return "HOA Payment";
-      case "singlePremiumMortgageInsurance":
-        return "Single Premium Mortgage Insurance";
-      case "prepaidEscrowClosingCosts":
-        return "Prepaid & Escrow closing costs";
-      default:
-        return value;
-    }
-  }
 }
