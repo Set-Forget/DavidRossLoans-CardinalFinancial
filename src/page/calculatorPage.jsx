@@ -4,6 +4,7 @@ import Table from "../components/calculator/Table";
 import { AddIcon } from "../components/calculator/Icons";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../context/CalculatorContext";
+import { UserContext } from "../context/UserContext";
 import { LoadingContext } from "../context/LoadingContext";
 import {
   MAX_SCENARIOS,
@@ -14,6 +15,7 @@ import {
   KEY_PROPERTY_TAXES,
   KEY_MORTGAGE_INSURANCE,
   calculateDownPaymentPercentage,
+  API_URL,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
 import Modal from "../components/calculator/Modal";
@@ -22,6 +24,7 @@ export default function CalculatorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state, dispatch } = useContext(CalculatorContext);
+  const { user } = useContext(UserContext);
   const { setLoading } = useContext(LoadingContext);
   const { showModalResults, scenarios, deal, selectedDeal } = state;
   const scenariosRef = useRef(scenarios);
@@ -222,9 +225,11 @@ export default function CalculatorPage() {
 
   async function handleCalculate() {
     dispatch({ type: "SHOW_MODAL_RESULTS", payload: true });
+    const { logs } = state;
+    const hasLogs = Boolean(logs.length);
+    if (!hasLogs) return;
     try {
       const newDate = new Date().toISOString();
-      const { logs } = state;
       let dataToLog = {
         time: newDate,
         email: user.email,
