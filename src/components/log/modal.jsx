@@ -54,14 +54,14 @@ export default function Modal() {
                 <div className="my-4">
                   {dataToShow.map((group, index) => (
                     <div key={group.scenarioIndex} className="my-2">
-                      <h2 className="font-medium text-lg">
+                      <h2 className="font-medium text-md">
                         Scenario {Number(group.scenarioIndex) + 1}
                       </h2>
                       <ul>
                         {group.data.map((item) => (
                           <li
                             key={item.fieldName + index}
-                            className="flex w-full justify-between my-1 text-md"
+                            className="flex w-full justify-between my-1 text-sm"
                           >
                             <span>{formatFieldName(item.fieldName)}</span>
                             <span>
