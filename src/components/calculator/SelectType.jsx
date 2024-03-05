@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from "react";
+import { Fragment, useState, useContext, useEffect, useCallback } from "react";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
@@ -12,18 +12,38 @@ const SelectType = ({ scenarioIndex, name }) => {
       value: "conventional",
     },
     { name: `VA - Scenario ${scenarioIndex + 1}`, value: "va" },
+    { name: `FHA - Scenario ${scenarioIndex + 1}`, value: "fha" },
   ];
+
+  const getTypeValue = useCallback((arg) => {
+    switch (arg) {
+      case "conventional":
+        return values[0];
+      case "va":
+        return values[1];
+      case "fha":
+        return values[2];
+      default:
+        return values[0];
+    }
+  }, []);
   const type = state.scenarios[scenarioIndex].type;
-  const defValue = type === "conventional" ? values[0] : values[1];
+  const defValue = getTypeValue(type);
   const [value, setValue] = useState(defValue);
 
   useEffect(() => {
     const scenarioType = state.scenarios[scenarioIndex].type;
     if (scenarioType === value.value) return;
-    const newDefValue = scenarioType === "conventional" ? values[0] : values[1];
+    const newDefValue = getTypeValue(scenarioType);
     setValue(newDefValue);
-  }, [state.scenarios[scenarioIndex].type, scenarioIndex, value.value, values]);
-  
+  }, [
+    state.scenarios[scenarioIndex].type,
+    scenarioIndex,
+    value.value,
+    values,
+    getTypeValue,
+  ]);
+
   return (
     <Listbox as="div" value={value.value} onChange={handleOnChange}>
       <div>
@@ -74,7 +94,7 @@ const SelectType = ({ scenarioIndex, name }) => {
   );
 
   function handleOnChange(e) {
-    const item = e === "conventional" ? values[0] : values[1];
+    const item = getTypeValue(e);
     setValue(item);
     dispatch({
       type: "UPDATE_SCENARIO",
@@ -93,4 +113,3 @@ SelectType.propTypes = {
 };
 
 export default SelectType;
-

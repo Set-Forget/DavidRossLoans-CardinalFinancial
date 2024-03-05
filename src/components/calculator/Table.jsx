@@ -12,6 +12,7 @@ const Table = () => {
   const { scenarios } = state;
 
   const hasVaType = scenarios.some((item) => item.type === "va");
+  const hasFhaType = scenarios.some((item) => item.type === "fha");
 
   return (
     <table className="border-collapse table-auto w-full text-md table-inputs">
@@ -80,6 +81,31 @@ const Table = () => {
             </td>
           ))}
         </tr>
+        {hasFhaType && (
+          <tr>
+            <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+              Loan Amount FHA
+            </td>
+            {scenarios.map((scenario, index) => {
+              const { loanAmount } = scenario;
+              const loanAmountFha = loanAmount + loanAmount * 0.0175;
+              return (
+                <td
+                  key={`loanAmountFha-${index}`}
+                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                >
+                  {scenario.type === "fha" ? (
+                    <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
+                      $ {formatCurrency(loanAmountFha)}
+                    </span>
+                  ) : (
+                    <span className="flex w-full justify-center">-</span>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        )}
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
             Loan Term
@@ -129,7 +155,7 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Interest Rate
+            Note Rate
           </td>
           {scenarios.map((scenario, index) => (
             <td
@@ -162,7 +188,7 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Homeowners
+            Hazard Insurance
           </td>
           {scenarios.map((scenario, index) => (
             <td
@@ -179,17 +205,17 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Monthly Mortgage Insurance
+            Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
             return (
               <td
-                key={`monthlyMortgageInsurance-${index}`}
+                key={`mortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
               >
                 <CalculatorInput
-                  name={`monthlyMortgageInsurance-${index}`}
-                  value={scenario.monthlyMortgageInsurance}
+                  name={`mortgageInsurance-${index}`}
+                  value={scenario.mortgageInsurance}
                   prefix
                 />
               </td>
@@ -225,23 +251,6 @@ const Table = () => {
               <CalculatorInput
                 name={`HOAPayment-${index}`}
                 value={scenario.HOAPayment}
-                prefix
-              />
-            </td>
-          ))}
-        </tr>
-        <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Single Premium Mortgage Insurance
-          </td>
-          {scenarios.map((scenario, index) => (
-            <td
-              key={`singlePremiumMortgageInsurance-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
-            >
-              <CalculatorInput
-                name={`singlePremiumMortgageInsurance-${index}`}
-                value={scenario.singlePremiumMortgageInsurance}
                 prefix
               />
             </td>
@@ -347,21 +356,16 @@ const Table = () => {
   function getTotalClosingCost(scenario) {
     const {
       points,
-      singlePremiumMortgageInsurance,
+      mortgageInsurance,
       prepaidEscrowClosingCosts,
       closingCosts,
     } = scenario;
     const _points = Number(points);
-    const _singlePremiumMortgageInsurance = Number(
-      singlePremiumMortgageInsurance
-    );
+    const _mortgageInsurance = Number(mortgageInsurance);
     const _prepaidEscrowClosingCosts = Number(prepaidEscrowClosingCosts);
     const _closingCosts = Number(closingCosts);
     return (
-      _points +
-      _singlePremiumMortgageInsurance +
-      _prepaidEscrowClosingCosts +
-      _closingCosts
+      _points + _mortgageInsurance + _prepaidEscrowClosingCosts + _closingCosts
     );
   }
 };

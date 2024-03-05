@@ -8,12 +8,12 @@ const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
   const { scenarios, results, showModalResults } = state;
 
-  const getPMT = useCallback((interestRate, loanAmount, loanTerm) => {
+  const getPMT = useCallback((interestRate, loanAmountValue, loanTerm) => {
     const years = loanTerm.split(" ")[0];
     const monthlyPayments = Number(years) * 12;
     const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
-    const dividend = Number(loanAmount) * monthlyPaymentsRate;
+    const dividend = Number(loanAmountValue) * monthlyPaymentsRate;
     const divider = 1 - Math.pow(1 + monthlyPaymentsRate, -monthlyPayments);
     return (dividend / divider).toFixed(2);
   }, []);
@@ -21,16 +21,16 @@ const TableResult = () => {
   const getTotalHousingExpense = useCallback(
     (
       interestRate,
-      loanAmount,
+      loanAmountValue,
       loanTerm,
       homeOwnersInsurance,
-      monthlyMortgageInsurance,
-      propertyTaxes
+      mortgageInsurance,
+      propertyTaxes,
     ) => {
-      const pmt = getPMT(interestRate, loanAmount, loanTerm);
+      const pmt = getPMT(interestRate, loanAmountValue, loanTerm);
       const sum =
         Number(homeOwnersInsurance) +
-        Number(monthlyMortgageInsurance) +
+        Number(mortgageInsurance) +
         Number(propertyTaxes);
       return Number(pmt) + sum;
     },
@@ -40,25 +40,27 @@ const TableResult = () => {
   useEffect(() => {
     if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
+      const {type, loanAmount} = scenario
+      const loanAmountValue = type === "fha" ? loanAmount + loanAmount * 0.0175 : loanAmount;
       const principleAndInterest = getPMT(
         scenario.interestRate,
-        scenario.loanAmount,
-        scenario.loanTerm
+        loanAmountValue,
+        scenario.loanTerm,
       );
       const totalHousingExpense = getTotalHousingExpense(
         scenario.interestRate,
-        scenario.loanAmount,
+        loanAmountValue,
         scenario.loanTerm,
         scenario.homeOwnersInsurance,
-        scenario.monthlyMortgageInsurance,
-        scenario.propertyTaxes
+        scenario.mortgageInsurance,
+        scenario.propertyTaxes,
       );
       const totalHousingExpenseWithHOA =
         totalHousingExpense + Number(scenario.HOAPayment);
       const totalDownPayment =
-        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
+        Number(scenario.purchasePrice) - Number(loanAmountValue);
       const totalCashFromBorrower =
-        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
+        Number(scenario.purchasePrice) - Number(loanAmountValue);
       return {
         ...initialResult,
         principleAndInterest,
@@ -130,16 +132,16 @@ const TableResult = () => {
         </tr>
         <tr>
           <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            <span>Monthly</span>
-            <span className="ml-2">Mortgage</span>
+            <span>Mortgage</span>
             <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { loanAmount } = scenario;
-            const value = checkValue((loanAmount * 0.85) / 12);
+            const { loanAmount, type } = scenario;
+            const loanAmountValue = type === "fha" ? loanAmount + loanAmount * 0.0175 : loanAmount;
+            const value = checkValue((loanAmountValue * 0.85) / 12);
             return (
               <td
-                key={`monthlyMortgageInsurance-${index}`}
+                key={`mortgageInsurance-${index}`}
                 className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
@@ -299,11 +301,11 @@ const TableResult = () => {
             <span className="ml-2">Delta</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { singlePremiumMortgageInsurance: total } = scenario;
+            const { mortgageInsurance: total } = scenario;
             const comparisons = [];
             scenarios.forEach((r, i) => {
               if (index === i) return;
-              const { singlePremiumMortgageInsurance: tmpTotal } = r;
+              const { mortgageInsurance: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
