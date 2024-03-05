@@ -14,6 +14,8 @@ import {
   KEY_HOA_PAYMENT,
   KEY_PROPERTY_TAXES,
   KEY_MORTGAGE_INSURANCE,
+  KEY_NOTE_RATE,
+  KEY_HAZARD_INSURANCE,
   calculateDownPaymentPercentage,
   API_URL,
 } from "../utils/utils";
@@ -54,6 +56,8 @@ export default function CalculatorPage() {
       const loanTerm = String(data[KEY_LOAN_TERM] / 12);
       const HOAPayment = data[KEY_HOA_PAYMENT];
       const propertyTaxes = data[KEY_PROPERTY_TAXES];
+      const interestRate = data[KEY_NOTE_RATE];
+      const homeOwnersInsurance = data[KEY_HAZARD_INSURANCE];
       const defaultDownPaymentAmount =
         Number(purchasePrice) - Number(loanAmount);
       const downPaymentAmount = data[KEY_DOWN_PAYMENT_AMOUNT];
@@ -70,6 +74,8 @@ export default function CalculatorPage() {
           HOAPayment,
           propertyTaxes,
           downPaymentAmount: downPaymentAmountValue,
+          interestRate,
+          homeOwnersInsurance,
           mortgageInsurance,
         },
       });
@@ -152,6 +158,22 @@ export default function CalculatorPage() {
           fieldName: "mortgageInsurance",
           scenarioIndex: String(scenarioIndex),
           value: deal?.mortgageInsurance ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "interestRate",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.interestRate ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "homeOwnersInsurance",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.homeOwnersInsurance ?? "",
         },
       });
     });
