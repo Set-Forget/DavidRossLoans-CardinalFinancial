@@ -3,7 +3,8 @@ export const PIPE = "|";
 
 export const API_URL =
   "https://script.google.com/macros/s/AKfycbxTznkTRaceva-hCmt3OIqD-pXdLRJRS3nnsPfcycRtUp7U7uQ9C7FM5YBQIxHsfMSB/exec";
-export const FORM_API_URL = "https://script.google.com/macros/s/AKfycbz9e6gu9GYHpSBPPN_DUjNYzWAUPRSBLNdRab-ar0up8PjMIB7x8T9K3zqTV2om7ZpO/exec"
+export const FORM_API_URL =
+  "https://script.google.com/macros/s/AKfycbz9e6gu9GYHpSBPPN_DUjNYzWAUPRSBLNdRab-ar0up8PjMIB7x8T9K3zqTV2om7ZpO/exec";
 export const KEY_PURCHASE_PRICE = "e986ec80d8dce46cf43f261f60235d0a2faa24da";
 export const KEY_PROPERTY_TAXES = "0ac894d6605e196e6b2be867ff0c677dd31d8e92";
 export const KEY_LOAN_TERM = "878ddd2c5094c630638d255fd9ad54ab37aa5a4b";
@@ -12,8 +13,7 @@ export const KEY_DOWN_PAYMENT_AMOUNT =
   "98826f12c210fb692cf563eb80be01501973c23d";
 export const KEY_MORTGAGE_INSURANCE =
   "ada448810ec8e41b03f4104947e7d36d1c1a16a8";
-export const KEY_1003_LINK = "50833fc6d08de716344d4f834099ff4ed19a8760"
-
+export const KEY_1003_LINK = "50833fc6d08de716344d4f834099ff4ed19a8760";
 
 /**
  *
@@ -162,7 +162,6 @@ export const years = [
   "30 years",
 ];
 
-
 export function formatFieldValue(name, value) {
   if (name === "loanTerm" || name === "interestRate") return value;
   const format = formatCurrency(value);
@@ -187,16 +186,14 @@ export function formatFieldName(value) {
       return "Charge for interest rate";
     case "homeOwnersInsurance":
       return "Homeowners";
-    case "monthlyMortgageInsurance":
-      return "Monthly Mortgage Insurance";
+    case "mortgageInsurance":
+      return "Mortgage Insurance";
     case "propertyTaxes":
       return "Property Taxes";
     case "HOAPayment":
       return "HOA Payment";
-    case "singlePremiumMortgageInsurance":
-      return "Single Premium Mortgage Insurance";
-      case "closingCosts":
-        return "Closing Costs";
+    case "closingCosts":
+      return "Closing Costs";
     case "prepaidEscrowClosingCosts":
       return "Prepaid & Escrow closing costs";
     default:

@@ -113,7 +113,7 @@ const Calculator = () => {
       dispatch({
         type: "UPDATE_SCENARIO",
         payload: {
-          fieldName: "singlePremiumMortgageInsurance",
+          fieldName: "mortgageInsurance",
           scenarioIndex: String(scenarioIndex),
           value: deal?.mortgageInsurance ?? "",
         },

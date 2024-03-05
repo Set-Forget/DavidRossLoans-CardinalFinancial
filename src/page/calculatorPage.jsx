@@ -149,7 +149,7 @@ export default function CalculatorPage() {
       dispatch({
         type: "UPDATE_SCENARIO",
         payload: {
-          fieldName: "singlePremiumMortgageInsurance",
+          fieldName: "mortgageInsurance",
           scenarioIndex: String(scenarioIndex),
           value: deal?.mortgageInsurance ?? "",
         },
