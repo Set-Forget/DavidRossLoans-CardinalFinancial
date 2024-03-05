@@ -9,6 +9,8 @@ import {
   KEY_LOAN_TERM,
   KEY_DOWN_PAYMENT_AMOUNT,
   KEY_MORTGAGE_INSURANCE,
+  KEY_NOTE_RATE,
+  KEY_HAZARD_INSURANCE,
   calculateDownPaymentPercentage,
 } from "../utils/utils";
 import { BASE_URL } from "../router";
@@ -116,6 +118,22 @@ const Calculator = () => {
           fieldName: "mortgageInsurance",
           scenarioIndex: String(scenarioIndex),
           value: deal?.mortgageInsurance ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "interestRate",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.interestRate ?? "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "homeOwnersInsurance",
+          scenarioIndex: String(scenarioIndex),
+          value: deal?.homeOwnersInsurance ?? "",
         },
       });
     });
