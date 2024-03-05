@@ -88,7 +88,7 @@ const Table = () => {
             </td>
             {scenarios.map((scenario, index) => {
               const { loanAmount } = scenario;
-              const loanAmountFha = loanAmount + loanAmount * 0.0175;
+              const loanAmountFha = Number(loanAmount) + (Number(loanAmount) * 0.0175);
               return (
                 <td
                   key={`loanAmountFha-${index}`}

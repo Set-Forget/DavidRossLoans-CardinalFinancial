@@ -25,7 +25,7 @@ const TableResult = () => {
       loanTerm,
       homeOwnersInsurance,
       mortgageInsurance,
-      propertyTaxes,
+      propertyTaxes
     ) => {
       const pmt = getPMT(interestRate, loanAmountValue, loanTerm);
       const sum =
@@ -40,12 +40,15 @@ const TableResult = () => {
   useEffect(() => {
     if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
-      const {type, loanAmount} = scenario
-      const loanAmountValue = type === "fha" ? loanAmount + loanAmount * 0.0175 : loanAmount;
+      const { type, loanAmount } = scenario;
+      const loanAmountFha =
+      Number(loanAmount) + (Number(loanAmount) * 0.0175);
+      const loanAmountValue =
+        type === "fha" ? loanAmountFha : loanAmount;
       const principleAndInterest = getPMT(
         scenario.interestRate,
         loanAmountValue,
-        scenario.loanTerm,
+        scenario.loanTerm
       );
       const totalHousingExpense = getTotalHousingExpense(
         scenario.interestRate,
@@ -53,7 +56,7 @@ const TableResult = () => {
         scenario.loanTerm,
         scenario.homeOwnersInsurance,
         scenario.mortgageInsurance,
-        scenario.propertyTaxes,
+        scenario.propertyTaxes
       );
       const totalHousingExpenseWithHOA =
         totalHousingExpense + Number(scenario.HOAPayment);
@@ -137,7 +140,10 @@ const TableResult = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { loanAmount, type } = scenario;
-            const loanAmountValue = type === "fha" ? loanAmount + loanAmount * 0.0175 : loanAmount;
+            const loanAmountFha =
+              Number(loanAmount) + (Number(loanAmount) * 0.0175);
+            const loanAmountValue =
+              type === "fha" ? loanAmountFha : loanAmount;
             const value = checkValue((loanAmountValue * 0.85) / 12);
             return (
               <td
