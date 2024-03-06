@@ -152,7 +152,7 @@ const Calculator = () => {
             onInputChange={handleInputChange}
             options={options}
             placeholder="Select deal"
-            className="max-w-sm mx-auto h-[38px] border-none w-full bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block dark:bg-gray-700 dark:placeholder-gray-400"
+            className="max-w-sm mx-auto h-[38px] border-none w-full text-white focus:ring-[#00B1A4] focus:border-[#00B1A4] block bg-gray-700 placeholder-gray-400"
           />
         </div>
       </div>

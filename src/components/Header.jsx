@@ -12,7 +12,7 @@ const Header = () => {
     const { admin: isAdmin } = user;
 
     return (
-        <header className="w-full px-8 py-3 flex justify-between bg-white dark:bg-slate-700">
+        <header className="w-full px-8 py-3 flex justify-between bg-slate-700">
             <div className="flex items-center justify-center">
                 <img
                     src={
@@ -65,7 +65,7 @@ const Header = () => {
                 {!user.email && (
                     <a
                         href="https://www.cardinalfinancial.com/loan-originator/david-ross/"
-                        className="font-medium tracking-wide dark:text-white p-1 hover:text-[#00B1A4]"
+                        className="font-medium tracking-widetext-white p-1 hover:text-[#00B1A4]"
                     >
                         Contact us
                     </a>

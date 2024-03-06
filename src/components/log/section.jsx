@@ -59,7 +59,7 @@ export default function SectionLogs() {
                       return (
                         <th
                           key={`result-${data}`}
-                          className="font-normal border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
+                          className="font-normal border-b border-slate-600 p-4 pt-0 pb-3 text-white text-left"
                         >
                           {isActionsColumn ? "" : data}
                         </th>
@@ -67,7 +67,7 @@ export default function SectionLogs() {
                     })}
                   </tr>
                 </thead>
-                <tbody className="dark:bg-slate-800">
+                <tbody className="bg-slate-800">
                   {logsData?.slice(1)?.map((row, rowIndex) => (
                     <tr key={`row-${rowIndex}`}>
                       {row.map((cell, cellIndex) => {
@@ -78,7 +78,7 @@ export default function SectionLogs() {
                           return (
                             <td
                               key={`cell-${rowIndex}-${cellIndex}`}
-                              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                              className="border-b border-slate-600 p-4 text-slate-400"
                             >
                               {hasValues ? (
                                 <PopoverComponent row={values} />
@@ -91,7 +91,7 @@ export default function SectionLogs() {
                         return (
                           <td
                             key={`cell-${rowIndex}-${cellIndex}`}
-                            className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                            className="border-b border-slate-600 p-4 text-slate-400"
                           >
                             {cellIndex === 0 ? formatDate(cell) : cell}
                           </td>

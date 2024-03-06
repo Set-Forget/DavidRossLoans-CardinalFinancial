@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   const { loading } = useContext(LoadingContext);
 
   return (
-    <div className="flex flex-col place-items-center h-screen text-stone-800 dark:bg-slate-700 dark:text-white">
+    <div className="flex flex-col place-items-center h-screen bg-slate-700 text-white">
       <Header />
       {loading ? (
         <Spinner isLayout />

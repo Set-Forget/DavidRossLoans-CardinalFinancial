@@ -81,14 +81,14 @@ const TableResult = () => {
     <table className="border-collapse table-auto w-full text-lg">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-left">
+          <th className="border-b border-slate-600 p-4 pt-0 pb-3 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
             return (
               <th
                 key={`result-${index}`}
-                className="text-lg font-normal border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
+                className="text-lg font-normal border-b border-slate-600 p-4 pt-0 pb-3 text-white text-left"
               >
                 Scenario {index + 1}
               </th>
@@ -96,9 +96,9 @@ const TableResult = () => {
           })}
         </tr>
       </thead>
-      <tbody className="dark:bg-slate-800">
+      <tbody className="bg-slate-800">
         <tr>
-          <td className="text-lg font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-700 p-4 text-white">
             <span>Principle</span>
             <span className="ml-2">and</span>
             <span className="ml-2">Interest</span>
@@ -109,7 +109,7 @@ const TableResult = () => {
             return (
               <td
                 key={`principleAndInterest-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -117,7 +117,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-700 p-4 text-white">
             <span>Homeowners</span>
           </td>
           {scenarios.map((scenario, index) => {
@@ -126,7 +126,7 @@ const TableResult = () => {
             return (
               <td
                 key={`homeOwnersInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -134,7 +134,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Mortgage</span>
             <span className="ml-2">Insurance</span>
           </td>
@@ -148,7 +148,7 @@ const TableResult = () => {
             return (
               <td
                 key={`mortgageInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -156,7 +156,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Property</span>
             <span className="ml-2">Taxes</span>
           </td>
@@ -166,7 +166,7 @@ const TableResult = () => {
             return (
               <td
                 key={`propertyTaxes-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -174,7 +174,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Total</span>
             <span className="ml-2">Housing</span>
             <span className="ml-2">Expense</span>
@@ -185,7 +185,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalHousingExpense-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -193,7 +193,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Total</span>
             <span className="ml-2">Housing</span>
             <span className="ml-2">Expense</span>
@@ -206,7 +206,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalHousingExpenseWithHOA-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -214,7 +214,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Total</span>
             <span className="ml-2">Down</span>
             <span className="ml-2">Payment</span>
@@ -225,7 +225,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalDownPayment-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -233,7 +233,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Total</span>
             <span className="ml-2">Cash</span>
             <span className="ml-2">From</span>
@@ -245,7 +245,7 @@ const TableResult = () => {
             return (
               <td
                 key={`totalCashFromBorrower-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 $ {formatCurrency(value)}
               </td>
@@ -253,7 +253,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Down</span>
             <span className="ml-2">Payment</span>
             <span className="ml-2">Delta</span>
@@ -293,7 +293,7 @@ const TableResult = () => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -301,7 +301,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Closing</span>
             <span className="ml-2">Cost</span>
             <span className="ml-2">Delta</span>
@@ -341,7 +341,7 @@ const TableResult = () => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -349,7 +349,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Cash</span>
             <span className="ml-2">From</span>
             <span className="ml-2">Borrower</span>
@@ -390,7 +390,7 @@ const TableResult = () => {
             return (
               <td
                 key={`cashFromBorrowerDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -398,7 +398,7 @@ const TableResult = () => {
           })}
         </tr>
         <tr>
-          <td className="text-lg font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
             <span>Payment</span>
             <span className="ml-2">Difference</span>
           </td>
@@ -437,7 +437,7 @@ const TableResult = () => {
             return (
               <td
                 key={`paymentDifferences-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-white"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>

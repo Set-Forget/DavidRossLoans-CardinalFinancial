@@ -255,7 +255,7 @@ export default function CalculatorPage() {
       let dataToLog = {
         time: newDate,
         email: user.email,
-        action: "Calculator",
+        action: "Calculate",
         deal: id,
         values: JSON.stringify(logs),
       };

@@ -95,14 +95,14 @@ export default function ButtonAddToPipedrive({ companies, avg, address, toLog })
                     onChange={handleSelectChange}
                     onInputChange={handleInputChange}
                     options={options}
-                    className="bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full dark:bg-gray-700 dark:placeholder-gray-400"
+                    className="bg-gray-700 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full placeholder-gray-400"
                 />
                 to
             </div>
             <button
                 type="button"
                 onClick={updateDeal}
-                className="text-white bg-[#00B1A4] hover:bg-[#033652] focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 focus:outline-none dark:focus:ring-blue-800 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed"
+                className="text-white bg-[#00B1A4] hover:bg-[#033652] focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed"
                 disabled={!selectedDeal}
             >
                 add to pipedrive

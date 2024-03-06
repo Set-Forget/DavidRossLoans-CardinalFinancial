@@ -54,7 +54,7 @@ function CardForValues({title, img, value, link, setEstimateValue}) {
     return(
         <div className="relative w-48 h-48">
             <a href={link} target="_blank" >
-                <div className="bg-gray-100 dark:bg-slate-700 border-solid border-2 border-[#00B1A4] p-4 rounded min-w-min w-48 h-48 flex flex-col relative items-end justify-between">
+                <div className="bg-slate-700 border-solid border-2 border-[#00B1A4] p-4 rounded min-w-min w-48 h-48 flex flex-col relative items-end justify-between">
                 <img src={img} alt={title} className="self-start justify-self-start h-12"/>
                 </div>
             </a>
