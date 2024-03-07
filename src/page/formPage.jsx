@@ -154,14 +154,13 @@ export default function FormPage() {
     return (
         <>
             <Table
-                title="1003 Forms"
                 subtitle="List of all 1003 forms created"
                 columns={columns}
                 data={paginatedData}
                 isLoading={loading}
                 className="w-full"
                 toolbar={
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-end">
                         <Button
                             onClick={() =>
                                 modalDispatch({

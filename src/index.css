@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.content-area-height {
+    min-height: calc(100% - 65px);
+}
+
+.content-area-width {
+    max-width: calc(100vw - 256px);
+}
+  

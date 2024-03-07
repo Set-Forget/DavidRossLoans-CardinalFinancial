@@ -15,7 +15,7 @@ const Table = () => {
   const hasFhaType = scenarios.some((item) => item.type === "fha");
 
   return (
-    <table className="border-collapse table-auto w-full text-md table-inputs">
+    <table className="border-collapse table-fixed xl:table-auto w-full text-md table-inputs">
       <thead>
         <tr>
           <th className="border-b border-slate-600 p-4 pt-0 pb-3 text-slate-200 text-left">
@@ -126,7 +126,7 @@ const Table = () => {
           {scenarios.map((scenario, index) => (
             <td
               key={`downPaymentPercentage-${index}`}
-              className="border-b border-slate-600 p-4text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`downPaymentPercentage-${index}`}

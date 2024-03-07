@@ -70,10 +70,7 @@ export default function Modal() {
                   {!imageDataUrl ? (
                     <div
                       ref={componentRef}
-                      className="my-2"
-                      style={{
-                        background: "linear-gradient(180deg, #05293e, #033652)",
-                      }}
+                      className="my-2 bg-[#02293f]"
                     >
                       <div className="w-full justify-start relative top-6 left-4">
                         <LogoIcon />
@@ -91,7 +88,7 @@ export default function Modal() {
                     <button
                       type="button"
                       onClick={handleCopy}
-                      className="w-[320px] text-white bg-slate-700 font-medium rounded-full text-md px-4 py-2 m-auto"
+                      className="w-[320px] text-white bg-[#033652] font-medium rounded-full text-md px-4 py-2 m-auto"
                     >
                       Copy Text
                     </button>

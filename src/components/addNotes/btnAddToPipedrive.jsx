@@ -95,7 +95,7 @@ export default function ButtonAddToPipedrive({ companies, avg, address, toLog })
                     onChange={handleSelectChange}
                     onInputChange={handleInputChange}
                     options={options}
-                    className="bg-gray-700 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full placeholder-gray-400"
+                    className="bg-slate-800 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block w-full placeholder-gray-400"
                 />
                 to
             </div>

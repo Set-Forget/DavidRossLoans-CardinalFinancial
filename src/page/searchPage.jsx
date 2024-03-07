@@ -104,7 +104,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <h1 className="p-6 text-2xl md:text-4xl lg:text-6xl">Home Value Sites</h1>
+      <p>Make a search to find the values</p>
       <SearchBar mutation={mutation} setSearchItem={searchAddress} />
       {mutation.isLoading ? (
         <>
@@ -121,25 +121,25 @@ export default function SearchPage() {
           </p>
           <hr />
         </>
-      ) : hasSearched ? (
-        <>
-          <WebScrappingResult
-            searchItem={searchItem}
-            companies={companies}
-            avg={average}
-            setEstimateValue={setEstimateValue}
-          />
-          {allowPipedrive && (
-            <ButtonAddToPipedrive
+      ) : (
+        hasSearched && (
+          <>
+            <WebScrappingResult
+              searchItem={searchItem}
               companies={companies}
               avg={average}
-              address={searchItem}
-              toLog={toLog}
+              setEstimateValue={setEstimateValue}
             />
-          )}
-        </>
-      ) : (
-        <p>Make a search to find the values</p>
+            {allowPipedrive && (
+              <ButtonAddToPipedrive
+                companies={companies}
+                avg={average}
+                address={searchItem}
+                toLog={toLog}
+              />
+            )}
+          </>
+        )
       )}
     </>
   );

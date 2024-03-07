@@ -53,7 +53,7 @@ export default function SearchBar({mutation, setSearchItem}) {
             autoComplete="street-address"
             id="address-search"
             name="address-search"
-            className="block w-full p-4 pl-10 text-sm border rounded-lg  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            className="block w-full p-4 pl-10 text-sm border rounded-lg  bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             required/>
             </AddressAutofill>
            <button 
@@ -68,7 +68,7 @@ export default function SearchBar({mutation, setSearchItem}) {
                 </span>
                 <input
                     name="address-city"
-                    className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                     placeholder="City"
                     autoComplete="address-level2"
                     disabled
@@ -80,7 +80,7 @@ export default function SearchBar({mutation, setSearchItem}) {
                 </span>
                 <input
                     name="address-state"
-                    className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                     placeholder="State / Region"
                     autoComplete="address-level1"
                     disabled
@@ -92,7 +92,7 @@ export default function SearchBar({mutation, setSearchItem}) {
                 </span>
                 <input
                 name="address-postcode"
-                className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 placeholder="ZIP / Postcode"
                 autoComplete="postal-code"
                 disabled
@@ -104,7 +104,7 @@ export default function SearchBar({mutation, setSearchItem}) {
                 </span>
                 <input
                 name="address-unit"
-                className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full p-4 text-sm border rounded-none rounded-r-lg bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Unit"
                 type="text"
                 />

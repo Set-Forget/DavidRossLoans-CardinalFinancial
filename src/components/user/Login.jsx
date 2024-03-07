@@ -184,7 +184,7 @@ const ErrorLoginModal = ({ setShowErrorModal }) => {
     return (
         <div
             id="editMemberModal"
-            className="relative z-10 ml-[40px] bg-slate-700 text-white"
+            className="relative z-10 ml-[40px] bg-[#033652] text-white"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
@@ -192,7 +192,7 @@ const ErrorLoginModal = ({ setShowErrorModal }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-40 transition-opacity"></div>
             <div className="fixed inset-0 z-10 overflow-y-auto">
                 <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <div className="bg-slate-700 text-white relative transform overflow-hidden rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transition-all w-[600px] sm:my-8 sm:p-6">
+                    <div className="bg-[#033652] text-white relative transform overflow-hidden rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transition-all w-[600px] sm:my-8 sm:p-6">
                         <div className="mt-3 text-center sm:mt-5 text-sm montserrat">
                             <h3
                                 className="font-semibold lg:text-base leading-6 text-white"

@@ -27,7 +27,7 @@ export default function SearchBar({mutation, setSearchItem}) {
            value={inputValue}
            onChange={(e) => setInputValue(e.target.value)}
            id="default-search" 
-           className="block w-full p-4 pl-10 text-sm border rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+           className="block w-full p-4 pl-10 text-sm border rounded-lg bg-slate-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
            required/>
           <button 
            type="submit" 

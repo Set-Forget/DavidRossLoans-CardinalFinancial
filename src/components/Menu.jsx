@@ -28,7 +28,7 @@ export default function Menu({ name, icon, variant, className, options }) {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <HeadlessMenu.Items className="absolute z-20 right-0 my-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-slate-700 shadow-lg ring-1 ring-black/5 focus:outline-none">
+                <HeadlessMenu.Items className="absolute z-20 right-0 my-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-[#033652] shadow-lg ring-1 ring-black/5 focus:outline-none">
                     <div className="px-1 py-1">
                         {options.map((option) => (
                             <>

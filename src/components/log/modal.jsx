@@ -84,7 +84,7 @@ export default function Modal() {
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="text-white bg-slate-700 font-medium rounded-full text-sm px-4 py-2"
+                    className="text-white bg-[#033652] font-medium rounded-full text-sm px-4 py-2"
                   >
                     Copy Text
                   </button>
