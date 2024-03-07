@@ -143,8 +143,8 @@ const Calculator = () => {
 
   return (
     <section className="rounded-xl w-full">
-      <div className="shadow-sm my-2 rounded-xl">
-        <div className="w-full flex my-6">
+      <div className="shadow-sm mb-2 rounded-xl">
+        <div className="w-full flex mb-6">
           <Select
             id="deals"
             value={selectedDeal}
@@ -152,7 +152,7 @@ const Calculator = () => {
             onInputChange={handleInputChange}
             options={options}
             placeholder="Select deal"
-            className="max-w-sm mx-auto h-[38px] border-none w-full bg-gray-50 text-gray-900 focus:ring-[#00B1A4] focus:border-[#00B1A4] block dark:bg-gray-700 dark:placeholder-gray-400"
+            className="max-w-sm mx-auto h-[38px] border-none w-full text-gray-700 focus:ring-[#00B1A4] focus:border-[#00B1A4] block bg-slate-800 placeholder-gray-400"
           />
         </div>
       </div>

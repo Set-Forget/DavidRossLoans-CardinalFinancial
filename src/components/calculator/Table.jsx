@@ -15,17 +15,17 @@ const Table = () => {
   const hasFhaType = scenarios.some((item) => item.type === "fha");
 
   return (
-    <table className="border-collapse table-auto w-full text-md table-inputs">
+    <table className="border-collapse table-fixed xl:table-auto w-full text-md table-inputs">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+          <th className="border-b border-slate-600 p-4 pt-0 pb-3 text-slate-200 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
             return (
               <th
                 key={`scenario-${index}`}
-                className="font-normal border-b dark:border-slate-600 p-3 pt-2 pb-3 text-white text-left"
+                className="font-normal border-b border-slate-600 p-3 pt-2 pb-3 text-white text-left"
               >
                 <div className="flex">
                   <SelectType scenarioIndex={index} name="type" />
@@ -46,15 +46,15 @@ const Table = () => {
           })}
         </tr>
       </thead>
-      <tbody className="dark:bg-slate-800">
+      <tbody className="bg-slate-800">
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-white">
+          <td className="border-b border-slate-700 p-4 text-white">
             Purchase Price
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`purchasePrice-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`purchasePrice-${index}`}
@@ -65,13 +65,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Loan Amount
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`loanAmount-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`loanAmount-${index}`}
@@ -83,7 +83,7 @@ const Table = () => {
         </tr>
         {hasFhaType && (
           <tr>
-            <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+            <td className="border-b border-slate-600 p-4 text-white">
               Loan Amount FHA
             </td>
             {scenarios.map((scenario, index) => {
@@ -92,7 +92,7 @@ const Table = () => {
               return (
                 <td
                   key={`loanAmountFha-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                  className="border-b border-slate-600 p-4 text-slate-400"
                 >
                   {scenario.type === "fha" ? (
                     <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
@@ -107,26 +107,26 @@ const Table = () => {
           </tr>
         )}
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Loan Term
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`loanTerm-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <ListBox name={`loanTerm-${index}`} value={scenario.loanTerm} />
             </td>
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-white">
+          <td className="border-b border-slate-700 p-4 text-white">
             Down Payment Percentage
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`downPaymentPercentage-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`downPaymentPercentage-${index}`}
@@ -137,13 +137,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-100 dark:border-slate-700 p-4 text-white">
+          <td className="border-b border-slate-700 p-4 text-white">
             Down Payment Amount
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`downPaymentAmount-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 prefix
@@ -154,13 +154,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Note Rate
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`interestRate-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <ListBox
                 name={`interestRate-${index}`}
@@ -170,13 +170,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Charge for interest rate
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`points-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`points-${index}`}
@@ -187,13 +187,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Hazard Insurance
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`homeOwnersInsurance-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`homeOwnersInsurance-${index}`}
@@ -204,14 +204,14 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Mortgage Insurance
           </td>
           {scenarios.map((scenario, index) => {
             return (
               <td
                 key={`mortgageInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                className="border-b border-slate-600 p-4 text-slate-400"
               >
                 <CalculatorInput
                   name={`mortgageInsurance-${index}`}
@@ -223,13 +223,13 @@ const Table = () => {
           })}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Property Taxes
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`propertyTaxes-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`propertyTaxes-${index}`}
@@ -240,13 +240,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             HOA Payment
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`HOAPayment-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`HOAPayment-${index}`}
@@ -257,13 +257,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Prepaid & Escrow closing costs
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`prepaidEscrowClosingCosts-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`prepaidEscrowClosingCosts-${index}`}
@@ -274,13 +274,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Closing Costs
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`closingCosts-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <CalculatorInput
                 name={`closingCosts-${index}`}
@@ -291,13 +291,13 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+          <td className="border-b border-slate-600 p-4 text-white">
             Total Closing Costs
           </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`totalClosingCosts-${index}`}
-              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+              className="border-b border-slate-600 p-4 text-slate-400"
             >
               <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
                 $ {getTotalClosingCost(scenario)}
@@ -308,13 +308,13 @@ const Table = () => {
         {hasVaType && (
           <>
             <tr>
-              <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
+              <td className="border-b border-slate-600 p-4 text-white">
                 Funding Fee
               </td>
               {scenarios.map((scenario, index) => (
                 <td
                   key={`fundingFee-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                  className="border-b border-slate-600 p-4 text-slate-400"
                 >
                   {scenario.type === "va" ? (
                     <SelectVaFoundingFee
@@ -328,13 +328,13 @@ const Table = () => {
               ))}
             </tr>
             <tr>
-              <td className="border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-                Waiver of VA Funding Fee”
+              <td className="border-b border-slate-600 p-4 text-white">
+                Waiver of VA Funding Fee
               </td>
               {scenarios.map((scenario, index) => (
                 <td
                   key={`waived-${index}`}
-                  className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400"
+                  className="border-b border-slate-600 p-4 text-slate-400"
                 >
                   {scenario.type === "va" ? (
                     <SelectWaived

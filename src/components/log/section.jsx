@@ -44,14 +44,13 @@ export default function SectionLogs() {
 
   return (
     <>
-      <h2 className="font-bold text-lg text-white mb-6">History Logs</h2>
       {isFetching ? (
         <Spinner />
       ) : (
         <>
-          <section className="rounded-xl w-full px-32">
+          <section className="rounded-xl w-full">
             {logsData?.length > 1 ? (
-              <table className="border-collapse table-fixed w-full text-md">
+              <table className="border-collapse table-auto w-full text-md">
                 <thead>
                   <tr>
                     {logsData[0].map((data, index) => {
@@ -59,7 +58,7 @@ export default function SectionLogs() {
                       return (
                         <th
                           key={`result-${data}`}
-                          className="font-normal border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
+                          className="font-normal border-b border-slate-600 p-4 pt-0 pb-3 text-white text-left"
                         >
                           {isActionsColumn ? "" : data}
                         </th>
@@ -67,7 +66,7 @@ export default function SectionLogs() {
                     })}
                   </tr>
                 </thead>
-                <tbody className="dark:bg-slate-800">
+                <tbody className="bg-slate-800">
                   {logsData?.slice(1)?.map((row, rowIndex) => (
                     <tr key={`row-${rowIndex}`}>
                       {row.map((cell, cellIndex) => {
@@ -78,7 +77,7 @@ export default function SectionLogs() {
                           return (
                             <td
                               key={`cell-${rowIndex}-${cellIndex}`}
-                              className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                              className="border-b border-slate-600 p-4 text-slate-400 text-center"
                             >
                               {hasValues ? (
                                 <PopoverComponent row={values} />
@@ -91,7 +90,7 @@ export default function SectionLogs() {
                         return (
                           <td
                             key={`cell-${rowIndex}-${cellIndex}`}
-                            className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                            className="border-b border-slate-600 p-4 text-slate-400"
                           >
                             {cellIndex === 0 ? formatDate(cell) : cell}
                           </td>

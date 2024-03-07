@@ -182,11 +182,9 @@ export default function CalculatorPage() {
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
 
   return (
-    <>
-      <h2 className="font-bold text-lg text-white">Conventional calculator</h2>
-      <section className="rounded-xl">
-        <div className="max-w-6xl shadow-sm my-2 rounded-xl">
-          <div className="w-full flex justify-between my-6">
+      <section className="rounded-xl w-full">
+        <div className="max-w-6xl shadow-sm mb-2 rounded-xl">
+          <div className="w-full flex justify-between mb-6">
             <button
               onClick={handleGoBack}
               className="flex items-center text-white"
@@ -197,14 +195,15 @@ export default function CalculatorPage() {
               />
               Go back
             </button>
-            <button
-              className="flex items-center text-md font-medium whitespace-nowrap mb-1 border border-white rounded-full px-3 py-2 text-white"
-              onClick={handleAddScenario}
-              disabled={!showAddScenario}
-            >
-              Add Scenario&nbsp;
-              <AddIcon />
-            </button>
+            {showAddScenario && (
+              <button
+                className="flex items-center text-md font-medium whitespace-nowrap mb-1 border border-white rounded-full px-3 py-2 text-white"
+                onClick={handleAddScenario}
+              >
+                Add Scenario&nbsp;
+                <AddIcon />
+              </button>
+            )}
           </div>
           <div className="flex flex-col">
             <Table />
@@ -226,7 +225,6 @@ export default function CalculatorPage() {
           </div>
         </div>
       </section>
-    </>
   );
 
   function handleGoBack() {
@@ -255,7 +253,7 @@ export default function CalculatorPage() {
       let dataToLog = {
         time: newDate,
         email: user.email,
-        action: "Calculator",
+        action: "Calculate",
         deal: id,
         values: JSON.stringify(logs),
       };
