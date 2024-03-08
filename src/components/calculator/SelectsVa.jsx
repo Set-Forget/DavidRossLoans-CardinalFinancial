@@ -1,8 +1,7 @@
 import { Fragment, useState, useContext, useEffect, useRef } from "react";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { Listbox, Transition } from "@headlessui/react";
-import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { CheckIcon } from "./Icons";
+import { ChevronUpDownIcon, CheckIcon } from "@heroicons/react/20/solid";
 
 export const SelectVaFoundingFee = ({ name, value }) => {
   const { dispatch, state } = useContext(CalculatorContext);
@@ -13,12 +12,10 @@ export const SelectVaFoundingFee = ({ name, value }) => {
   const [fieldName, scenarioIndex] = name.split("-");
   const values = [
     "0",
-    `1) Less than 5% = 2.15%`,
-    `1) 5% or more =  1.5%`,
-    `1) 10% or more = 1.25%`,
-    `2) Less than 5% = 3.3%`,
-    `2) 5% or more =  1.5%`,
-    `2) 10% or more = 1.25%`,
+    `Less than 5% = 2.15%`,
+    `5% or more =  1.5%`,
+    `10% or more = 1.25%`,
+    `Less than 5% = 3.3%`,
   ];
 
   useEffect(() => {

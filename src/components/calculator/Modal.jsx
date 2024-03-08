@@ -8,18 +8,17 @@ import {
 } from "react";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import TableResult from "./TableResult";
+import Button from "../Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { LogoIcon } from "./Icons";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { formatFieldName, formatFieldValue } from "../../utils/utils";
 import html2canvas from "html2canvas";
 
 export default function Modal() {
   const { state, dispatch } = useContext(CalculatorContext);
-  const { logs } = state;
+  const { results } = state;
   const { showModalResults } = state;
   const componentRef = useRef();
-  const hasLogs = Boolean(logs.length);
   const [imageDataUrl, setImageDataUrl] = useState(null);
 
   const generateImage = useCallback(() => {
@@ -62,16 +61,13 @@ export default function Modal() {
             >
               <Dialog.Panel className="w-screen transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex justify-end">
-                  <button onClick={closeModal}>
+                  <Button variant="ghost" onClick={closeModal}>
                     <XCircleIcon className="h-6 w-6 fill-black" />
-                  </button>
+                  </Button>
                 </div>
                 <div className="my-4">
                   {!imageDataUrl ? (
-                    <div
-                      ref={componentRef}
-                      className="my-2 bg-[#02293f]"
-                    >
+                    <div ref={componentRef} className="my-2 bg-[#02293f]">
                       <div className="w-full justify-start relative top-6 left-4">
                         <LogoIcon />
                       </div>
@@ -83,17 +79,9 @@ export default function Modal() {
                     </div>
                   )}
                 </div>
-                {hasLogs && (
-                  <div className="w-full flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleCopy}
-                      className="w-[320px] text-white bg-[#033652] font-medium rounded-full text-md px-4 py-2 m-auto"
-                    >
-                      Copy Text
-                    </button>
-                  </div>
-                )}
+                <div className="w-full flex justify-center">
+                  <Button onClick={handleCopy}>Copy Text</Button>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -110,23 +98,27 @@ export default function Modal() {
   }
 
   async function handleCopy() {
-    const groupedData = logs.reduce((acc, item) => {
-      const index = parseInt(item.scenarioIndex);
-      if (!acc[index]) {
-        acc[index] = [];
-      }
-      acc[index].push(item);
-      return acc;
-    }, []);
-    if (!groupedData.length) return;
     let info = "";
-    groupedData.forEach((group, index) => {
+    results.forEach((scenario, index) => {
       info += `Scenario ${index + 1}\n`;
-      group.forEach((item) => {
-        info += `${formatFieldName(item.fieldName)}: ${formatFieldValue(
-          item.fieldName,
-          item.value
-        )}\n`;
+      info += `Principle and Interest: $ ${scenario.principleAndInterest}\n`;
+      info += `Hazard Insurance: $ ${scenario.homeOwnersInsurance}\n`;
+      info += `Mortgage Insurance: $ ${scenario.mortgageInsurance}\n`;
+      info += `Property Taxes: $ ${scenario.propertyTaxes}\n`;
+      info += `Total Housing Expense: $ ${scenario.totalHousingExpense}\n`;
+      info += `Total Housing Expense with HOA: $ ${scenario.totalHousingExpenseWithHOA}\n`;
+      info += `Total Down Payment: $ ${scenario.totalDownPayment}\n`;
+      info += `Total Cash From Borrower: $ ${scenario.totalCashFromBorrower}\n`;
+      Object.keys(scenario.comparisons).forEach((name) => {
+        const comparisonList = scenario.comparisons[name];
+        info += `${name}: `;
+        comparisonList.forEach((comparison, i) => {
+          info += `Vs Scenario ${comparison.vs} $ ${comparison.value}`;
+          if (i < comparisonList.length - 1) {
+            info += ", ";
+          }
+        });
+        info += "\n";
       });
       info += "\n";
     });

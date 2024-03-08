@@ -18,7 +18,6 @@ export default function EditFormView() {
     const [deals, setDeals] = useState([]);
 
     const formData = state.payload.form;
-    console.log(formData);
     const {
         register,
         handleSubmit,

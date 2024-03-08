@@ -11,6 +11,7 @@ export const initialScenario = {
   downPaymentPercentage: "",
   downPaymentAmount: "",
   interestRate: "",
+  apr: "",
   points: "",
   homeOwnersInsurance: "",
   mortgageInsurance: "",
@@ -26,9 +27,12 @@ export const initialScenario = {
 export const initialResult = {
   principleAndInterest: "",
   totalHousingExpense: "",
-  housingExpenseWithHOA: "",
+  totalHousingExpenseWithHOA: "",
   totalDownPayment: "",
   totalCashFromBorrower: "",
+  homeOwnersInsurance: "",
+  mortgageInsurance: "",
+  propertyTaxes: ""
 };
 
 export const initialDeal = {
@@ -36,10 +40,13 @@ export const initialDeal = {
   loanAmount: null,
   loanTerm: null,
   downPaymentPercentage: null,
+  interestRate: null,
+  apr: null,
   HOAPayment: null,
   propertyTaxes: null,
   downPaymentAmount: null,
   mortgageInsurance: null,
+  homeOwnersInsurance: null,
 };
 
 export const calculatorReducer = (state, action) => {

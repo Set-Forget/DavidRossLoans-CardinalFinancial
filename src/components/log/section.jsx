@@ -35,7 +35,7 @@ export default function SectionLogs() {
   useEffect(() => {
     if (isAdmin) return;
     navigate(-1);
-  }, [isAdmin]);
+  }, [isAdmin, navigate]);
 
   useEffect(() => {
     if (logsData.length) return;
@@ -48,7 +48,7 @@ export default function SectionLogs() {
         <Spinner />
       ) : (
         <>
-          <section className="rounded-xl w-full">
+          <section className="w-full">
             {logsData?.length > 1 ? (
               <table className="border-collapse table-auto w-full text-md">
                 <thead>
@@ -77,7 +77,7 @@ export default function SectionLogs() {
                           return (
                             <td
                               key={`cell-${rowIndex}-${cellIndex}`}
-                              className="border-b border-slate-600 p-4 text-slate-400 text-center"
+                              className="border-b border-slate-600 p-4 text-white text-center"
                             >
                               {hasValues ? (
                                 <PopoverComponent row={values} />
@@ -90,7 +90,7 @@ export default function SectionLogs() {
                         return (
                           <td
                             key={`cell-${rowIndex}-${cellIndex}`}
-                            className="border-b border-slate-600 p-4 text-slate-400"
+                            className="border-b border-slate-600 p-4 text-white"
                           >
                             {cellIndex === 0 ? formatDate(cell) : cell}
                           </td>

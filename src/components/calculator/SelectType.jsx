@@ -27,6 +27,7 @@ const SelectType = ({ scenarioIndex, name }) => {
         return values[0];
     }
   }, []);
+
   const type = state.scenarios[scenarioIndex].type;
   const defValue = getTypeValue(type);
   const [value, setValue] = useState(defValue);

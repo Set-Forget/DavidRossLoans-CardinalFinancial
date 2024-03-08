@@ -2,10 +2,11 @@ import { useContext } from "react";
 import ListBox from "./Listbox";
 import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
-import { RemoveIcon } from "./Icons";
 import SelectType from "./SelectType";
 import { SelectVaFoundingFee, SelectWaived } from "./SelectsVa";
 import { formatCurrency } from "../../utils/utils";
+import { InformationCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
+import Button from "../Button";
 
 const Table = () => {
   const { state, dispatch } = useContext(CalculatorContext);
@@ -27,20 +28,20 @@ const Table = () => {
                 key={`scenario-${index}`}
                 className="font-normal border-b border-slate-600 p-3 pt-2 pb-3 text-white text-left"
               >
-                <div className="flex">
+                <div className="flex justify-between">
                   <SelectType scenarioIndex={index} name="type" />
                   {index >= 2 && (
-                    <button
-                      className="text-white relative float-right"
+                    <Button
+                    variant="ghost"
                       onClick={() => {
                         dispatch({ type: "REMOVE_SCENARIO", payload: index });
                         dispatch({ type: "REMOVE_RESULT", payload: index });
                       }}
                     >
-                      <RemoveIcon />
-                    </button>
+                      <TrashIcon className="w-5 h-5 fill-white" />
+                    </Button>
                   )}
-                </div>
+                  </div>
               </th>
             );
           })}
@@ -88,7 +89,8 @@ const Table = () => {
             </td>
             {scenarios.map((scenario, index) => {
               const { loanAmount } = scenario;
-              const loanAmountFha = Number(loanAmount) + (Number(loanAmount) * 0.0175);
+              const loanAmountFha =
+                Number(loanAmount) + Number(loanAmount) * 0.0175;
               return (
                 <td
                   key={`loanAmountFha-${index}`}
@@ -166,6 +168,17 @@ const Table = () => {
                 name={`interestRate-${index}`}
                 value={scenario.interestRate}
               />
+            </td>
+          ))}
+        </tr>
+        <tr>
+          <td className="border-b border-slate-600 p-4 text-white">APR</td>
+          {scenarios.map((scenario, index) => (
+            <td
+              key={`apr-${index}`}
+              className="border-b border-slate-600 p-4 text-slate-400"
+            >
+              <ListBox name={`apr-${index}`} value={scenario.apr} />
             </td>
           ))}
         </tr>
@@ -258,7 +271,7 @@ const Table = () => {
         </tr>
         <tr>
           <td className="border-b border-slate-600 p-4 text-white">
-            Prepaid & Escrow closing costs
+            Prepaid & Escrow Closing Costs
           </td>
           {scenarios.map((scenario, index) => (
             <td
@@ -299,9 +312,34 @@ const Table = () => {
               key={`totalClosingCosts-${index}`}
               className="border-b border-slate-600 p-4 text-slate-400"
             >
-              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
-                $ {getTotalClosingCost(scenario)}
-              </span>
+              <div className="flex relative">
+                <div className="group relative">
+                  <InformationCircleIcon className="h-5 w-5 text-white cursor-pointer absolute left-[-24px] top-2" />
+                  <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
+                    <div className="flex flex-col p-2">
+                      <span className="truncate">
+                        Charge for interest rate:{" $"}
+                        {Number(scenario.points)}
+                      </span>
+                      <span className="truncate">
+                        Mortgage Insurance:{" $"}
+                        {Number(scenario.mortgageInsurance)}
+                      </span>
+                      <span className="truncate">
+                        Prepaid & Escrow:{" $"}
+                        {Number(scenario.prepaidEscrowClosingCosts)}
+                      </span>
+                      <span className="truncate">
+                        Closing Costs:{" $"}
+                        {Number(scenario.closingCosts)}
+                      </span>
+                    </div>
+                  </span>
+                </div>
+                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
+                  $ {getTotalClosingCost(scenario)}
+                </span>
+              </div>
             </td>
           ))}
         </tr>
@@ -364,9 +402,20 @@ const Table = () => {
     const _mortgageInsurance = Number(mortgageInsurance);
     const _prepaidEscrowClosingCosts = Number(prepaidEscrowClosingCosts);
     const _closingCosts = Number(closingCosts);
-    return (
-      _points + _mortgageInsurance + _prepaidEscrowClosingCosts + _closingCosts
-    );
+    if (
+      !_points ||
+      !_mortgageInsurance ||
+      !_prepaidEscrowClosingCosts ||
+      !_closingCosts
+    )
+      return "";
+    else
+      return (
+        _points +
+        _mortgageInsurance +
+        _prepaidEscrowClosingCosts +
+        _closingCosts
+      );
   }
 };
 
