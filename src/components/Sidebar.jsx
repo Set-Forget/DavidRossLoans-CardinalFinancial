@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import Image1 from "../assets/2.png";
 import Image2 from "../assets/3.png";

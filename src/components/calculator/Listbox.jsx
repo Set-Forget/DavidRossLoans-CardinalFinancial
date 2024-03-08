@@ -1,9 +1,8 @@
 import { Fragment, useRef, useState, useContext, useEffect } from "react";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import { Listbox, Transition } from "@headlessui/react";
-import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { rates, years } from "../../utils/utils";
-import { CheckIcon } from "./Icons";
 import PropTypes from "prop-types";
 
 const ListBox = ({ name, value }) => {

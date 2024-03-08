@@ -2,7 +2,8 @@ import { Fragment, useContext } from "react";
 import { LogsContext } from "../../context/LogContext";
 import { Dialog, Transition } from "@headlessui/react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { formatFieldValue, formatFieldName } from "../../utils/utils"
+import Button from "../Button";
+import { formatFieldValue, formatFieldName } from "../../utils/utils";
 
 export default function Modal() {
   const { state, dispatch } = useContext(LogsContext);
@@ -47,9 +48,9 @@ export default function Modal() {
                   >
                     Modified fields and values
                   </Dialog.Title>
-                  <button onClick={closeModal}>
+                  <Button variant="ghost" onClick={closeModal}>
                     <XCircleIcon className="h-6 w-6 fill-black" />
-                  </button>
+                  </Button>
                 </div>
                 <div className="my-4">
                   {dataToShow.map((group, index) => (
@@ -74,20 +75,7 @@ export default function Modal() {
                   ))}
                 </div>
                 <div className="mt-4 flex items-center justify-center">
-                  <button
-                    type="button"
-                    className="flex justify-center px-4 py-2 text-sm font-medium text-slate-700"
-                    onClick={closeModal}
-                  >
-                    Go Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="text-white bg-[#033652] font-medium rounded-full text-sm px-4 py-2"
-                  >
-                    Copy Text
-                  </button>
+                  <Button onClick={handleCopy}>Copy Text</Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -122,5 +110,4 @@ export default function Modal() {
       console.error(err);
     }
   }
-
 }

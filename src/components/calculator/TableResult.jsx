@@ -15,7 +15,8 @@ const TableResult = () => {
     const monthlyPaymentsRate = rate / 12 / 100;
     const dividend = Number(loanAmountValue) * monthlyPaymentsRate;
     const divider = 1 - Math.pow(1 + monthlyPaymentsRate, -monthlyPayments);
-    return (dividend / divider).toFixed(2);
+    const result = dividend / divider;
+    return Math.floor(result);
   }, []);
 
   const getTotalHousingExpense = useCallback(
@@ -41,10 +42,8 @@ const TableResult = () => {
     if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
       const { type, loanAmount } = scenario;
-      const loanAmountFha =
-      Number(loanAmount) + (Number(loanAmount) * 0.0175);
-      const loanAmountValue =
-        type === "fha" ? loanAmountFha : loanAmount;
+      const loanAmountFha = Number(loanAmount) + Number(loanAmount) * 0.0175;
+      const loanAmountValue = type === "fha" ? loanAmountFha : loanAmount;
       const principleAndInterest = getPMT(
         scenario.interestRate,
         loanAmountValue,
@@ -66,15 +65,75 @@ const TableResult = () => {
         Number(scenario.purchasePrice) - Number(loanAmountValue);
       return {
         ...initialResult,
-        principleAndInterest,
-        totalHousingExpense,
-        totalHousingExpenseWithHOA,
-        totalDownPayment,
-        totalCashFromBorrower,
+        principleAndInterest: checkValue(principleAndInterest),
+        totalHousingExpense: checkValue(totalHousingExpense),
+        totalHousingExpenseWithHOA: checkValue(totalHousingExpenseWithHOA),
+        totalDownPayment: checkValue(totalDownPayment),
+        totalCashFromBorrower: checkValue(totalCashFromBorrower),
+        homeOwnersInsurance: checkValue(scenario.homeOwnersInsurance),
+        mortgageInsurance: checkValue(scenario.mortgageInsurance),
+        propertyTaxes: checkValue(scenario.propertyTaxes),
       };
     });
 
-    dispatch({ type: "UPDATE_RESULTS", payload: newResults });
+    const checkDelta = (scenario, total, tmpTotal, name) => {
+      const value = checkValue(Number(total) - Number(tmpTotal));
+      return { value, vs: scenario, name };
+    };
+
+    const resultAndComparisons = newResults.map((scenario, index) => {
+      const {
+        mortgageInsurance,
+        totalDownPayment,
+        totalCashFromBorrower,
+        totalHousingExpenseWithHOA,
+      } = scenario;
+      const comparisons = [];
+      newResults.forEach((r, i) => {
+        if (index === i) return;
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalDownPayment,
+            r.totalDownPayment,
+            "Down Payment Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            mortgageInsurance,
+            r.mortgageInsurance,
+            "Closing Cost Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalCashFromBorrower,
+            r.totalCashFromBorrower,
+            "Cash From Borrower Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalHousingExpenseWithHOA,
+            r.totalHousingExpenseWithHOA,
+            "Payment Difference"
+          )
+        );
+      });
+      const groupedComparisons = {};
+      comparisons.forEach((comparison) => {
+        if (!groupedComparisons[comparison.name]) {
+          groupedComparisons[comparison.name] = [];
+        }
+        groupedComparisons[comparison.name].push(comparison);
+      });
+      return { ...scenario, comparisons: groupedComparisons };
+    });
+    dispatch({ type: "UPDATE_RESULTS", payload: resultAndComparisons });
   }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showModalResults]);
 
   return (
@@ -105,30 +164,29 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { principleAndInterest } = result;
-            const value = checkValue(principleAndInterest);
             return (
               <td
                 key={`principleAndInterest-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(principleAndInterest)}
               </td>
             );
           })}
         </tr>
         <tr>
           <td className="text-lg font-normal border-b border-slate-700 p-4 text-white">
-            <span>Homeowners</span>
+            <span>Hazard</span>
+            <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;
-            const value = checkValue(homeOwnersInsurance);
             return (
               <td
                 key={`homeOwnersInsurance-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(homeOwnersInsurance)}
               </td>
             );
           })}
@@ -139,18 +197,13 @@ const TableResult = () => {
             <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { loanAmount, type } = scenario;
-            const loanAmountFha =
-              Number(loanAmount) + (Number(loanAmount) * 0.0175);
-            const loanAmountValue =
-              type === "fha" ? loanAmountFha : loanAmount;
-            const value = checkValue((loanAmountValue * 0.85) / 12);
+            const { mortgageInsurance } = scenario;
             return (
               <td
                 key={`mortgageInsurance-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(mortgageInsurance)}
               </td>
             );
           })}
@@ -162,13 +215,12 @@ const TableResult = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { propertyTaxes } = scenario;
-            const value = checkValue(propertyTaxes);
             return (
               <td
                 key={`propertyTaxes-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(propertyTaxes)}
               </td>
             );
           })}
@@ -181,13 +233,12 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalHousingExpense } = result;
-            const value = checkValue(totalHousingExpense);
             return (
               <td
                 key={`totalHousingExpense-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalHousingExpense)}
               </td>
             );
           })}
@@ -202,13 +253,12 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA } = result;
-            const value = checkValue(totalHousingExpenseWithHOA);
             return (
               <td
                 key={`totalHousingExpenseWithHOA-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalHousingExpenseWithHOA)}
               </td>
             );
           })}
@@ -221,13 +271,12 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalDownPayment } = result;
-            const value = checkValue(totalDownPayment);
             return (
               <td
                 key={`totalDownPayment-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalDownPayment)}
               </td>
             );
           })}
@@ -241,13 +290,12 @@ const TableResult = () => {
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower } = result;
-            const value = checkValue(totalCashFromBorrower);
             return (
               <td
                 key={`totalCashFromBorrower-${index}`}
                 className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalCashFromBorrower)}
               </td>
             );
           })}
@@ -450,7 +498,7 @@ const TableResult = () => {
 
   function checkValue(value) {
     const number = Number(value);
-    return isNaN(number) ? "0" : number.toFixed(2);
+    return isNaN(number) ? "0" : Math.floor(number);
   }
 };
 
