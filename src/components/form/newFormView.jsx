@@ -52,16 +52,24 @@ export default function NewFormView() {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const formData = JSON.stringify({
-                dealId: data.deal.id.toString(),
-                ...data,
-            });
-
-            const encodedFormData = encodeURIComponent(formData);
-            const docsUrl = `${FORM_API_URL}?action=addToForm&&formData=${encodedFormData}`;
             const pipedriveUrl = `${API_URL}/deals/${data.deal.id}?api_token=${API_KEY}`;
 
-            const res = await fetch(docsUrl);
+            const payload = {
+                action: "addToForm",
+                formData: {
+                    dealId: data.deal.id.toString(),
+                    ...data,
+                },
+            };
+
+            const res = await fetch(FORM_API_URL, {
+                method: "POST",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                },
+                body: JSON.stringify(payload),
+            });
             const resJson = await res.json();
 
             const fileReviewLink = `https://docs.google.com/spreadsheets/d/1QYdsX4NOqOrWOq7eYT8B8q0LnBTt4_dbXXACk3A3GyM/edit#gid=${resJson.data}`;

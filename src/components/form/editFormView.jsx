@@ -79,11 +79,21 @@ export default function EditFormView() {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const newData = JSON.stringify(data);
-            const encodedNewData = encodeURIComponent(newData);
-            const encodedDealId = encodeURIComponent(formData[19]);
-            const url = `${FORM_API_URL}?action=editForm&&dealId=${encodedDealId}&&newData=${encodedNewData}`;
-            await fetch(url);
+            const payload = {
+                action: "editForm",
+                newData: data,
+                dealId: formData[19],
+            };
+
+            await fetch(FORM_API_URL, {
+                method: "POST",
+                redirect: "follow",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8",
+                },
+                body: JSON.stringify(payload),
+            });
+
             reset();
             dispatch({ type: "CLOSE_MODAL" });
         } catch (error) {
