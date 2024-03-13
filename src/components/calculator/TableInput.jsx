@@ -18,7 +18,7 @@ const CalculatorInput = ({
   useEffect(() => {
     if (!value || value === localValue) return;
     let val = String(value);
-    val = val.replace(/[^0-9.]/g, "").replace(/(\.\d{2})\d+/, "$1");
+    val = val.replace(/[^0-9]/g, "");
     if (prefix) val = val.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     setLocalValue(val);
   }, [value, prefix, localValue]);
@@ -65,9 +65,7 @@ const CalculatorInput = ({
     if (!isEdited) setIsEdited(true);
     const [fieldName, scenarioIndex] = name.split("-");
     let val = e.target.value;
-    const storeValue = val
-      .replace(/[^0-9.]/g, "")
-      .replace(/(\.\d{2})\d+/, "$1");
+    const storeValue = val.replace(/[^0-9]/g, ""); 
     let _localValue = "";
     if (prefix) _localValue = storeValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     else _localValue = storeValue;

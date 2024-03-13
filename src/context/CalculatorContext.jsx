@@ -10,14 +10,14 @@ import PropTypes from "prop-types";
 export const CalculatorContext = createContext();
 
 const initialState = {
-  showResults: false,
+  showModalResults: false,
   isReset: false,
   scenarios: [initialScenario, initialScenario],
   results: [initialResult, initialResult],
   options: [],
   logs: [],
   deal: [initialDeal],
-  selectedDeal: null
+  selectedDeal: null,
 };
 
 export const CalculatorProvider = ({ children }) => {

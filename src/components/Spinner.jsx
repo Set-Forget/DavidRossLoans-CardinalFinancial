@@ -2,10 +2,9 @@ import PropTypes from "prop-types";
 export default function Spinner({ isLayout = false }) {
   return (
     <div
-      className="flex flex-1 justify-center items-center w-full"
-      {...(isLayout && {
-        style: { background: "linear-gradient(180deg, #05293e, #033652)" },
-      })}
+      className={`flex flex-1 justify-center items-center w-full ${
+        isLayout ? "bg-[#02293f]" : "bg-transparent"
+      }`}
     >
       <div className="w-12">
         <div className="relative">

@@ -4,33 +4,34 @@ import { CalculatorContext } from "../../context/CalculatorContext";
 import { initialResult } from "../../reducer/Calculator";
 import { formatCurrency } from "../../utils/utils";
 
-const TableResult = ({ componentRef }) => {
+const TableResult = () => {
   const { state, dispatch } = useContext(CalculatorContext);
-  const { scenarios, results, showResults } = state;
+  const { scenarios, results, showModalResults } = state;
 
-  const getPMT = useCallback((interestRate, loanAmount, loanTerm) => {
+  const getPMT = useCallback((interestRate, loanAmountValue, loanTerm) => {
     const years = loanTerm.split(" ")[0];
     const monthlyPayments = Number(years) * 12;
     const rate = Number(interestRate?.split(" ")[0]);
     const monthlyPaymentsRate = rate / 12 / 100;
-    const dividend = Number(loanAmount) * monthlyPaymentsRate;
+    const dividend = Number(loanAmountValue) * monthlyPaymentsRate;
     const divider = 1 - Math.pow(1 + monthlyPaymentsRate, -monthlyPayments);
-    return (dividend / divider).toFixed(2);
+    const result = dividend / divider;
+    return Math.floor(result);
   }, []);
 
   const getTotalHousingExpense = useCallback(
     (
       interestRate,
-      loanAmount,
+      loanAmountValue,
       loanTerm,
       homeOwnersInsurance,
-      monthlyMortgageInsurance,
+      mortgageInsurance,
       propertyTaxes
     ) => {
-      const pmt = getPMT(interestRate, loanAmount, loanTerm);
+      const pmt = getPMT(interestRate, loanAmountValue, loanTerm);
       const sum =
         Number(homeOwnersInsurance) +
-        Number(monthlyMortgageInsurance) +
+        Number(mortgageInsurance) +
         Number(propertyTaxes);
       return Number(pmt) + sum;
     },
@@ -38,52 +39,115 @@ const TableResult = ({ componentRef }) => {
   );
 
   useEffect(() => {
-    if (!showResults) return;
+    if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
+      const { type, loanAmount } = scenario;
+      const loanAmountFha = Number(loanAmount) + Number(loanAmount) * 0.0175;
+      const loanAmountValue = type === "fha" ? loanAmountFha : loanAmount;
       const principleAndInterest = getPMT(
         scenario.interestRate,
-        scenario.loanAmount,
+        loanAmountValue,
         scenario.loanTerm
       );
       const totalHousingExpense = getTotalHousingExpense(
         scenario.interestRate,
-        scenario.loanAmount,
+        loanAmountValue,
         scenario.loanTerm,
         scenario.homeOwnersInsurance,
-        scenario.monthlyMortgageInsurance,
+        scenario.mortgageInsurance,
         scenario.propertyTaxes
       );
       const totalHousingExpenseWithHOA =
         totalHousingExpense + Number(scenario.HOAPayment);
       const totalDownPayment =
-        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
+        Number(scenario.purchasePrice) - Number(loanAmountValue);
       const totalCashFromBorrower =
-        Number(scenario.purchasePrice) - Number(scenario.loanAmount);
+        Number(scenario.purchasePrice) - Number(loanAmountValue);
       return {
         ...initialResult,
-        principleAndInterest,
-        totalHousingExpense,
-        totalHousingExpenseWithHOA,
-        totalDownPayment,
-        totalCashFromBorrower,
+        principleAndInterest: checkValue(principleAndInterest),
+        totalHousingExpense: checkValue(totalHousingExpense),
+        totalHousingExpenseWithHOA: checkValue(totalHousingExpenseWithHOA),
+        totalDownPayment: checkValue(totalDownPayment),
+        totalCashFromBorrower: checkValue(totalCashFromBorrower),
+        homeOwnersInsurance: checkValue(scenario.homeOwnersInsurance),
+        mortgageInsurance: checkValue(scenario.mortgageInsurance),
+        propertyTaxes: checkValue(scenario.propertyTaxes),
       };
     });
 
-    dispatch({ type: "UPDATE_RESULTS", payload: newResults });
-  }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showResults]);
+    const checkDelta = (scenario, total, tmpTotal, name) => {
+      const value = checkValue(Number(total) - Number(tmpTotal));
+      return { value, vs: scenario, name };
+    };
+
+    const resultAndComparisons = newResults.map((scenario, index) => {
+      const {
+        mortgageInsurance,
+        totalDownPayment,
+        totalCashFromBorrower,
+        totalHousingExpenseWithHOA,
+      } = scenario;
+      const comparisons = [];
+      newResults.forEach((r, i) => {
+        if (index === i) return;
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalDownPayment,
+            r.totalDownPayment,
+            "Down Payment Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            mortgageInsurance,
+            r.mortgageInsurance,
+            "Closing Cost Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalCashFromBorrower,
+            r.totalCashFromBorrower,
+            "Cash From Borrower Delta"
+          )
+        );
+        comparisons.push(
+          checkDelta(
+            i + 1,
+            totalHousingExpenseWithHOA,
+            r.totalHousingExpenseWithHOA,
+            "Payment Difference"
+          )
+        );
+      });
+      const groupedComparisons = {};
+      comparisons.forEach((comparison) => {
+        if (!groupedComparisons[comparison.name]) {
+          groupedComparisons[comparison.name] = [];
+        }
+        groupedComparisons[comparison.name].push(comparison);
+      });
+      return { ...scenario, comparisons: groupedComparisons };
+    });
+    dispatch({ type: "UPDATE_RESULTS", payload: resultAndComparisons });
+  }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showModalResults]);
 
   return (
-    <table className="border-collapse table-auto w-full text-md">
+    <table className="border-collapse table-auto w-full text-lg">
       <thead>
         <tr>
-          <th className="border-b dark:border-slate-600 p-4 pt-0 pb-3 text-left">
+          <th className="border-b border-slate-600 p-4 pt-0 pb-3 text-left">
             {""}
           </th>
           {scenarios.map((_, index) => {
             return (
               <th
                 key={`result-${index}`}
-                className="font-normal border-b dark:border-slate-600 p-4 pt-0 pb-3 text-white text-left"
+                className="text-lg font-normal border-b border-slate-600 p-4 pt-0 pb-3 text-white text-left"
               >
                 Scenario {index + 1}
               </th>
@@ -91,146 +155,156 @@ const TableResult = ({ componentRef }) => {
           })}
         </tr>
       </thead>
-      <tbody className="dark:bg-slate-800">
+      <tbody className="bg-slate-800">
         <tr>
-          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Principle and Interest
+          <td className="text-lg font-normal border-b border-slate-700 p-4 text-white">
+            <span>Principle</span>
+            <span className="ml-2">and</span>
+            <span className="ml-2">Interest</span>
           </td>
           {results.map((result, index) => {
             const { principleAndInterest } = result;
-            const value = checkValue(principleAndInterest);
             return (
               <td
                 key={`principleAndInterest-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(principleAndInterest)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-100 dark:border-slate-700 p-4 text-white">
-            Homeowners
+          <td className="text-lg font-normal border-b border-slate-700 p-4 text-white">
+            <span>Hazard</span>
+            <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { homeOwnersInsurance } = scenario;
-            const value = checkValue(homeOwnersInsurance);
             return (
               <td
                 key={`homeOwnersInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(homeOwnersInsurance)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Monthly Mortgage Insurance
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Mortgage</span>
+            <span className="ml-2">Insurance</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { loanAmount } = scenario;
-            const value = checkValue((loanAmount * 0.85) / 12);
+            const { mortgageInsurance } = scenario;
             return (
               <td
-                key={`monthlyMortgageInsurance-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                key={`mortgageInsurance-${index}`}
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(mortgageInsurance)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Property Taxes
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Property</span>
+            <span className="ml-2">Taxes</span>
           </td>
           {scenarios.map((scenario, index) => {
             const { propertyTaxes } = scenario;
-            const value = checkValue(propertyTaxes);
             return (
               <td
                 key={`propertyTaxes-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(propertyTaxes)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Housing Expense
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Total</span>
+            <span className="ml-2">Housing</span>
+            <span className="ml-2">Expense</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpense } = result;
-            const value = checkValue(totalHousingExpense);
             return (
               <td
                 key={`totalHousingExpense-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalHousingExpense)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Housing Expense With the HOA
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Total</span>
+            <span className="ml-2">Housing</span>
+            <span className="ml-2">Expense</span>
+            <span className="ml-2">With</span>
+            <span className="ml-2">HOA</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA } = result;
-            const value = checkValue(totalHousingExpenseWithHOA);
             return (
               <td
                 key={`totalHousingExpenseWithHOA-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalHousingExpenseWithHOA)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Down Payment
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Total</span>
+            <span className="ml-2">Down</span>
+            <span className="ml-2">Payment</span>
           </td>
           {results.map((result, index) => {
             const { totalDownPayment } = result;
-            const value = checkValue(totalDownPayment);
             return (
               <td
                 key={`totalDownPayment-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalDownPayment)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Total Cash From Borrower
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Total</span>
+            <span className="ml-2">Cash</span>
+            <span className="ml-2">From</span>
+            <span className="ml-2">Borrower</span>
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower } = result;
-            const value = checkValue(totalCashFromBorrower);
             return (
               <td
                 key={`totalCashFromBorrower-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
-                $ {formatCurrency(value)}
+                $ {formatCurrency(totalCashFromBorrower)}
               </td>
             );
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Down Payment Delta
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Down</span>
+            <span className="ml-2">Payment</span>
+            <span className="ml-2">Delta</span>
           </td>
           {results.map((result, index) => {
             const { totalDownPayment: total } = result;
@@ -251,7 +325,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative -bottom-2.5 left-1">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative -bottom-2 left-1">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -259,7 +341,7 @@ const TableResult = ({ componentRef }) => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -267,15 +349,17 @@ const TableResult = ({ componentRef }) => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Closing Cost Delta
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Closing</span>
+            <span className="ml-2">Cost</span>
+            <span className="ml-2">Delta</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { singlePremiumMortgageInsurance: total } = scenario;
+            const { mortgageInsurance: total } = scenario;
             const comparisons = [];
             scenarios.forEach((r, i) => {
               if (index === i) return;
-              const { singlePremiumMortgageInsurance: tmpTotal } = r;
+              const { mortgageInsurance: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span
@@ -289,7 +373,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative -bottom-2.5 left-1">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative -bottom-2 left-1">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -297,7 +389,7 @@ const TableResult = ({ componentRef }) => {
             return (
               <td
                 key={`closingCostDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -305,8 +397,11 @@ const TableResult = ({ componentRef }) => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Cash From Borrower Delta
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Cash</span>
+            <span className="ml-2">From</span>
+            <span className="ml-2">Borrower</span>
+            <span className="ml-2">Delta</span>
           </td>
           {results.map((result, index) => {
             const { totalCashFromBorrower: total } = result;
@@ -327,7 +422,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative -bottom-2.5 left-1">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative -bottom-2 left-1">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -335,7 +438,7 @@ const TableResult = ({ componentRef }) => {
             return (
               <td
                 key={`cashFromBorrowerDelta-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -343,8 +446,9 @@ const TableResult = ({ componentRef }) => {
           })}
         </tr>
         <tr>
-          <td className="font-normal border-b border-slate-200 dark:border-slate-600 p-4 text-white">
-            Payment Difference
+          <td className="text-lg font-normal border-b border-slate-600 p-4 text-white">
+            <span>Payment</span>
+            <span className="ml-2">Difference</span>
           </td>
           {results.map((result, index) => {
             const { totalHousingExpenseWithHOA: total } = result;
@@ -365,7 +469,15 @@ const TableResult = ({ componentRef }) => {
                     }`}
                   >
                     $&nbsp;{formatCurrency(value)}&nbsp;
-                    {value >= 0 ? <UpIcon /> : <DownIcon />}
+                    {value >= 0 ? (
+                      <div className="relative -bottom-2.5 left-1">
+                        <UpIcon />
+                      </div>
+                    ) : (
+                      <div className="relative -bottom-2 left-1">
+                        <DownIcon />
+                      </div>
+                    )}
                   </span>
                 </span>
               );
@@ -373,7 +485,7 @@ const TableResult = ({ componentRef }) => {
             return (
               <td
                 key={`paymentDifferences-${index}`}
-                className="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-400"
+                className="border-b border-slate-600 p-4 text-white"
               >
                 <div className="flex flex-col">{comparisons}</div>
               </td>
@@ -386,7 +498,7 @@ const TableResult = ({ componentRef }) => {
 
   function checkValue(value) {
     const number = Number(value);
-    return isNaN(number) ? "0" : number.toFixed(2);
+    return isNaN(number) ? "0" : Math.floor(number);
   }
 };
 

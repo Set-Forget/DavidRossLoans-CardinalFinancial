@@ -6,8 +6,8 @@ import "./index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserProvider } from "./context/UserContext.jsx";
 import { LoadingProvider } from "./context/LoadingContext.jsx";
-import { CalculatorProvider } from "./context/CalculatorContext";
 import { ModalProvider } from "./context/ModalContext.jsx";
+import { DialogProvider } from "./context/DialogContext.jsx";
 
 const queryClient = new QueryClient();
 
@@ -16,13 +16,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
                 <ModalProvider>
-                    <UserProvider>
-                        <LoadingProvider>
-                            <CalculatorProvider>
+                    <DialogProvider>
+                        <UserProvider>
+                            <LoadingProvider>
                                 <App />
-                            </CalculatorProvider>
-                        </LoadingProvider>
-                    </UserProvider>
+                            </LoadingProvider>
+                        </UserProvider>
+                    </DialogProvider>
                 </ModalProvider>
             </QueryClientProvider>
         </React.StrictMode>

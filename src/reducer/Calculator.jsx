@@ -11,22 +11,28 @@ export const initialScenario = {
   downPaymentPercentage: "",
   downPaymentAmount: "",
   interestRate: "",
+  apr: "",
   points: "",
   homeOwnersInsurance: "",
-  monthlyMortgageInsurance: "",
+  mortgageInsurance: "",
   propertyTaxes: "",
   HOAPayment: "",
-  singlePremiumMortgageInsurance: "",
   prepaidEscrowClosingCosts: "",
   closingCosts: "",
+  type: "conventional",
+  foundingFee: "",
+  waived: "no",
 };
 
 export const initialResult = {
   principleAndInterest: "",
   totalHousingExpense: "",
-  housingExpenseWithHOA: "",
+  totalHousingExpenseWithHOA: "",
   totalDownPayment: "",
   totalCashFromBorrower: "",
+  homeOwnersInsurance: "",
+  mortgageInsurance: "",
+  propertyTaxes: ""
 };
 
 export const initialDeal = {
@@ -34,10 +40,13 @@ export const initialDeal = {
   loanAmount: null,
   loanTerm: null,
   downPaymentPercentage: null,
+  interestRate: null,
+  apr: null,
   HOAPayment: null,
   propertyTaxes: null,
   downPaymentAmount: null,
   mortgageInsurance: null,
+  homeOwnersInsurance: null,
 };
 
 export const calculatorReducer = (state, action) => {
@@ -98,6 +107,11 @@ export const calculatorReducer = (state, action) => {
         ...state,
         selectedDeal: action.payload,
       };
+    case "SET_CALCULATOR_TYPE":
+      return {
+        ...state,
+        calculatorType: action.payload,
+      };
     case "REMOVE_SCENARIO": {
       const scenarioIndex = action.payload;
       return {
@@ -115,10 +129,10 @@ export const calculatorReducer = (state, action) => {
         results: state.results.filter((_, index) => index !== resultIndex),
       };
     }
-    case "SHOW_RESULTS":
+    case "SHOW_MODAL_RESULTS":
       return {
         ...state,
-        showResults: action.payload,
+        showModalResults: action.payload,
         isReset: false,
       };
     case "UPDATE_RESULTS":
@@ -158,7 +172,7 @@ export const calculatorReducer = (state, action) => {
       return {
         ...state,
         isReset: true,
-        showResults: false,
+        showModalResults: false,
         scenarios: newScenarios,
         results: newResults,
       };

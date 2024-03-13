@@ -4,7 +4,6 @@ import PublicRoute from "./PublicRoute";
 import NotFoundPage from "../page/notFoundPage";
 import LoginPage from "../page/loginPage";
 import SearchPage from "../page/searchPage";
-import DealPage from "../page/dealPage";
 import CalculatorPage from "../page/calculatorPage";
 import { LogsPage } from "../page/logPage";
 import FormPage from "../page/formPage";
@@ -18,8 +17,7 @@ const AppRoutes = () => {
             {customRoute("", LoginPage, false)}
             {customRoute("home", SearchPage, true)}
             {customRoute("logs", LogsPage, true)}
-            {customRoute("calculator", DealPage, true)}
-            {customRoute("calculator/:id", CalculatorPage, true)}
+            {customRoute("calculator/:id?", CalculatorPage, true)}
             {customRoute("form", FormPage, true)}
         </Routes>
     );

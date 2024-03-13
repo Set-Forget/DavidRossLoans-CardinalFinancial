@@ -9,7 +9,7 @@ export default function FormDetailsView() {
             <dl className="divide-y divide-gray-100 flex flex-col gap-4">
                 <div className="px-6 py-6 grid grid-cols-3 gap-4">
                     <dt className="text-sm font-medium leading-6 text-gray-900 text-left">
-                        Key Contact Person's Name
+                        Key Contact Person Name
                     </dt>
                     <dd className="mt-1 text-sm leading-6 text-gray-700 col-span-2 text-left">
                         {data[2] || "N/A"}
@@ -88,7 +88,7 @@ export default function FormDetailsView() {
                         </div>
                         <div className="px-6 py-4">
                             <dt className="text-sm font-medium leading-6 text-gray-900 text-left">
-                                Borrower's current estimated balance in the account?
+                                Borrower current estimated balance in the account?
                             </dt>
                             <dd className="mt-1 text-sm leading-6 text-gray-700 col-span-2 text-left">
                                 {data[10] || "N/A"}

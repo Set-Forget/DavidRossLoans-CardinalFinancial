@@ -1,10 +1,11 @@
-export const MAX_SCENARIOS = 5;
+export const MAX_SCENARIOS = 4;
 export const PIPE = "|";
 
 export const API_URL =
   "https://script.google.com/macros/s/AKfycbxTznkTRaceva-hCmt3OIqD-pXdLRJRS3nnsPfcycRtUp7U7uQ9C7FM5YBQIxHsfMSB/exec";
-
-export const KEY_PURCHASE_PRICE = "e986ec80d8dce46cf43f261f60235d0a2faa24da";
+export const FORM_API_URL =
+  "https://script.google.com/macros/s/AKfycbz9e6gu9GYHpSBPPN_DUjNYzWAUPRSBLNdRab-ar0up8PjMIB7x8T9K3zqTV2om7ZpO/exec";
+export const KEY_PURCHASE_PRICE = "d73ba24d1cfd8f803a56b2d6f9131b076462bac0";
 export const KEY_PROPERTY_TAXES = "0ac894d6605e196e6b2be867ff0c677dd31d8e92";
 export const KEY_LOAN_TERM = "878ddd2c5094c630638d255fd9ad54ab37aa5a4b";
 export const KEY_HOA_PAYMENT = "e223b6bbce177a8877fa3e3e7674bceb5b6bc735";
@@ -12,6 +13,11 @@ export const KEY_DOWN_PAYMENT_AMOUNT =
   "98826f12c210fb692cf563eb80be01501973c23d";
 export const KEY_MORTGAGE_INSURANCE =
   "ada448810ec8e41b03f4104947e7d36d1c1a16a8";
+export const KEY_HAZARD_INSURANCE = "795c2eb1181da169e077f87dd0d2bf0c4d44deb5";
+export const KEY_NOTE_RATE = "96f424fea79a1d5ed8a68b6fee0fb474d6155d05";
+export const KEY_APR = "2c669ed88c58a9ce0f78952c3bda42eb3a266892"
+export const KEY_1003_LINK = "50833fc6d08de716344d4f834099ff4ed19a8760";
+
 /**
  *
  * @param {dateString} date
@@ -42,16 +48,12 @@ export function formatDate(date) {
 export function formatCurrency(value) {
   let num = Number(value);
   if (Number.isInteger(num)) return num.toLocaleString("en-US");
-  else {
-    return num.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
+  else return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
 }
 
 export function calculateDownPaymentPercentage(loanAmount, purchasePrice) {
-  return ((1 - Number(loanAmount) / Number(purchasePrice)) * 100).toFixed(2);
+  const result = (1 - Number(loanAmount) / Number(purchasePrice)) * 100;
+  return Math.floor(result);
 }
 
 export function calculateLoanAmount(downPaymentPercentage, purchasePrice) {
@@ -158,3 +160,42 @@ export const years = [
   "29 years",
   "30 years",
 ];
+
+export function formatFieldValue(name, value) {
+  if (name === "loanTerm" || name === "interestRate") return value;
+  const format = formatCurrency(value);
+  return `$ ${format}`;
+}
+
+export function formatFieldName(value) {
+  switch (value) {
+    case "purchasePrice":
+      return "Purchase Price";
+    case "loanAmount":
+      return "Loan Amount";
+    case "loanTerm":
+      return "Loan Term";
+    case "downPaymentPercentage":
+      return "Down Payment Percentage";
+    case "downPaymentAmount":
+      return "Down Payment Amount";
+    case "interestRate":
+      return "Interest Rate";
+    case "points":
+      return "Charge for interest rate";
+    case "homeOwnersInsurance":
+      return "Homeowners";
+    case "mortgageInsurance":
+      return "Mortgage Insurance";
+    case "propertyTaxes":
+      return "Property Taxes";
+    case "HOAPayment":
+      return "HOA Payment";
+    case "closingCosts":
+      return "Closing Costs";
+    case "prepaidEscrowClosingCosts":
+      return "Prepaid & Escrow closing costs";
+    default:
+      return value;
+  }
+}

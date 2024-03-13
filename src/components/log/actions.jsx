@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { LogsContext } from "../../context/LogContext";
 import { Popover } from "@headlessui/react";
+import Button from "../Button";
 import { EllipsisHorizontalIcon, EyeIcon } from "@heroicons/react/20/solid";
 
-export default function PopoverComponent({row}) {
+export default function PopoverComponent({ row }) {
   const { dispatch } = useContext(LogsContext);
 
   return (
@@ -11,11 +12,12 @@ export default function PopoverComponent({row}) {
       <Popover.Button onClick={handleClick}>
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </Popover.Button>
-      <Popover.Panel className="absolute z-10 bg-white dark:bg-slate-700 text-black dark:text-white p-3 rounded-lg">
+      <Popover.Panel className="absolute z-10 bg-white p-1 rounded-lg w-44 right-0">
         <div className="grid grid-cols-1 truncate">
-          <button className="flex items-center gap-3" onClick={openModal}>
-            <EyeIcon className="h-5 w-5" />
-            See more info</button>
+          <Button variant="ghost" className="flex justify-center items-center text-black" onClick={openModal}>
+            <EyeIcon className="h-5 w-5 mr-3" />
+            See more info
+          </Button>
         </div>
       </Popover.Panel>
     </Popover>

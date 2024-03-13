@@ -1,29 +1,56 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ModalContext } from "../../context/ModalContext";
-import { FORM_API_URL, KEY_1003_LINK } from "../../utils/utils";
 import Button from "../Button";
 import Input from "../Input";
+import { useContext } from "react";
+import { ModalContext } from "../../context/ModalContext";
+import { FORM_API_URL } from "../../utils/utils";
 import SearchSelect from "../SearchSelect";
 
 const API_URL = "https://api.pipedrive.com/v1";
 const API_KEY = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
-export default function NewFormView() {
+export default function EditFormView() {
     const { state, dispatch } = useContext(ModalContext);
 
     const [loading, setLoading] = useState(false);
     const [query, setQuery] = useState("");
     const [deals, setDeals] = useState([]);
 
+    const formData = state.payload.form;
     const {
         register,
         handleSubmit,
         reset,
-        setValue,
         control,
+        setValue,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            deal: {
+                name: formData[1],
+                id: formData[19],
+            },
+            formTitle: formData[1],
+            keyContactPersonName: formData[2],
+            scenario: formData[3],
+            dealGoal: formData[4],
+            incomeEmploymentB1: formData[5],
+            incomeEmploymentB2: formData[6],
+            bestCaseCash: formData[7],
+            worstCaseCash: formData[8],
+            accountAssets: formData[9],
+            borrowerBalance: formData[10],
+            loanOfficerNotes: formData[11],
+            questionsBorrower: formData[12],
+            questionsOperations: formData[13],
+            incomeEmploymentNotes: formData[14],
+            incomeDocumentsB1: formData[15],
+            incomeDocumentsB2: formData[16],
+            opsAssetsNotes: formData[17],
+            assetDocuments: formData[18],
+        },
+    });
 
     const searchDeals = async (query) => {
         if (query === "" || query.length < 3) return [];
@@ -52,39 +79,18 @@ export default function NewFormView() {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const formData = JSON.stringify({
-                dealId: data.deal.id.toString(),
-                ...data,
-            });
-
-            const encodedFormData = encodeURIComponent(formData);
-            const docsUrl = `${FORM_API_URL}?action=addToForm&&formData=${encodedFormData}`;
-            const pipedriveUrl = `${API_URL}/deals/${data.deal.id}?api_token=${API_KEY}`;
-
-            const res = await fetch(docsUrl);
-            const resJson = await res.json();
-
-            const fileReviewLink = `https://docs.google.com/spreadsheets/d/1QYdsX4NOqOrWOq7eYT8B8q0LnBTt4_dbXXACk3A3GyM/edit#gid=${resJson.data}`;
-
-            const fieldData = {
-                [KEY_1003_LINK]: fileReviewLink,
-            };
-
-            await fetch(pipedriveUrl, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(fieldData),
-            });
-
-            state.payload();
+            const newData = JSON.stringify(data);
+            const encodedNewData = encodeURIComponent(newData);
+            const encodedDealId = encodeURIComponent(formData[19]);
+            const url = `${FORM_API_URL}?action=editForm&&dealId=${encodedDealId}&&newData=${encodedNewData}`;
+            await fetch(url);
             reset();
             dispatch({ type: "CLOSE_MODAL" });
         } catch (error) {
             throw new Error(error);
         } finally {
             setLoading(false);
+            state.payload.getAllForms();
         }
     };
 
