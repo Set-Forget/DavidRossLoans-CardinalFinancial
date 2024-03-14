@@ -73,7 +73,7 @@ const ListBox = ({ name, value }) => {
                 }
                 value={item}
               >
-                {item === value && <CheckIcon />}
+                {item === value && <CheckIcon className="h-5 w-5" />}
                 <span
                   className={`block truncate w-full text-right ${
                     item === value ? "font-bold" : "font-normal"
