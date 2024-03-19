@@ -16,8 +16,7 @@ import html2canvas from "html2canvas";
 
 export default function Modal() {
   const { state, dispatch } = useContext(CalculatorContext);
-  const { results } = state;
-  const { showModalResults } = state;
+  const { results, showModalResults, isResultsCalculated } = state;
   const componentRef = useRef();
   const [imageDataUrl, setImageDataUrl] = useState(null);
 
@@ -29,9 +28,9 @@ export default function Modal() {
   }, []);
 
   useEffect(() => {
-    if (!showModalResults) return;
+    if (!showModalResults ||!isResultsCalculated) return;
     generateImage();
-  }, [showModalResults]);
+  }, [showModalResults, isResultsCalculated]);
 
   return (
     <Transition appear show={showModalResults} as={Fragment}>
@@ -66,16 +65,16 @@ export default function Modal() {
                   </Button>
                 </div>
                 <div className="my-4">
-                  {!imageDataUrl ? (
+                  {imageDataUrl && isResultsCalculated ? (
+                    <div className="mt-8 flex w-full justify-center">
+                      <img src={imageDataUrl} alt="Generated Result" />
+                    </div>
+                  ) : (
                     <div ref={componentRef} className="my-2 bg-[#02293f]">
                       <div className="w-full justify-start relative top-6 left-4">
                         <LogoIcon />
                       </div>
                       <TableResult />
-                    </div>
-                  ) : (
-                    <div className="mt-8 flex w-full justify-center">
-                      <img src={imageDataUrl} alt="Generated Result" />
                     </div>
                   )}
                 </div>
@@ -93,6 +92,10 @@ export default function Modal() {
   function closeModal() {
     dispatch({
       type: "SHOW_MODAL_RESULTS",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_IS_RESULTS_READY",
       payload: false,
     });
   }

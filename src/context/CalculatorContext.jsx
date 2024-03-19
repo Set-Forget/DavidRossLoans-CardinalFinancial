@@ -18,6 +18,7 @@ const initialState = {
   logs: [],
   deal: [initialDeal],
   selectedDeal: null,
+  isResultsCalculated: false,
 };
 
 export const CalculatorProvider = ({ children }) => {

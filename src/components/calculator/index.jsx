@@ -28,7 +28,6 @@ const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
 export default function SectionCalculator() {
   const { id: idParam } = useParams();
-  const navigate = useNavigate();
   const { state, dispatch } = useContext(CalculatorContext);
   const { user } = useContext(UserContext);
   const { setLoading } = useContext(LoadingContext);

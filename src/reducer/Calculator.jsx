@@ -177,6 +177,11 @@ export const calculatorReducer = (state, action) => {
         results: newResults,
       };
     }
+    case "SET_IS_RESULTS_READY":
+      return {
+        ...state,
+        isResultsCalculated: action.payload,
+      };
     default:
       return state;
   }
