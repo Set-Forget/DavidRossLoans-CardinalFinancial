@@ -134,6 +134,10 @@ const TableResult = () => {
       return { ...scenario, comparisons: groupedComparisons };
     });
     dispatch({ type: "UPDATE_RESULTS", payload: resultAndComparisons });
+        dispatch({
+      type: "SET_IS_RESULTS_READY",
+      payload: true,
+    });
   }, [scenarios, getTotalHousingExpense, dispatch, getPMT, showModalResults]);
 
   return (
