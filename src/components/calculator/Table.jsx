@@ -32,7 +32,7 @@ const Table = () => {
                   <SelectType scenarioIndex={index} name="type" />
                   {index >= 2 && (
                     <Button
-                    variant="ghost"
+                      variant="ghost"
                       onClick={() => {
                         dispatch({ type: "REMOVE_SCENARIO", payload: index });
                         dispatch({ type: "REMOVE_RESULT", payload: index });
@@ -41,7 +41,7 @@ const Table = () => {
                       <TrashIcon className="w-5 h-5 fill-white" />
                     </Button>
                   )}
-                  </div>
+                </div>
               </th>
             );
           })}
@@ -178,7 +178,9 @@ const Table = () => {
               key={`apr-${index}`}
               className="border-b border-slate-600 p-4 text-slate-400"
             >
-              <ListBox name={`apr-${index}`} value={scenario.apr} />
+              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
+                {scenario.apr.split("%")[0] + " " + "%"}
+              </span>
             </td>
           ))}
         </tr>
