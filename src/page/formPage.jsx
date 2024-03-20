@@ -17,7 +17,8 @@ import FormDetailsView from "../components/form/formDetailsView";
 import Modal from "../components/form/modal";
 import { DialogContext } from "../context/DialogContext";
 import { ModalContext } from "../context/ModalContext";
-import { FORM_API_URL } from "../utils/utils";
+import { API_URL, FORM_API_URL } from "../utils/utils";
+import { UserContext } from "../context/UserContext";
 
 const columns = [
     { name: "Form Name", accessor: "formName" },
@@ -29,15 +30,22 @@ const columns = [
 const itemsPerPage = 10;
 
 export default function FormPage() {
+    const { user } = useContext(UserContext);
+
     const modalDispatch = useContext(ModalContext).dispatch;
     const dialogDispatch = useContext(DialogContext).dispatch;
 
     const [forms, setForms] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [formLoading, setFormLoading] = useState(true);
+    const [usersLoading, setUsersLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1);
+    const [usersList, setUsersList] = useState([])
+
+    const userFromList = usersList.find(userFromList => user.email === userFromList.email)
 
     const getAllForms = async () => {
-        setLoading(true);
+        setFormLoading(true);
+        if(usersLoading) return
         try {
             const url = `${FORM_API_URL}?action=getForms`;
             const response = await fetch(url);
@@ -62,12 +70,14 @@ export default function FormPage() {
                                     name: "Edit form",
                                     onClick: () => handleEditForm(item),
                                     icon: ({ className }) => <PencilIcon className={className} />,
+                                    disabled: !userFromList.allowPipedrive
                                 },
                                 {
                                     name: "Delete form",
                                     onClick: () => handleDeleteForm(item),
                                     icon: ({ className }) => <TrashIcon className={className} />,
                                     divider: true,
+                                    disabled: !userFromList?.allowPipedrive
                                 },
                                 {
                                     name: "View document",
@@ -83,7 +93,7 @@ export default function FormPage() {
         } catch (error) {
             console.error(error);
         } finally {
-            setLoading(false);
+            setFormLoading(false);
         }
     };
 
@@ -147,9 +157,26 @@ export default function FormPage() {
 
     const paginatedData = forms.slice(startIndex, endIndex);
 
+    const getAllUsers = async () => {
+        try {
+            const url = `${API_URL}?action=getAllUsers`;
+            const response = await fetch(url);
+            const resJson = await response.json();
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            setUsersList(resJson)
+        } catch (error) {
+            console.error('Hubo un problema con la petición fetch:', error);
+        } finally {
+            setUsersLoading(false)
+        }
+    }
+
     useEffect(() => {
         getAllForms();
-    }, []);
+        getAllUsers()
+    }, [usersLoading]);
 
     return (
         <>
@@ -157,10 +184,10 @@ export default function FormPage() {
                 subtitle="List of all 1003 forms created"
                 columns={columns}
                 data={paginatedData}
-                isLoading={loading}
+                isLoading={formLoading || usersLoading}
                 className="w-full"
                 toolbar={
-                    <div className="flex justify-end">
+                    !usersLoading && userFromList?.allowPipedrive && <div className="flex justify-end">
                         <Button
                             onClick={() =>
                                 modalDispatch({

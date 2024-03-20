@@ -32,7 +32,7 @@ export const navigation = [
     name: "1003 Form",
     href: `form`,
     Icon: Image2,
-    admin: true,
+    admin: false,
     internal: true,
   },
   {

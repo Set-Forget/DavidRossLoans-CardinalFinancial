@@ -2,7 +2,7 @@ export const MAX_SCENARIOS = 4;
 export const PIPE = "|";
 
 export const API_URL =
-  "https://script.google.com/macros/s/AKfycbxTznkTRaceva-hCmt3OIqD-pXdLRJRS3nnsPfcycRtUp7U7uQ9C7FM5YBQIxHsfMSB/exec";
+  "https://script.google.com/macros/s/AKfycbyj3ncm4dDtMGm6F8u5PxJZTr3pUVQiWglxzgnxYlYFvMV-8GDOjLYvq5benvaaCBSP/exec";
 export const FORM_API_URL =
   "https://script.google.com/macros/s/AKfycbxAvdb6GyRMwZvG6PkcP_k5ODkDu7Nx6Q9iUkQjSwAaEZSiON7dkCkZivRGSI9eU4mT/exec";
 export const KEY_PURCHASE_PRICE = "d73ba24d1cfd8f803a56b2d6f9131b076462bac0";
