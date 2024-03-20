@@ -74,7 +74,7 @@ export default function Sidebar({ callback, value }) {
         <Link
           key={item.name}
           className={`${
-            item.name === value ? "bg-slate-700 rounded-md" : "bg-transparent"
+            item.name === value ? "bg-slate-700 rounded-md hover:bg-white hover:text-slate-700" : "bg-transparent"
           } flex justify-start items-center gap-1 p-2`}
           to={item.internal ? `${BASE_URL}${item.href}` : item.href}
           onClick={() => callback(item.name)}

@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import Table from "./Table";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { CalculatorContext } from "../../context/CalculatorContext";
@@ -27,6 +27,7 @@ const apiUrl = "https://api.pipedrive.com/v1";
 const apiKey = import.meta.env.VITE_PIPEDRIVE_API_KEY;
 
 export default function SectionCalculator() {
+  const [isFetching, setIsFetching] = useState(false);
   const { id: idParam } = useParams();
   const { state, dispatch } = useContext(CalculatorContext);
   const { user } = useContext(UserContext);
@@ -42,6 +43,7 @@ export default function SectionCalculator() {
     async (id) => {
       const apiEndpoint = `/deals/${id}?api_token=`;
       try {
+        setIsFetching(true);
         const response = await fetch(apiUrl + apiEndpoint + apiKey);
         const resJSON = await response.json();
         const { data } = resJSON;
@@ -81,6 +83,8 @@ export default function SectionCalculator() {
         });
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsFetching(false)
       }
     },
     [dispatch]
@@ -117,7 +121,6 @@ export default function SectionCalculator() {
   useEffect(() => {
     if (!deal) return;
     const { purchasePrice, loanAmount } = deal;
-    if (!purchasePrice || !loanAmount) return;
     const formatNumbers = (arg) => String(Math.floor(Number(arg)));
     scenariosRef.current.forEach((_, scenarioIndex) => {
       dispatch({
@@ -218,6 +221,7 @@ export default function SectionCalculator() {
   }, [deal, dispatch, selectedDeal]);
 
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
+  
   return (
     <section className="w-full">
       <div className="max-w-6xl mb-2">
@@ -225,6 +229,7 @@ export default function SectionCalculator() {
           <div className="flex w-[320px]">
             <Select
               id="deals"
+              isDisabled={isFetching}
               value={selectedDeal}
               onChange={handleSelectChange}
               onInputChange={handleInputChange}

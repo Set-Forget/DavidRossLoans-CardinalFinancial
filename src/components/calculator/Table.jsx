@@ -83,30 +83,71 @@ const Table = () => {
           ))}
         </tr>
         {hasFhaType && (
-          <tr>
-            <td className="border-b border-slate-600 p-4 text-white">
-              Loan Amount FHA
-            </td>
-            {scenarios.map((scenario, index) => {
-              const { loanAmount } = scenario;
-              const loanAmountFha =
-                Number(loanAmount) + Number(loanAmount) * 0.0175;
-              return (
-                <td
-                  key={`loanAmountFha-${index}`}
-                  className="border-b border-slate-600 p-4 text-slate-400"
-                >
-                  {scenario.type === "fha" ? (
-                    <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
-                      $ {formatCurrency(loanAmountFha)}
-                    </span>
-                  ) : (
-                    <span className="flex w-full justify-center">-</span>
-                  )}
-                </td>
-              );
-            })}
-          </tr>
+          <>
+            <tr>
+              <td className="border-b border-slate-600 p-4 text-white">
+                Loan Amount FHA
+              </td>
+              {scenarios.map((scenario, index) => {
+                const { loanAmount } = scenario;
+                const loanAmountFha =
+                  Number(loanAmount) + Number(loanAmount) * 0.0175;
+                return (
+                  <td
+                    key={`loanAmountFha-${index}`}
+                    className="border-b border-slate-600 p-4 text-slate-400"
+                  >
+                    {scenario.type === "fha" ? (
+                      <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
+                        $ {formatCurrency(loanAmountFha)}
+                      </span>
+                    ) : (
+                      <span className="flex w-full justify-center">-</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+            <tr>
+              <td className="border-b border-slate-600 p-4 text-white">
+                Monthly Mortgage Insurance
+              </td>
+              {scenarios.map((scenario, index) => {
+                const { purchasePrice, loanAmount, loanTerm } = scenario;
+                const mip = getMIP(purchasePrice, loanAmount, loanTerm);
+                const result = (loanAmount * mip) / 12;
+                return (
+                  <td
+                    key={`monthlyMortgageInsurance-${index}`}
+                    className="border-b border-slate-600 p-4 text-slate-400"
+                  >
+                    {scenario.type === "fha" ? (
+                      <div className="flex relative">
+                        {loanAmount && (
+                          <div className="group relative">
+                            <InformationCircleIcon className="h-5 w-5 text-white cursor-pointer absolute left-[-24px] top-2" />
+                            <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
+                              <div className="flex flex-col p-2">
+                                <span className="truncate">
+                                  Formula:{" "}
+                                  {"(" + loanAmount + " * " + mip + ") / 12"}
+                                </span>
+                              </div>
+                            </span>
+                          </div>
+                        )}
+                        <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
+                          {Math.floor(result)}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="flex w-full justify-center">-</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          </>
         )}
         <tr>
           <td className="border-b border-slate-600 p-4 text-white">
@@ -172,7 +213,21 @@ const Table = () => {
           ))}
         </tr>
         <tr>
-          <td className="border-b border-slate-600 p-4 text-white">APR</td>
+          <td className="border-b border-slate-600 p-4 text-white">
+            <div className="flex relative">
+              <span>
+              APR
+              </span>
+              <div className="group relative">
+                <InformationCircleIcon className="h-5 w-5 text-white cursor-pointer relative left-3 top-[2px]" />
+                <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
+                  <div className="flex flex-col p-2">
+                    <span className="truncate">APR (%) | Octane Sync</span>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </td>
           {scenarios.map((scenario, index) => (
             <td
               key={`apr-${index}`}
@@ -345,6 +400,44 @@ const Table = () => {
             </td>
           ))}
         </tr>
+        <tr>
+          <td className="border-b border-slate-600 p-4 text-white">
+            Loan to Value
+          </td>
+          {scenarios.map((scenario, index) => {
+            const { purchasePrice, loanAmount } = scenario;
+            const result = (Number(purchasePrice) / Number(loanAmount)) * 100;
+            const fallbackResult = isNaN(Math.floor(result))
+              ? "0"
+              : Math.floor(result);
+            const showInfo =
+              Boolean(Number(purchasePrice)) && Boolean(Number(loanAmount));
+            return (
+              <td
+                key={`loanToValue-${index}`}
+                className="border-b border-slate-600 p-4 text-slate-400"
+              >
+                <div className="flex relative">
+                  {showInfo && (
+                    <div className="group relative">
+                      <InformationCircleIcon className="h-5 w-5 text-white cursor-pointer absolute left-[-24px] top-2" />
+                      <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
+                        <div className="flex flex-col p-2">
+                          <span className="truncate">
+                            Formula: {purchasePrice + " / " + loanAmount}
+                          </span>
+                        </div>
+                      </span>
+                    </div>
+                  )}
+                  <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
+                    {fallbackResult + " %"}
+                  </span>
+                </div>
+              </td>
+            );
+          })}
+        </tr>
         {hasVaType && (
           <>
             <tr>
@@ -392,6 +485,30 @@ const Table = () => {
       </tbody>
     </table>
   );
+
+  function getMIP(purchasePrice, loanAmount, loanTerm) {
+    const DEFAULT_LOAN_AMOUNT = 726200;
+    const LTV = (Number(purchasePrice) / Number(loanAmount)) * 100;
+    const loanTermNumber = Number(loanTerm.split(" ")[0]);
+    if (loanTermNumber <= 15) {
+      if (Number(loanAmount) <= DEFAULT_LOAN_AMOUNT) {
+        if (LTV <= 90) return 15;
+        else return 40;
+      } else {
+        if (LTV <= 78) return 15;
+        else if (LTV > 78 && LTV <= 90) return 40;
+        else return 65;
+      }
+    } else {
+      if (Number(loanAmount) <= DEFAULT_LOAN_AMOUNT) {
+        if (LTV <= 95) return 50;
+        else return 55;
+      } else {
+        if (LTV <= 95) return 70;
+        else return 75;
+      }
+    }
+  }
 
   function getTotalClosingCost(scenario) {
     const {
