@@ -19,6 +19,7 @@ import { DialogContext } from "../context/DialogContext";
 import { ModalContext } from "../context/ModalContext";
 import { API_URL, FORM_API_URL } from "../utils/utils";
 import { UserContext } from "../context/UserContext";
+import { useSearchParams } from "react-router-dom";
 
 const columns = [
     { name: "Form Name", accessor: "formName" },
@@ -31,6 +32,10 @@ const itemsPerPage = 10;
 
 export default function FormPage() {
     const { user } = useContext(UserContext);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    console.log()
 
     const modalDispatch = useContext(ModalContext).dispatch;
     const dialogDispatch = useContext(DialogContext).dispatch;
@@ -45,7 +50,7 @@ export default function FormPage() {
 
     const getAllForms = async () => {
         setFormLoading(true);
-        if(usersLoading) return
+        if (usersLoading) return
         try {
             const url = `${FORM_API_URL}?action=getForms`;
             const response = await fetch(url);
@@ -55,6 +60,7 @@ export default function FormPage() {
                     formName: item[1],
                     keyContactPersonName: item[2],
                     dealId: item[19],
+                    formData: item,
                     actions: (
                         <Menu
                             icon={<EllipsisHorizontalIcon className="h-5 w-5" />}
@@ -98,6 +104,7 @@ export default function FormPage() {
     };
 
     const handleViewFormDetails = (form) => {
+        setSearchParams({ id: form[19] });
         modalDispatch({
             type: "OPEN_MODAL",
             title: `${form[1]}`,
@@ -164,7 +171,7 @@ export default function FormPage() {
             const resJson = await response.json();
 
             if (!response.ok) throw new Error('Network response was not ok');
-            
+
             setUsersList(resJson)
         } catch (error) {
             console.error('Hubo un problema con la petición fetch:', error);
@@ -177,6 +184,25 @@ export default function FormPage() {
         getAllForms();
         getAllUsers()
     }, [usersLoading]);
+
+    useEffect(() => {
+        const id = searchParams.get("id")
+
+        if (!id || formLoading) return
+
+        const form = forms.find(({ dealId }) => dealId === id)
+        
+        if(!form) return
+
+        modalDispatch({
+            type: "OPEN_MODAL",
+            title: `${form.formName}`,
+            view: FormDetailsView,
+            subtitle: "View form details",
+            payload: form.formData,
+        });
+
+    }, [formLoading])
 
     return (
         <>
