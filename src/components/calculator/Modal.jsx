@@ -12,6 +12,7 @@ import Button from "../Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { LogoIcon } from "./Icons";
 import { XCircleIcon } from "@heroicons/react/20/solid";
+import { formatCurrency } from "../../utils/utils";
 import html2canvas from "html2canvas";
 
 export default function Modal() {
@@ -104,19 +105,19 @@ export default function Modal() {
     let info = "";
     results.forEach((scenario, index) => {
       info += `Scenario ${index + 1}\n`;
-      info += `Principle and Interest: $ ${scenario.principleAndInterest}\n`;
-      info += `Hazard Insurance: $ ${scenario.homeOwnersInsurance}\n`;
-      info += `Mortgage Insurance: $ ${scenario.mortgageInsurance}\n`;
-      info += `Property Taxes: $ ${scenario.propertyTaxes}\n`;
-      info += `Total Housing Expense: $ ${scenario.totalHousingExpense}\n`;
-      info += `Total Housing Expense with HOA: $ ${scenario.totalHousingExpenseWithHOA}\n`;
-      info += `Total Down Payment: $ ${scenario.totalDownPayment}\n`;
-      info += `Total Cash From Borrower: $ ${scenario.totalCashFromBorrower}\n`;
+      info += `Principle and Interest: $ ${formatCurrency(scenario.principleAndInterest)}\n`;
+      info += `Hazard Insurance: $ ${formatCurrency(scenario.homeOwnersInsurance)}\n`;
+      info += `Mortgage Insurance: $ ${formatCurrency(scenario.mortgageInsurance)}\n`;
+      info += `Property Taxes: $ ${formatCurrency(scenario.propertyTaxes)}\n`;
+      info += `Total Housing Expense: $ ${formatCurrency(scenario.totalHousingExpense)}\n`;
+      info += `Total Housing Expense with HOA: $ ${formatCurrency(scenario.totalHousingExpenseWithHOA)}\n`;
+      info += `Total Down Payment: $ ${formatCurrency(scenario.totalDownPayment)}\n`;
+      info += `Total Cash From Borrower: $ ${formatCurrency(scenario.totalCashFromBorrower)}\n`;
       Object.keys(scenario.comparisons).forEach((name) => {
         const comparisonList = scenario.comparisons[name];
         info += `${name}: `;
         comparisonList.forEach((comparison, i) => {
-          info += `Vs Scenario ${comparison.vs} $ ${comparison.value}`;
+          info += `Vs Scenario ${comparison.vs} $ ${formatCurrency(comparison.value)}`;
           if (i < comparisonList.length - 1) {
             info += ", ";
           }
