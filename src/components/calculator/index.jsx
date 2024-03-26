@@ -84,11 +84,63 @@ export default function SectionCalculator() {
       } catch (error) {
         console.error(error);
       } finally {
-        setIsFetching(false)
+        setIsFetching(false);
       }
     },
     [dispatch]
   );
+
+  const getTotalClosingCost = useCallback((scenario) => {
+    const {
+      points,
+      mortgageInsurance,
+      prepaidEscrowClosingCosts,
+      closingCosts,
+    } = scenario;
+    const _points = Number(points);
+    const _mortgageInsurance = Number(mortgageInsurance);
+    const _prepaidEscrowClosingCosts = Number(prepaidEscrowClosingCosts);
+    const _closingCosts = Number(closingCosts);
+    if (
+      !_points ||
+      !_mortgageInsurance ||
+      !_prepaidEscrowClosingCosts ||
+      !_closingCosts
+    )
+      return "";
+    else
+      return (
+        _points +
+        _mortgageInsurance +
+        _prepaidEscrowClosingCosts +
+        _closingCosts
+      );
+  }, []);
+
+  const getMIP = useCallback((scenario) => {
+    const { purchasePrice, loanAmount, loanTerm } = scenario;
+    const DEFAULT_LOAN_AMOUNT = 726200;
+    const LTV = (Number(purchasePrice) / Number(loanAmount)) * 100;
+    const loanTermNumber = Number(loanTerm.split(" ")[0]);
+    if (loanTermNumber <= 15) {
+      if (Number(loanAmount) <= DEFAULT_LOAN_AMOUNT) {
+        if (LTV <= 90) return 15;
+        else return 40;
+      } else {
+        if (LTV <= 78) return 15;
+        else if (LTV > 78 && LTV <= 90) return 40;
+        else return 65;
+      }
+    } else {
+      if (Number(loanAmount) <= DEFAULT_LOAN_AMOUNT) {
+        if (LTV <= 95) return 50;
+        else return 55;
+      } else {
+        if (LTV <= 95) return 70;
+        else return 75;
+      }
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -122,7 +174,7 @@ export default function SectionCalculator() {
     if (!deal) return;
     const { purchasePrice, loanAmount } = deal;
     const formatNumbers = (arg) => String(Math.floor(Number(arg)));
-    scenariosRef.current.forEach((_, scenarioIndex) => {
+    scenariosRef.current.forEach((s, scenarioIndex) => {
       dispatch({
         type: "UPDATE_SCENARIO",
         payload: {
@@ -217,11 +269,69 @@ export default function SectionCalculator() {
             : "",
         },
       });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "loanAmountFha",
+          scenarioIndex: String(scenarioIndex),
+          value: loanAmount
+            ? formatNumbers(Number(loanAmount) + Number(loanAmount) * 0.0175)
+            : "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "loanAmountVa",
+          scenarioIndex: String(scenarioIndex),
+          value:
+            loanAmount && s.fundingFee
+              ? formatNumbers(Number(loanAmount) * Number(s.fundingFee))
+              : "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "loanToValue",
+          scenarioIndex: String(scenarioIndex),
+          value:
+            purchasePrice && loanAmount
+              ? formatNumbers(
+                  (Number(purchasePrice) / Number(loanAmount)) * 100
+                )
+              : "",
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "totalClosingCosts",
+          scenarioIndex: String(scenarioIndex),
+          value: getTotalClosingCost(s),
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "apr",
+          scenarioIndex: String(scenarioIndex),
+          value: s.apr.split("%")[0],
+        },
+      });
+      dispatch({
+        type: "UPDATE_SCENARIO",
+        payload: {
+          fieldName: "monthlyMortgageInsurance",
+          scenarioIndex: String(scenarioIndex),
+          value: loanAmount ? formatNumbers((loanAmount * getMIP(s)) / 12) : ""
+        },
+      });
     });
   }, [deal, dispatch, selectedDeal]);
 
   const showAddScenario = scenarios.length < MAX_SCENARIOS;
-  
+
   return (
     <section className="w-full">
       <div className="max-w-6xl mb-2">

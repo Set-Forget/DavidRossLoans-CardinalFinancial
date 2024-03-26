@@ -4,7 +4,6 @@ import CalculatorInput from "./TableInput";
 import { CalculatorContext } from "../../context/CalculatorContext";
 import SelectType from "./SelectType";
 import { SelectVaFoundingFee, SelectWaived } from "./SelectsVa";
-import { formatCurrency } from "../../utils/utils";
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
 import Button from "../Button";
 
@@ -89,18 +88,17 @@ const Table = () => {
                 Loan Amount FHA
               </td>
               {scenarios.map((scenario, index) => {
-                const { loanAmount } = scenario;
-                const loanAmountFha =
-                  Number(loanAmount) + Number(loanAmount) * 0.0175;
                 return (
                   <td
                     key={`loanAmountFha-${index}`}
                     className="border-b border-slate-600 p-4 text-slate-400"
                   >
                     {scenario.type === "fha" ? (
-                      <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
-                        $ {formatCurrency(loanAmountFha)}
-                      </span>
+                      <CalculatorInput
+                        name={`loanAmountFha-${index}`}
+                        value={String(scenario.loanAmountFha)}
+                        prefix
+                      />
                     ) : (
                       <span className="flex w-full justify-center">-</span>
                     )}
@@ -115,7 +113,6 @@ const Table = () => {
               {scenarios.map((scenario, index) => {
                 const { purchasePrice, loanAmount, loanTerm } = scenario;
                 const mip = getMIP(purchasePrice, loanAmount, loanTerm);
-                const result = (loanAmount * mip) / 12;
                 return (
                   <td
                     key={`monthlyMortgageInsurance-${index}`}
@@ -136,9 +133,11 @@ const Table = () => {
                             </span>
                           </div>
                         )}
-                        <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
-                          {Math.floor(result)}
-                        </span>
+                      <CalculatorInput
+                        name={`monthlyMortgageInsurance-${index}`}
+                        value={String(scenario.monthlyMortgageInsurance)}
+                        prefix
+                      />
                       </div>
                     ) : (
                       <span className="flex w-full justify-center">-</span>
@@ -146,6 +145,75 @@ const Table = () => {
                   </td>
                 );
               })}
+            </tr>
+          </>
+        )}
+        {hasVaType && (
+          <>
+            <tr>
+              <td className="border-b border-slate-600 p-4 text-white">
+                Loan Amount VA
+              </td>
+              {scenarios.map((scenario, index) => {
+                const { loanAmount, fundingFee } = scenario;
+                const loanAmountVa = Number(loanAmount) * Number(fundingFee);
+                return (
+                  <td
+                    key={`loanAmountVa-${index}`}
+                    className="border-b border-slate-600 p-4 text-slate-400"
+                  >
+                    {scenario.type === "va" ? (
+                      <CalculatorInput
+                        name={`loanAmountVa-${index}`}
+                        value={String(scenario.loanAmountVa)}
+                        prefix
+                      />
+                    ) : (
+                      <span className="flex w-full justify-center">-</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+            <tr>
+              <td className="border-b border-slate-600 p-4 text-white">
+                Funding Fee
+              </td>
+              {scenarios.map((scenario, index) => (
+                <td
+                  key={`fundingFee-${index}`}
+                  className="border-b border-slate-600 p-4 text-slate-400"
+                >
+                  {scenario.type === "va" ? (
+                    <SelectVaFoundingFee
+                      name={`fundingFee-${index}`}
+                      value={scenario.fundingFee}
+                    />
+                  ) : (
+                    <span className="flex w-full justify-center">-</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="border-b border-slate-600 p-4 text-white">
+                Waiver of VA Funding Fee
+              </td>
+              {scenarios.map((scenario, index) => (
+                <td
+                  key={`waived-${index}`}
+                  className="border-b border-slate-600 p-4 text-slate-400"
+                >
+                  {scenario.type === "va" ? (
+                    <SelectWaived
+                      name={`waived-${index}`}
+                      value={scenario.waived}
+                    />
+                  ) : (
+                    <span className="flex w-full justify-center">-</span>
+                  )}
+                </td>
+              ))}
             </tr>
           </>
         )}
@@ -173,7 +241,7 @@ const Table = () => {
             >
               <CalculatorInput
                 name={`downPaymentPercentage-${index}`}
-                value={scenario.downPaymentPercentage}
+                value={String(scenario.downPaymentPercentage)}
                 suffix
               />
             </td>
@@ -215,9 +283,7 @@ const Table = () => {
         <tr>
           <td className="border-b border-slate-600 p-4 text-white">
             <div className="flex relative">
-              <span>
-              APR
-              </span>
+              <span>APR</span>
               <div className="group relative">
                 <InformationCircleIcon className="h-5 w-5 text-white cursor-pointer relative left-3 top-[2px]" />
                 <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
@@ -233,9 +299,11 @@ const Table = () => {
               key={`apr-${index}`}
               className="border-b border-slate-600 p-4 text-slate-400"
             >
-              <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
-                {scenario.apr.split("%")[0] + " " + "%"}
-              </span>
+              <CalculatorInput
+                name={`apr-${index}`}
+                value={String(scenario.apr)}
+                suffix
+              />
             </td>
           ))}
         </tr>
@@ -393,9 +461,11 @@ const Table = () => {
                     </div>
                   </span>
                 </div>
-                <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-start border-none p-2 text-sm leading-5 text-gray-900">
-                  $ {getTotalClosingCost(scenario)}
-                </span>
+                <CalculatorInput
+                  name={`totalClosingCosts-${index}`}
+                  value={String(scenario.totalClosingCosts)}
+                  prefix
+                />
               </div>
             </td>
           ))}
@@ -406,10 +476,6 @@ const Table = () => {
           </td>
           {scenarios.map((scenario, index) => {
             const { purchasePrice, loanAmount } = scenario;
-            const result = (Number(purchasePrice) / Number(loanAmount)) * 100;
-            const fallbackResult = isNaN(Math.floor(result))
-              ? "0"
-              : Math.floor(result);
             const showInfo =
               Boolean(Number(purchasePrice)) && Boolean(Number(loanAmount));
             return (
@@ -430,58 +496,16 @@ const Table = () => {
                       </span>
                     </div>
                   )}
-                  <span className="opacity-75 cursor-not-allowed flex bg-white rounded-lg w-full justify-end border-none p-2 text-sm leading-5 text-gray-900">
-                    {fallbackResult + " %"}
-                  </span>
+                  <CalculatorInput
+                    name={`loanToValue-${index}`}
+                    value={String(scenario.loanToValue)}
+                    suffix
+                  />
                 </div>
               </td>
             );
           })}
         </tr>
-        {hasVaType && (
-          <>
-            <tr>
-              <td className="border-b border-slate-600 p-4 text-white">
-                Funding Fee
-              </td>
-              {scenarios.map((scenario, index) => (
-                <td
-                  key={`fundingFee-${index}`}
-                  className="border-b border-slate-600 p-4 text-slate-400"
-                >
-                  {scenario.type === "va" ? (
-                    <SelectVaFoundingFee
-                      name={`fundingFee-${index}`}
-                      value={scenario.fundingFee}
-                    />
-                  ) : (
-                    <span className="flex w-full justify-center">-</span>
-                  )}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="border-b border-slate-600 p-4 text-white">
-                Waiver of VA Funding Fee
-              </td>
-              {scenarios.map((scenario, index) => (
-                <td
-                  key={`waived-${index}`}
-                  className="border-b border-slate-600 p-4 text-slate-400"
-                >
-                  {scenario.type === "va" ? (
-                    <SelectWaived
-                      name={`waived-${index}`}
-                      value={scenario.waived}
-                    />
-                  ) : (
-                    <span className="flex w-full justify-center">-</span>
-                  )}
-                </td>
-              ))}
-            </tr>
-          </>
-        )}
       </tbody>
     </table>
   );
@@ -510,32 +534,6 @@ const Table = () => {
     }
   }
 
-  function getTotalClosingCost(scenario) {
-    const {
-      points,
-      mortgageInsurance,
-      prepaidEscrowClosingCosts,
-      closingCosts,
-    } = scenario;
-    const _points = Number(points);
-    const _mortgageInsurance = Number(mortgageInsurance);
-    const _prepaidEscrowClosingCosts = Number(prepaidEscrowClosingCosts);
-    const _closingCosts = Number(closingCosts);
-    if (
-      !_points ||
-      !_mortgageInsurance ||
-      !_prepaidEscrowClosingCosts ||
-      !_closingCosts
-    )
-      return "";
-    else
-      return (
-        _points +
-        _mortgageInsurance +
-        _prepaidEscrowClosingCosts +
-        _closingCosts
-      );
-  }
 };
 
 export default Table;
