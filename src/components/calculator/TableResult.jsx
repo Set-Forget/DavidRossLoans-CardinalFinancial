@@ -41,9 +41,21 @@ const TableResult = () => {
   useEffect(() => {
     if (!showModalResults) return;
     const newResults = scenarios.map((scenario) => {
-      const { type, loanAmount } = scenario;
+      const { type, loanAmount, fundingFee } = scenario;
       const loanAmountFha = Number(loanAmount) + Number(loanAmount) * 0.0175;
-      const loanAmountValue = type === "fha" ? loanAmountFha : loanAmount;
+      const loanAmountVa = Number(loanAmount) * Number(fundingFee);
+      let loanAmountValue = 0;
+      switch (type) {
+        case "fha":
+          loanAmountValue = loanAmountFha;
+          break;
+        case "va":
+          loanAmountValue = loanAmountVa;
+          break;
+        default:
+          loanAmountValue = loanAmount;
+          break;
+      }
       const principleAndInterest = getPMT(
         scenario.interestRate,
         loanAmountValue,
@@ -359,11 +371,11 @@ const TableResult = () => {
             <span className="ml-2">Delta</span>
           </td>
           {scenarios.map((scenario, index) => {
-            const { mortgageInsurance: total } = scenario;
+            const { closingCosts: total } = scenario;
             const comparisons = [];
             scenarios.forEach((r, i) => {
               if (index === i) return;
-              const { mortgageInsurance: tmpTotal } = r;
+              const { closingCosts: tmpTotal } = r;
               const value = checkValue(total - tmpTotal);
               comparisons.push(
                 <span

@@ -22,6 +22,11 @@ export const initialScenario = {
   type: "conventional",
   foundingFee: "",
   waived: "no",
+  loanAmountFha: "",
+  monthlyMortgageInsurance: "",
+  loanAmountVa: "",
+  totalClosingCosts: "",
+  loanToValue: "",
 };
 
 export const initialResult = {
