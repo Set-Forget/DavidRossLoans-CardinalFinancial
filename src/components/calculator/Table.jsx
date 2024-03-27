@@ -490,7 +490,7 @@ const Table = () => {
                       <span className="group-hover:opacity-100 group-hover:visible transition-opacity bg-white px-1 text-sm text-black rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 invisible mx-auto z-50 top-[-64px]">
                         <div className="flex flex-col p-2">
                           <span className="truncate">
-                            Formula: {purchasePrice + " / " + loanAmount}
+                            Formula: {(purchasePrice + " / " + loanAmount) + " * 100"}
                           </span>
                         </div>
                       </span>
